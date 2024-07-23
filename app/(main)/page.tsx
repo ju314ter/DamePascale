@@ -215,7 +215,7 @@ export default function LandingPage() {
               </Button>
             </Link>
           </div>
-          <div className="relative flex">
+          <div className="relative flex perspective-top">
             <motion.div style={{ rotateY: rotateCardAmigurumi }}>
               <Image
                 src="/totoro_nature.jpg"
@@ -254,7 +254,7 @@ export default function LandingPage() {
           style={{ y: scrollYBijouSection }}
           className="h-[100vh] flex justify-around items-center relative"
         >
-          <div className="relative flex">
+          <div className="relative flex perspective-top">
             <motion.div style={{ rotateY: rotateCardBijou }}>
               <Image
                 src="/fleurmodele.jpg"
@@ -316,64 +316,3 @@ export default function LandingPage() {
     </div>
   );
 }
-
-{
-  /* 
-        <Drawer containerRef={containerRef} index={0}>
-          <p>Carousel dernieres crea</p>
-        </Drawer>
-        <Drawer containerRef={containerRef} index={1}>
-          <div className="flex w-full h-full justify-around items-center p-5">
-            <Card className="h-full bg-secondary border-primary">
-              <CardHeader>Header</CardHeader>
-              <CardContent>Content</CardContent>
-              <CardFooter>Footer</CardFooter>
-            </Card>
-            <Card className="h-full bg-secondary border-primary">
-              <CardHeader>Header</CardHeader>
-              <CardContent>Content</CardContent>
-              <CardFooter>Footer</CardFooter>
-            </Card>
-            <Card className="h-full bg-secondary border-primary">
-              <CardHeader>Header</CardHeader>
-              <CardContent>Content</CardContent>
-              <CardFooter>Footer</CardFooter>
-            </Card>
-          </div>
-        </Drawer>
-        <Drawer containerRef={containerRef} index={2}>
-          <p>Parcours animé</p>
-        </Drawer>
-        <Drawer containerRef={containerRef} index={3}>
-          <p>Formulaire contact</p>
-        </Drawer> */
-}
-
-// function Drawer({ children, containerRef, index }: any) {
-//   const ref = useRef(null);
-//   const { scrollYProgress } = useScroll({
-//     container: containerRef,
-//     target: ref,
-//     layoutEffect: false,
-//     offset: ["-50px start", "end start"],
-//   });
-
-//   const scale = useTransform(scrollYProgress, [0, 0.4, 1], [1, 0.9, 0.7]);
-//   const opacity = useTransform(scrollYProgress, [0, 1], [1, 0.8]);
-//   const y = useTransform(scrollYProgress, [0, 1], [0, 700]);
-
-//   return (
-//     <div
-//       style={{ zIndex: index }}
-//       className="h-[500px] overflow-hidden"
-//       ref={ref}
-//     >
-//       <motion.div
-//         style={{ scale, y, opacity }}
-//         className="h-full w-full relative flex justify-center items-center border-l border-r border-t border-primary"
-//       >
-//         {children}
-//       </motion.div>
-//     </div>
-//   );
-// }

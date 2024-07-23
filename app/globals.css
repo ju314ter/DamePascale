@@ -96,3 +96,8 @@
   writing-mode: vertical-rl;
   text-orientation: upright;
 }
+
+.perspective-top {
+  perspective-origin: top;
+  perspective: 1500px;
+}
