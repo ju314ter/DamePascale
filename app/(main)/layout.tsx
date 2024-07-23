@@ -18,6 +18,8 @@ import PanierWrapper from "@/components/panier/panier";
 import { Toaster } from "@/components/ui/toaster";
 import { AnimatePresence, motion } from "framer-motion";
 import Transition from "@/components/ui/transition";
+import { Suspense } from "react";
+import { Loader } from "lucide-react";
 
 const jaquesFrancoisFont = Jacques_Francois({
   weight: "400",
@@ -74,7 +76,15 @@ export default function RootLayout({
             <PanierWrapper />
           </div>
         </div>
-        <main>{children}</main>
+        <Suspense
+          fallback={
+            <div className="w-full h-full flex justify-center items-center">
+              <Loader className="animate-spin" />
+            </div>
+          }
+        >
+          <main>{children}</main>
+        </Suspense>
         <Toaster />
       </body>
     </html>
