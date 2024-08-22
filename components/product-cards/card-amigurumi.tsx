@@ -59,7 +59,7 @@ const CardAmigurumi = ({ ami }: CardAmigurumiProps) => {
             alt={ami.name}
             width={300}
             height={300}
-            className="group-hover:scale-105 transition-all duration-500 w-[60%]"
+            className="w-[100%]"
           />
         </div>
         <p className="text-2xl text-center p-2 mt-4 text-primary font-serif font-bold group-hover:text-black group-hover:translate-x-1 transition-all duration-700">

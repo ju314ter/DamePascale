@@ -167,7 +167,7 @@ export default function LandingPage() {
           height={1024}
         />
       </div>
-      <section className="relative flex flex-col items-center my-16 w-full pb-32 overflow-hidden">
+      <section className="relative flex flex-col items-center my-16 w-full pb-16 overflow-hidden">
         <div className="w-full pt-16 mb-2">
           <CarouselLanding
             direction="backward"
@@ -187,7 +187,7 @@ export default function LandingPage() {
           style={{ y: scrollYAmigurumiSection }}
           className="h-[100vh] flex justify-around items-center relative"
         >
-          <div className="relative basis-4/12 flex flex-col items-center justify-start">
+          <div className="relative basis-1/2 flex flex-col items-center justify-start">
             <motion.div
               style={{ y: scrollYAmigurumiSection }}
               className="mask pointer-events-none absolute top-0 bottom-0 left-0 right-0 bg-gradient-to-b from-transparent from-[-10%] via-white to-white"
@@ -199,7 +199,7 @@ export default function LandingPage() {
               width={100}
               height={100}
             />
-            <p className="text-lg md:text-xl lg:text-2xl leading-6 p-4 text-left">
+            <p className="text-md md:text-lg lg:text-xl leading-6 p-4 text-left">
               Découvrez nos <b>amigurumis</b>, de charmantes peluches{" "}
               <b>crochetées à la main</b> avec amour. Uniques et adorables,
               elles apportent douceur et joie à tous les âges. Parfaites pour{" "}
@@ -283,7 +283,7 @@ export default function LandingPage() {
               </motion.svg>
             </motion.div>
           </div>
-          <div className="relative basis-4/12 flex flex-col items-center justify-start">
+          <div className="relative basis-1/2 flex flex-col items-center justify-start">
             <motion.div
               style={{ y: scrollYBijouSection }}
               className="mask pointer-events-none absolute top-0 bottom-0 left-0 right-0 bg-gradient-to-b from-transparent from-[-10%] via-white to-white"
@@ -295,7 +295,7 @@ export default function LandingPage() {
               width={100}
               height={100}
             />
-            <p className="text-lg md:text-xl lg:text-2xl leading-6 p-4 text-left">
+            <p className="text-md md:text-lg lg:text-xl leading-6 p-4 text-left">
               Découvrez nos <b>amigurumis</b>, de charmantes peluches{" "}
               <b>crochetées à la main</b> avec amour. Uniques et adorables,
               elles apportent douceur et joie à tous les âges. Parfaites pour{" "}

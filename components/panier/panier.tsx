@@ -28,11 +28,11 @@ const PanierWrapper = () => {
         asChild
       >
         <div className="panier h-full flex justify-center items-center">
-          <Button className="border group border-transparent hover:border-black hover:border-primary hover:bg-[#ffedd1]/50 focus:bg-[#ffedd1]/50 transition-colors">
+          <Button className="border border-transparent hover:border-black hover:border-primary hover:bg-[#ffedd1]/50 focus:bg-[#ffedd1]/50 transition-colors">
             <ShoppingCart
               size={36}
               strokeWidth={2}
-              className="text-secondary-foreground group-hover:stroke-white transition-all"
+              className="text-secondary-foreground transition-all"
             />
           </Button>
         </div>

@@ -19,7 +19,12 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "../ui/sheet";
-import { SubmitHandler, useForm, useFieldArray } from "react-hook-form";
+import {
+  SubmitHandler,
+  useForm,
+  useFieldArray,
+  useWatch,
+} from "react-hook-form";
 import { CheckboxFilters } from "../ui/checkbox";
 import { Label } from "../ui/label";
 import { cn } from "@/lib/utils";
@@ -30,8 +35,15 @@ interface FiltresAmigurumiProps {
     category: string[];
     univers: string[];
     size: string[];
-    price: number[];
+    price: [number, number];
   };
+}
+
+interface FormData {
+  category: { _id: string; title: string; checked: boolean }[];
+  univers: { _id: string; title: string; checked: boolean }[];
+  size: { _id: string; title: string; checked: boolean }[];
+  price: [number, number];
 }
 
 const FiltresAmigurumiWrapper = ({
@@ -39,7 +51,7 @@ const FiltresAmigurumiWrapper = ({
   urlParamsArray,
 }: FiltresAmigurumiProps) => {
   const { register, handleSubmit, setValue, control, watch, getValues } =
-    useForm<any>({
+    useForm<FormData>({
       defaultValues: {
         category: [{ _id: "1234-5678", title: "Category", checked: true }],
         univers: [{ _id: "1234-5678", title: "Univers", checked: true }],
@@ -145,11 +157,25 @@ const FiltresAmigurumiWrapper = ({
     control,
   });
 
+  const watchedFields = useWatch({ control });
+
   function handleSliderChange(value: number[]): void {
     if (value.length === 2) {
       const [min, max] = value;
       setValue("price", [min, max]);
     }
+  }
+
+  function handleSelectAll(bool: boolean): void {
+    fieldCategory.forEach((_, index) => {
+      setValue(`category.${index}.checked`, bool, { shouldDirty: true });
+    });
+    fieldUnivers.forEach((_, index) => {
+      setValue(`univers.${index}.checked`, bool, { shouldDirty: true });
+    });
+    fieldSize.forEach((_, index) => {
+      setValue(`size.${index}.checked`, bool, { shouldDirty: true });
+    });
   }
 
   return (
@@ -165,13 +191,21 @@ const FiltresAmigurumiWrapper = ({
         </div>
       </SheetTrigger>
       <SheetContent side="left" className="overflow-y-auto">
+        <SheetHeader>
+          <SheetTitle className="text-xl">Filtres</SheetTitle>
+          <SheetDescription>
+            Faites votre sélection parmis nos univers colorés et populaires.
+          </SheetDescription>
+          <div className="flex justify-center items-center w-full gap-2">
+            <Button variant={"action"} onClick={() => handleSelectAll(true)}>
+              Tous
+            </Button>
+            <Button variant={"action"} onClick={() => handleSelectAll(false)}>
+              Aucun
+            </Button>
+          </div>
+        </SheetHeader>
         <form onSubmit={handleSubmit(onSubmit)}>
-          <SheetHeader>
-            <SheetTitle className="text-xl">Filtres</SheetTitle>
-            <SheetDescription>
-              Faites votre sélection parmis nos univers colorés et populaires.
-            </SheetDescription>
-          </SheetHeader>
           <div className="py-4">
             <Label className="py-4 italic">Categories :</Label>
             <div className="flex flex-wrap m-4">
@@ -182,11 +216,12 @@ const FiltresAmigurumiWrapper = ({
                 >
                   <CheckboxFilters
                     id={category._id}
-                    className="focus:bg-transparent"
-                    defaultChecked={watch(`category.${i}.checked`)}
+                    checked={watchedFields.category?.[i]?.checked ?? false}
                     {...register(`category.${i}._id`)}
                     onCheckedChange={(checked: boolean) => {
-                      setValue(`category.${i}.checked`, checked);
+                      setValue(`category.${i}.checked`, checked, {
+                        shouldDirty: true,
+                      });
                     }}
                   >
                     {category.title}
@@ -204,11 +239,12 @@ const FiltresAmigurumiWrapper = ({
                 >
                   <CheckboxFilters
                     id={univers._id}
-                    className="focus:bg-transparent"
-                    defaultChecked={watch(`univers.${i}.checked`)}
+                    checked={watchedFields.univers?.[i]?.checked ?? false}
                     {...register(`univers.${i}._id`)}
                     onCheckedChange={(checked: boolean) => {
-                      setValue(`univers.${i}.checked`, checked);
+                      setValue(`univers.${i}.checked`, checked, {
+                        shouldDirty: true,
+                      });
                     }}
                   >
                     {univers.title}
@@ -226,11 +262,12 @@ const FiltresAmigurumiWrapper = ({
                 >
                   <CheckboxFilters
                     id={size._id}
-                    className="focus:bg-transparent"
-                    defaultChecked={watch(`size.${i}.checked`)}
+                    checked={watchedFields.size?.[i]?.checked ?? false}
                     {...register(`size.${i}._id`)}
                     onCheckedChange={(checked: boolean) => {
-                      setValue(`size.${i}.checked`, checked);
+                      setValue(`size.${i}.checked`, checked, {
+                        shouldDirty: true,
+                      });
                     }}
                   >
                     {size.title}

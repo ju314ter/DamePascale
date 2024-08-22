@@ -14,7 +14,12 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "../ui/sheet";
-import { SubmitHandler, useForm, useFieldArray } from "react-hook-form";
+import {
+  SubmitHandler,
+  useForm,
+  useFieldArray,
+  useWatch,
+} from "react-hook-form";
 import { CheckboxFilters } from "../ui/checkbox";
 import { Label } from "../ui/label";
 import { cn } from "@/lib/utils";
@@ -178,11 +183,28 @@ const FiltresBijouxWrapper = ({
     control,
   });
 
+  const watchedFields = useWatch({ control });
+
   function handleSliderChange(value: number[]): void {
     if (value.length === 2) {
       const [min, max] = value;
       setValue("price", [min, max]);
     }
+  }
+
+  function handleSelectAll(bool: boolean): void {
+    fieldCategory.forEach((_, index) => {
+      setValue(`category.${index}.checked`, bool, { shouldDirty: true });
+    });
+    fieldMatiere.forEach((_, index) => {
+      setValue(`matiere.${index}.checked`, bool, { shouldDirty: true });
+    });
+    fieldFleur.forEach((_, index) => {
+      setValue(`fleur.${index}.checked`, bool, { shouldDirty: true });
+    });
+    fieldSize.forEach((_, index) => {
+      setValue(`size.${index}.checked`, bool, { shouldDirty: true });
+    });
   }
 
   return (
@@ -198,13 +220,21 @@ const FiltresBijouxWrapper = ({
         </div>
       </SheetTrigger>
       <SheetContent side="left" className="overflow-y-auto">
+        <SheetHeader>
+          <SheetTitle className="text-xl">Filtres</SheetTitle>
+          <SheetDescription>
+            Faites votre sélection parmis nos univers colorés et populaires.
+          </SheetDescription>
+          <div className="flex justify-center items-center w-full gap-2">
+            <Button variant={"action"} onClick={() => handleSelectAll(true)}>
+              Tous
+            </Button>
+            <Button variant={"action"} onClick={() => handleSelectAll(false)}>
+              Aucun
+            </Button>
+          </div>
+        </SheetHeader>
         <form onSubmit={handleSubmit(onSubmit)}>
-          <SheetHeader>
-            <SheetTitle className="text-xl">Filtres</SheetTitle>
-            <SheetDescription>
-              Faites votre sélection parmis nos univers colorés et populaires.
-            </SheetDescription>
-          </SheetHeader>
           <div className="py-4">
             <Label className="py-4 italic">Categories :</Label>
             <div className="flex flex-wrap m-4">
@@ -215,11 +245,12 @@ const FiltresBijouxWrapper = ({
                 >
                   <CheckboxFilters
                     id={category._id}
-                    className="focus:bg-transparent"
-                    defaultChecked={watch(`category.${i}.checked`)}
+                    checked={watchedFields.category?.[i]?.checked ?? false}
                     {...register(`category.${i}._id`)}
                     onCheckedChange={(checked: boolean) => {
-                      setValue(`category.${i}.checked`, checked);
+                      setValue(`category.${i}.checked`, checked, {
+                        shouldDirty: true,
+                      });
                     }}
                   >
                     {category.title}
@@ -237,11 +268,12 @@ const FiltresBijouxWrapper = ({
                 >
                   <CheckboxFilters
                     id={matiere._id}
-                    className="focus:bg-transparent"
-                    defaultChecked={watch(`matiere.${i}.checked`)}
+                    checked={watchedFields.matiere?.[i]?.checked ?? false}
                     {...register(`matiere.${i}._id`)}
                     onCheckedChange={(checked: boolean) => {
-                      setValue(`matiere.${i}.checked`, checked);
+                      setValue(`matiere.${i}.checked`, checked, {
+                        shouldDirty: true,
+                      });
                     }}
                   >
                     {matiere.title}
@@ -259,11 +291,12 @@ const FiltresBijouxWrapper = ({
                 >
                   <CheckboxFilters
                     id={fleur._id}
-                    className="focus:bg-transparent"
-                    defaultChecked={watch(`fleur.${i}.checked`)}
+                    checked={watchedFields.fleur?.[i]?.checked ?? false}
                     {...register(`fleur.${i}._id`)}
                     onCheckedChange={(checked: boolean) => {
-                      setValue(`fleur.${i}.checked`, checked);
+                      setValue(`fleur.${i}.checked`, checked, {
+                        shouldDirty: true,
+                      });
                     }}
                   >
                     {fleur.title}
@@ -281,11 +314,12 @@ const FiltresBijouxWrapper = ({
                 >
                   <CheckboxFilters
                     id={size._id}
-                    className="focus:bg-transparent text-base"
-                    defaultChecked={watch(`size.${i}.checked`)}
+                    checked={watchedFields.size?.[i]?.checked ?? false}
                     {...register(`size.${i}._id`)}
                     onCheckedChange={(checked: boolean) => {
-                      setValue(`size.${i}.checked`, checked);
+                      setValue(`size.${i}.checked`, checked, {
+                        shouldDirty: true,
+                      });
                     }}
                   >
                     {size.title}

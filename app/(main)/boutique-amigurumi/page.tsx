@@ -41,10 +41,10 @@ export default function BoutiquePage() {
     () => searchParams.get("univers")?.split(",") || [],
     [searchParams]
   );
-  const priceParams = useMemo(
-    () => searchParams.get("price")?.split(",").map(Number) || [0, 100],
-    [searchParams]
-  );
+  const priceParams: [number, number] = useMemo(() => {
+    const prices = searchParams.get("price")?.split(",").map(Number) || [];
+    return [prices[0] || 0, prices[1] || 100]; // Ensure it returns a tuple
+  }, [searchParams]);
   const sizeParams = useMemo(
     () => searchParams.get("size")?.split(",") || [],
     [searchParams]
