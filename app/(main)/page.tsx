@@ -196,8 +196,8 @@ export default function LandingPage() {
               src="/daruma-group-nobg.png"
               alt="Daruma"
               className="-scale-x-100 hidden sm:block"
-              width={100}
-              height={100}
+              width={200}
+              height={200}
             />
             <p className="text-md md:text-lg lg:text-xl leading-6 p-4 text-left">
               Découvrez nos <b>amigurumis</b>, de charmantes peluches{" "}
@@ -283,24 +283,26 @@ export default function LandingPage() {
               </motion.svg>
             </motion.div>
           </div>
-          <div className="relative basis-1/2 flex flex-col items-center justify-start">
+          <div className="relative -top-5 basis-1/2 flex flex-col items-center justify-start">
             <motion.div
               style={{ y: scrollYBijouSection }}
               className="mask pointer-events-none absolute top-0 bottom-0 left-0 right-0 bg-gradient-to-b from-transparent from-[-10%] via-white to-white"
             ></motion.div>
             <Image
               src="/fleur-nobg.png"
-              alt="Daruma"
+              alt="Fleur"
               className="-scale-x-100 hidden sm:block"
-              width={100}
-              height={100}
+              width={200}
+              height={200}
             />
             <p className="text-md md:text-lg lg:text-xl leading-6 p-4 text-left">
-              Découvrez nos <b>amigurumis</b>, de charmantes peluches{" "}
-              <b>crochetées à la main</b> avec amour. Uniques et adorables,
-              elles apportent douceur et joie à tous les âges. Parfaites pour{" "}
-              <b>décorer, offrir ou se faire plaisir</b>, ces créations
-              artisanales deviendront vos compagnons préférés.
+              Entrez dans notre écrin où <b>les fleurs deviennent bijoux</b>.
+              Nos
+              <b>créations uniques</b> allient la délicatesse naturelle à
+              l&apos;art de la joaillerie. Découvrez des pièces exquises faites
+              de <b>véritables fleurs préservées</b>, capturant la beauté
+              éphémère de la nature dans des parures intemporelles. Offrez-vous{" "}
+              <b>un morceau de poésie florale à porter</b>.
             </p>
             <Link href="/blog">
               <Button

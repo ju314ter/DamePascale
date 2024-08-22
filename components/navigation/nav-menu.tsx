@@ -33,7 +33,7 @@ export function NavMenu({
               Amigurumis
             </NavigationMenuTrigger>
             <NavigationMenuContent>
-              <div className="p-4 md:w-[300px] lg:w-[400px] flex">
+              <div className="p-4 min-w-[500px] w-[40vw] flex">
                 <div className="flex-auto basis-6/12 h-full transition-all">
                   <Link href="/boutique-amigurumi" passHref>
                     <NavigationMenuLink asChild className="hover:bg-secondary">
@@ -74,7 +74,7 @@ export function NavMenu({
               Bijoux
             </NavigationMenuTrigger>
             <NavigationMenuContent>
-              <div className="p-4 md:w-[300px] lg:w-[400px] flex bg-transparent">
+              <div className="p-4 min-w-[500px] w-[40vw] flex bg-transparent">
                 <div className="flex-auto basis-6/12 h-full transition-all">
                   <Link href="/boutique-bijou" passHref>
                     <NavigationMenuLink asChild className="hover:bg-secondary">
@@ -113,10 +113,10 @@ export function NavMenu({
 
           <NavigationMenuItem>
             <NavigationMenuTrigger className="text-xl">
-              Blog
+              Collections
             </NavigationMenuTrigger>
             <NavigationMenuContent>
-              <ul className="grid gap-3 p-4 md:w-[300px] lg:w-[400px] lg:grid-cols-[.75fr_1fr]">
+              <ul className="grid gap-3 p-4 min-w-[500px] w-[40vw] lg:grid-cols-[.75fr_1fr]">
                 {blogNavlink.map((component) => (
                   <ListItem
                     className="hover:bg-secondary"

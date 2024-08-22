@@ -58,10 +58,10 @@ const CardBijou = ({ item }: CardBijouProps) => {
             alt={item.name}
             width={300}
             height={300}
-            className="group-hover:scale-105 transition-all duration-500 w-[100%] rounded-sm"
+            className="transition-all duration-500 w-[100%] rounded-sm"
           />
         </div>
-        <p className="text-2xl text-center p-2 mt-4 font-serif font-bold text-primary group-hover:text-black group-hover:translate-x-1 transition-all duration-700">
+        <p className="text-xl text-center p-2 mt-4 font-serif font-bold text-primary group-hover:text-black group-hover:translate-x-1 transition-all duration-700">
           {item.name}
         </p>
         <div className="flex w-full items-center justify-center text-lg font-bold pb-2 text-primary gap-2">
