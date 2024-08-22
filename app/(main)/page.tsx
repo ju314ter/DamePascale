@@ -222,12 +222,12 @@ export default function LandingPage() {
                 alt="Totoro dans la nature"
                 width={500}
                 height={500}
-                className="rounded-xl shadow-2xl saturate-150 w-[30vw]"
+                className="rounded-xl shadow-2xl saturate-150 w-[30vw] md:w-[25vw] lg:w-[20vw]"
               />
               <motion.svg
                 style={{ y: scrollYAmigurumiWord }}
                 className="absolute top-0 left-5 hidden sm:block"
-                height="200%"
+                height="400%"
                 width="60px"
                 xmlns="http://www.w3.org/2000/svg"
               >
@@ -261,12 +261,12 @@ export default function LandingPage() {
                 alt="Totoro dans la nature"
                 width={500}
                 height={500}
-                className="rounded-xl shadow-2xl saturate-150 w-[30vw]"
+                className="rounded-xl shadow-2xl saturate-150 w-[30vw] md:w-[25vw] lg:w-[20vw]"
               />
               <motion.svg
                 style={{ y: scrollYBijouWord }}
                 className="absolute top-0 left-5 hidden sm:block"
-                height="200%"
+                height="400%"
                 width="60px"
                 xmlns="http://www.w3.org/2000/svg"
               >
