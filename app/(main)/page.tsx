@@ -113,7 +113,7 @@ export default function LandingPage() {
 
   return (
     <div
-      className="relative h-[100vh] overflow-auto w-full scroll-smooth pt-[5vh] snap-proximity snap-y"
+      className="relative h-[100vh] overflow-auto w-full scroll-smooth pt-[5vh] lg:snap-proximity lg:snap-y"
       ref={containerRef}
     >
       <div className="relative flex flex-col w-full h-[100vh] justify-start items-center mt-16">

@@ -11,6 +11,7 @@ import { urlFor } from "@/sanity/lib/client";
 import { usePanier } from "@/store/panier-store";
 import { ToastAction } from "@/components/ui/toast";
 import { useToast } from "@/components/ui/use-toast";
+import { CarouselProduct } from "@/components/carousel/carouselProduct";
 
 interface Params {
   [key: string]: string | string[];
@@ -45,7 +46,6 @@ const ProductDetailAmigurumiPage = () => {
           src="/transparentknittingtexture.png"
           alt="Transparent texture"
           style={{ opacity: 0.2 }}
-          objectFit="contain"
           width={1024}
           height={1024}
         />
@@ -53,14 +53,7 @@ const ProductDetailAmigurumiPage = () => {
 
       <div className="product-header relative z-20 flex flex-col md:flex-row gap-8">
         <div className="product-image w-full md:w-1/2">
-          <Image
-            priority
-            src={urlFor(amigurumi.highlightedImg).url()}
-            alt={amigurumi.name}
-            width={1000}
-            height={1000}
-            className="hover:scale-105 transition-all duration-300"
-          />
+          <CarouselProduct slides={amigurumi.imageGallery} />
         </div>
         <div className="product-info w-full md:w-1/2 flex flex-col gap-4">
           <h1 className="text-3xl font-bold text-primary">{amigurumi.name}</h1>
