@@ -63,8 +63,9 @@ export const amigurumiProductSchema: SchemaTypeDefinition = {
     {
       name: "description",
       title: "Description",
-      type: "text",
-      validation: (Rule: Rule) => Rule.required().min(10).max(1000),
+      type: "array",
+      of: [{ type: "block" }],
+      validation: (Rule: Rule) => Rule.required().min(1).max(100),
     },
     {
       name: "price",

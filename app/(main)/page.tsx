@@ -113,7 +113,7 @@ export default function LandingPage() {
 
   return (
     <div
-      className="relative h-[100vh] overflow-auto w-full scroll-smooth pt-[5vh]"
+      className="relative h-[100vh] overflow-auto w-full scroll-smooth pt-[5vh] snap-proximity snap-y"
       ref={containerRef}
     >
       <div className="relative flex flex-col w-full h-[100vh] justify-start items-center mt-16">
@@ -178,10 +178,9 @@ export default function LandingPage() {
           <CarouselLanding direction="forward" items={carouselBijouxItem} />
         </div>
       </section>
-
       <section
         ref={refSectionAmigurumi}
-        className="relative h-[200vh] items-start"
+        className="relative h-[200vh] items-start snap-center"
       >
         <motion.div
           style={{ y: scrollYAmigurumiSection }}
@@ -248,7 +247,7 @@ export default function LandingPage() {
       </section>
       <section
         ref={refSectionBijou}
-        className="relative h-[200vh] items-start overflow-hidden"
+        className="relative h-[200vh] items-start overflow-hidden snap-center"
       >
         <motion.div
           style={{ y: scrollYBijouSection }}

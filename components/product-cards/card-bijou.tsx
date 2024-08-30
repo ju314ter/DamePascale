@@ -30,7 +30,7 @@ const CardBijou = ({ item }: CardBijouProps) => {
   return (
     <Card className="w-full min-h-[400px] group bg-white border-secondary rounded-md product-card flex justify-center items-center flex-col drop-shadow-sm hover:bg-secondary hover:-translate-y-1 transition-all duration-700">
       <Link
-        href={`/boutique-amigurumi/${item._id}`}
+        href={`/boutique-bijou/${item._id}`}
         className="w-full h-full flex justify-between flex-col"
       >
         <div className="card-tags w-full flex justify-around p-2 start font-sans flex-wrap gap-1">

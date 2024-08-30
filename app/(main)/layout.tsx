@@ -49,7 +49,7 @@ export default function RootLayout({
           italianaFont.variable
         )}
       >
-        <div className="fixed z-10 header flex w-full h-[50px] justify-center items-center bg-opacity-20 bg-white backdrop-blur-xl shadow-sm">
+        <div className="fixed z-50 header flex w-full h-[50px] justify-center items-center bg-opacity-20 bg-white backdrop-blur-xl shadow-sm">
           <div className="logo ml-2 absolute left-0">
             <Link href="/" className="flex gap-2">
               <Image

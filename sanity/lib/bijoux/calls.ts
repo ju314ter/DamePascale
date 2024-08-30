@@ -1,5 +1,6 @@
 import { groq } from "next-sanity";
 import { client } from "../client";
+import { TextBlock } from "../amigurumis/calls";
 
 export interface BijouFilters {
   price?: [number, number];
@@ -11,7 +12,7 @@ export interface BijouFilters {
 export interface Bijou {
   _id: string;
   name: string;
-  description: string;
+  description: TextBlock[];
   price: number;
   matieres: {
     _id: string;
@@ -88,19 +89,18 @@ export const getBijouById = async (id: string) => {
   const query = `*[_type == "bijoux" && _id == $id]{
     _id,
     name,
-    description,
     price,
-    matiere->{
+    "matieres": matieres[]-> {
       _id,
-      title
+      title,
     },
-    fleur->{
+    "categories": categories[]-> {
       _id,
-      title
+      title,
     },
-    category->{
+    "fleurs": fleurs[]-> {
       _id,
-      title
+      title,
     },
     stock,
     highlightedImg,
@@ -115,7 +115,6 @@ export const getLastNBijoux = async (n: number) => {
   const query = `*[_type == "bijoux"] | order(_createdAt desc) [0...${n}]{
     _id,
     name,
-    description,
     price,
     "matieres": matieres[]-> {
       _id,

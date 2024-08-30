@@ -26,7 +26,7 @@ export function NavMenu({
 }) {
   return (
     <>
-      <NavigationMenu className="z-50 hidden md:block">
+      <NavigationMenu className="hidden md:block">
         <NavigationMenuList>
           <NavigationMenuItem>
             <NavigationMenuTrigger className="text-xl">

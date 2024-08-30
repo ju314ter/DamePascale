@@ -8,6 +8,9 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { ArrowRight } from "lucide-react";
 import { urlFor } from "@/sanity/lib/client";
+import { usePanier } from "@/store/panier-store";
+import { ToastAction } from "@/components/ui/toast";
+import { useToast } from "@/components/ui/use-toast";
 
 interface Params {
   [key: string]: string | string[];
@@ -16,6 +19,8 @@ interface Params {
 const ProductDetailAmigurumiPage = () => {
   const params: Params = useParams();
   const [amigurumi, setAmigurumi] = useState<Amigurumi | null>(null);
+  const { addToPanier, removeFromPanier } = usePanier();
+  const { toast } = useToast();
 
   useEffect(() => {
     async function fetchAmigurumi() {
@@ -27,7 +32,6 @@ const ProductDetailAmigurumiPage = () => {
       }
     }
     fetchAmigurumi();
-    console.log(params);
   }, [params]);
 
   if (!amigurumi) {
@@ -35,8 +39,19 @@ const ProductDetailAmigurumiPage = () => {
   }
 
   return (
-    <div className="product-detail-page w-full max-w-[1200px] mx-auto pt-[10vh] p-5">
-      <div className="product-header flex flex-col md:flex-row gap-8">
+    <div className="relative w-full max-w-[1200px] min-h-[100vh] mx-auto pt-[10vh] p-5 overflow-hidden">
+      <div className="absolute top-0 left-0 w-full h-full z-10">
+        <Image
+          src="/transparentknittingtexture.png"
+          alt="Transparent texture"
+          style={{ opacity: 0.2 }}
+          objectFit="contain"
+          width={1024}
+          height={1024}
+        />
+      </div>
+
+      <div className="product-header relative z-20 flex flex-col md:flex-row gap-8">
         <div className="product-image w-full md:w-1/2">
           <Image
             priority
@@ -50,13 +65,41 @@ const ProductDetailAmigurumiPage = () => {
         <div className="product-info w-full md:w-1/2 flex flex-col gap-4">
           <h1 className="text-3xl font-bold text-primary">{amigurumi.name}</h1>
           <div className="product-tags flex gap-2">
-            {/* <Badge variant={"outline"}>{amigurumi.categories.title}</Badge>
-            <Badge variant={"default"}>{amigurumi.universes.title}</Badge> */}
+            <div className="flex flex-wrap gap-1 justify-center">
+              {amigurumi.categories && amigurumi.categories.length > 0 ? (
+                amigurumi.categories.map((cat) => (
+                  <Badge variant={"outline"} key={cat._id}>
+                    {cat.title}
+                  </Badge>
+                ))
+              ) : (
+                <Badge variant="default">No category</Badge>
+              )}
+            </div>
+            <div className="flex flex-wrap gap-1 justify-center">
+              {amigurumi.universes && amigurumi.universes.length > 0 ? (
+                amigurumi.universes.map((uni) => (
+                  <Badge variant={"default"} key={uni._id}>
+                    {uni.title}
+                  </Badge>
+                ))
+              ) : (
+                <Badge variant="default">No universes</Badge>
+              )}
+            </div>
             {amigurumi.promotionDiscount && (
               <Badge variant={"destructive"}>Promo</Badge>
             )}
           </div>
-          <p className="text-lg text-accent">{amigurumi.description}</p>
+          <div>
+            {amigurumi.description?.map((block: any) => (
+              <div key={block._key}>
+                {block.children.map((child: any) => (
+                  <p key={child._key}>{child.text}</p>
+                ))}
+              </div>
+            ))}
+          </div>
           <div className="product-price flex items-center gap-2 text-lg font-bold text-primary">
             {amigurumi.promotionDiscount ? (
               <>
@@ -70,7 +113,27 @@ const ProductDetailAmigurumiPage = () => {
               <span>€{amigurumi.price}</span>
             )}
           </div>
-          <Button variant={"cta"} className="mt-4">
+          <Button
+            variant={"cta"}
+            className="mt-4"
+            onClick={(e) => {
+              e.preventDefault();
+              addToPanier(amigurumi);
+              toast({
+                title: `${amigurumi.name} ajouté au panier`,
+                action: (
+                  <ToastAction
+                    altText="Retirer du panier"
+                    onClick={() => {
+                      removeFromPanier(amigurumi);
+                    }}
+                  >
+                    Annuler
+                  </ToastAction>
+                ),
+              });
+            }}
+          >
             Ajouter au panier
           </Button>
         </div>

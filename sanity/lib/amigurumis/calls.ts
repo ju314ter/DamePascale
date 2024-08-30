@@ -7,10 +7,18 @@ export interface AmigurumiFilters {
   categories?: string[];
 }
 
+export interface TextBlock {
+  children: { mark: any[]; text: string; _key: string; _type: string }[];
+  markDefs: any[];
+  style: string;
+  _key: string;
+  _type: string;
+}
+
 export interface Amigurumi {
   _id: string;
   name: string;
-  description: string;
+  description?: TextBlock[];
   price: number;
   universes: {
     _id: string;
@@ -49,15 +57,10 @@ export const getAmigurumis = async (filtres?: AmigurumiFilters) => {
     filtres?.categories && filtres.categories.length > 0
       ? ` && (${filtres.categories.map((cat) => `"${cat}" in categories[]->_id`).join(" || ")})`
       : "";
-  // && (
-  //   "eeabf63b-1271-4537-90f4-1d565c06b2fd" in categories[]->_id ||
-  //   "another-category-id" in categories[]->_id
-  // )
 
   const query = `*[_type == "amigurumis"${universPartialQuery}${categoryPartialQuery}${pricePartialQuery}]{
     _id,
     name,
-    description,
     price,
     "universes": universes[]-> {
       _id,
@@ -72,8 +75,6 @@ export const getAmigurumis = async (filtres?: AmigurumiFilters) => {
     imageGallery,
     promotionDiscount
   }`;
-
-  console.log("query", query);
 
   const amigurumis: Amigurumi[] = await client.fetch(groq`${query}`);
 
@@ -119,7 +120,6 @@ export const getLastNAmigurumis = async (n: number) => {
   const query = `*[_type == "amigurumis"] | order(_createdAt desc) [0...${n}]{
     _id,
     name,
-    description,
     price,
     "universes": universes[]-> {
       _id,
