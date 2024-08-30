@@ -92,13 +92,19 @@ const ProductDetailAmigurumiPage = () => {
             )}
           </div>
           <div>
-            {amigurumi.description?.map((block: any) => (
-              <div key={block._key}>
-                {block.children.map((child: any) => (
-                  <p key={child._key}>{child.text}</p>
-                ))}
-              </div>
-            ))}
+            {amigurumi.description &&
+              // Legacy behaviour: description used to be a text string before being an array of blocks
+              (Array.isArray(amigurumi.description) ? (
+                amigurumi.description.map((block: any) => (
+                  <div key={block._key}>
+                    {block.children.map((child: any) => (
+                      <p key={child._key}>{child.text}</p>
+                    ))}
+                  </div>
+                ))
+              ) : (
+                <p>{amigurumi.description}</p>
+              ))}
           </div>
           <div className="product-price flex items-center gap-2 text-lg font-bold text-primary">
             {amigurumi.promotionDiscount ? (
