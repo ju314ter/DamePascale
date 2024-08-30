@@ -27,8 +27,9 @@ export const bijouFleurSchema: SchemaTypeDefinition = {
     },
   ],
 };
+
 export const bijouMenuSchema: SchemaTypeDefinition = {
-  name: "bijouNavlink",
+  name: "bijouLienMenu",
   title: "Lien menu bijou",
   type: "document",
   fields: [
@@ -40,12 +41,13 @@ export const bijouMenuSchema: SchemaTypeDefinition = {
     },
     {
       name: "href",
-      title: "Destination (boutique-amigurumi?....)",
+      title: "Destination (boutique-bijou?....)",
       type: "string",
       validation: (Rule: Rule) => Rule.required(),
     },
   ],
 };
+
 export const bijouMatiereSchema: SchemaTypeDefinition = {
   name: "bijouMatiere",
   title: "Bijou Matiere",

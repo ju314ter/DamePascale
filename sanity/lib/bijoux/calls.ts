@@ -63,7 +63,6 @@ export const getBijoux = async (filtres?: BijouFilters) => {
     name,
     description,
     price,
-    size,
     "matieres": matieres[]-> {
       _id,
       title,
@@ -91,7 +90,6 @@ export const getBijouById = async (id: string) => {
     name,
     description,
     price,
-    size,
     matiere->{
       _id,
       title
@@ -119,7 +117,6 @@ export const getLastNBijoux = async (n: number) => {
     name,
     description,
     price,
-    size,
     "matieres": matieres[]-> {
       _id,
       title,
@@ -142,7 +139,7 @@ export const getLastNBijoux = async (n: number) => {
 };
 
 export const getBijouNavlinks = async () => {
-  const query = `*[_type == "bijouNavlink"]{
+  const query = `*[_type == "bijouLienMenu"]{
     _id,
     title,
     href
