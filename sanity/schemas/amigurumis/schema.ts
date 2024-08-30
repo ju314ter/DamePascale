@@ -82,19 +82,6 @@ export const amigurumiProductSchema: SchemaTypeDefinition = {
       validation: (Rule: Rule) => Rule.required(),
     },
     {
-      name: "size",
-      title: "Size",
-      type: "string",
-      options: {
-        list: [
-          { title: "Small", value: "S" },
-          { title: "Medium", value: "M" },
-          { title: "Large", value: "L" },
-        ],
-      },
-      validation: (Rule: Rule) => Rule.required(),
-    },
-    {
       name: "imageGallery",
       title: "Image Gallery",
       type: "array",
@@ -105,18 +92,28 @@ export const amigurumiProductSchema: SchemaTypeDefinition = {
       validation: (Rule: Rule) => Rule.required().min(1),
     },
     {
-      name: "category",
-      title: "Category",
-      type: "reference",
-      to: [{ type: "amigurumiCategory" }],
-      validation: (Rule: Rule) => Rule.required(),
+      name: "categories",
+      title: "Categories",
+      type: "array",
+      of: [
+        {
+          type: "reference",
+          to: [{ type: "amigurumiCategory" }],
+        },
+      ],
+      validation: (Rule: Rule) => Rule.required().min(1),
     },
     {
-      name: "univers",
-      title: "Univers",
-      type: "reference",
-      to: [{ type: "amigurumiUnivers" }],
-      validation: (Rule: Rule) => Rule.required(),
+      name: "universes",
+      title: "Universes",
+      type: "array",
+      of: [
+        {
+          type: "reference",
+          to: [{ type: "amigurumiUnivers" }],
+        },
+      ],
+      validation: (Rule: Rule) => Rule.required().min(1),
     },
     {
       name: "stock",

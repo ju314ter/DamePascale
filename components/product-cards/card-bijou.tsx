@@ -34,9 +34,42 @@ const CardBijou = ({ item }: CardBijouProps) => {
         className="w-full h-full flex justify-between flex-col"
       >
         <div className="card-tags w-full flex justify-around p-2 start font-sans flex-wrap gap-1">
-          <Badge variant={"outline"}>{item.matiere.title}</Badge>
+          <div className="flex flex-wrap gap-1 justify-center">
+            {item.categories && item.categories.length > 0 ? (
+              item.categories.map((cat) => (
+                <Badge variant="default" key={cat._id}>
+                  {cat.title}
+                </Badge>
+              ))
+            ) : (
+              <Badge variant="default">No category</Badge>
+            )}
+          </div>
+          <div className="flex flex-wrap gap-1 justify-center">
+            {item.fleurs && item.fleurs.length > 0 ? (
+              item.fleurs.map((fleur) => (
+                <Badge variant="outline" key={fleur._id}>
+                  {fleur.title}
+                </Badge>
+              ))
+            ) : (
+              <Badge variant="outline">No fleur</Badge>
+            )}
+          </div>
+          <div className="flex flex-wrap gap-1 justify-center">
+            {item.matieres && item.matieres.length > 0 ? (
+              item.matieres.map((matiere) => (
+                <Badge variant="outline" key={matiere._id}>
+                  {matiere.title}
+                </Badge>
+              ))
+            ) : (
+              <Badge variant="outline">No matière</Badge>
+            )}
+          </div>
+          {/* <Badge variant={"outline"}>{item.matiere.title}</Badge>
           <Badge variant={"outline"}>{item.fleur.title}</Badge>
-          <Badge variant={"default"}>{item.category.title}</Badge>
+          <Badge variant={"default"}>{item.category.title}</Badge> */}
         </div>
         <div className="overflow-hidden relative w-full h-[55%] flex justify-center items-center">
           {item.promotionDiscount && (
@@ -46,11 +79,6 @@ const CardBijou = ({ item }: CardBijouProps) => {
             >
               Promo
             </Badge>
-          )}
-          {item.size && (
-            <div className="absolute bottom-2 right-2 z-10 text-lg rounded-full h-12 w-12 bg-secondary flex justify-center items-center group-hover:bg-primary group-hover:text-secondary transition-colors duration-500">
-              {item.size}
-            </div>
           )}
           <Image
             priority

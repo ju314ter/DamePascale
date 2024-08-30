@@ -2,10 +2,9 @@ import { groq } from "next-sanity";
 import { client } from "../client";
 
 export interface AmigurumiFilters {
-  size?: ("S" | "M" | "L")[];
   price?: [number, number];
-  univers?: string[];
-  category?: string[];
+  universes?: string[];
+  categories?: string[];
 }
 
 export interface Amigurumi {
@@ -13,15 +12,14 @@ export interface Amigurumi {
   name: string;
   description: string;
   price: number;
-  size: string;
-  univers: {
+  universes: {
     _id: string;
     title: string;
-  };
-  category: {
+  }[];
+  categories: {
     _id: string;
     title: string;
-  };
+  }[];
   stock: number;
   highlightedImg: any;
   imageGallery: any[];
@@ -38,29 +36,34 @@ export interface AmigurumiHerobanner {
 }
 
 export const getAmigurumis = async (filtres?: AmigurumiFilters) => {
-  const sizePartialQuery = filtres?.size
-    ? ` && size in [${filtres.size.map((size) => `"${size}"`)}]`
-    : "";
   const pricePartialQuery = filtres?.price
     ? ` && price >= ${filtres.price[0]} && price <= ${filtres.price[1]}`
     : "";
-  const universPartialQuery = filtres?.univers
-    ? ` && univers._ref in [${filtres.univers.map((univers) => `"${univers}"`)}]`
-    : "";
-  const categoryPartialQuery = filtres?.category
-    ? ` && category._ref in [${filtres.category.map((category) => `"${category}"`)}]`
-    : "";
-  const query = `*[_type == "amigurumis"${sizePartialQuery}${pricePartialQuery}${universPartialQuery}${categoryPartialQuery}]{
+
+  const universPartialQuery =
+    filtres?.universes && filtres.universes.length > 0
+      ? ` && (${filtres.universes.map((univers) => `"${univers}" in universes[]->_id`).join(" || ")})`
+      : "";
+
+  const categoryPartialQuery =
+    filtres?.categories && filtres.categories.length > 0
+      ? ` && (${filtres.categories.map((cat) => `"${cat}" in categories[]->_id`).join(" || ")})`
+      : "";
+  // && (
+  //   "eeabf63b-1271-4537-90f4-1d565c06b2fd" in categories[]->_id ||
+  //   "another-category-id" in categories[]->_id
+  // )
+
+  const query = `*[_type == "amigurumis"${universPartialQuery}${categoryPartialQuery}${pricePartialQuery}]{
     _id,
     name,
     description,
     price,
-    size,
-    univers->{
+    "universes": universes[]-> {
       _id,
-      title
+      title,
     },
-    category->{
+    "categories": categories[]-> {
       _id,
       title
     },
@@ -69,7 +72,11 @@ export const getAmigurumis = async (filtres?: AmigurumiFilters) => {
     imageGallery,
     promotionDiscount
   }`;
+
+  console.log("query", query);
+
   const amigurumis: Amigurumi[] = await client.fetch(groq`${query}`);
+
   return amigurumis;
 };
 
@@ -91,12 +98,11 @@ export const getAmigurumiById = async (id: string) => {
     name,
     description,
     price,
-    size,
-    univers->{
+    "universes": universes[]-> {
       _id,
-      title
+      title,
     },
-    category->{
+    "categories": categories[]-> {
       _id,
       title
     },
@@ -115,12 +121,11 @@ export const getLastNAmigurumis = async (n: number) => {
     name,
     description,
     price,
-    size,
-    univers->{
+    "universes": universes[]-> {
       _id,
-      title
+      title,
     },
-    category->{
+    "categories": categories[]-> {
       _id,
       title
     },

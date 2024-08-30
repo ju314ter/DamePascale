@@ -26,6 +26,10 @@ const cardVariants = {
 export default function BoutiquePage() {
   const [amigurumis, setAmigurumis] = useState<Amigurumi[]>([]);
 
+  // useEffect(() => {
+  //   console.log(amigurumis);
+  // }, [amigurumis]);
+
   async function fetchAmigurumis(filters?: AmigurumiFilters) {
     const data = filters ? await getAmigurumis(filters) : await getAmigurumis();
     setAmigurumis(data);
@@ -45,15 +49,11 @@ export default function BoutiquePage() {
     const prices = searchParams.get("price")?.split(",").map(Number) || [];
     return [prices[0] || 0, prices[1] || 100]; // Ensure it returns a tuple
   }, [searchParams]);
-  const sizeParams = useMemo(
-    () => searchParams.get("size")?.split(",") || [],
-    [searchParams]
-  );
+
   const urlParamsArray = {
-    category: categoryParams,
-    univers: universParams,
-    size: sizeParams,
-    price: priceParams,
+    categories: categoryParams,
+    universes: universParams,
+    price: priceParams as [number, number],
   };
 
   useEffect(() => {
@@ -61,25 +61,23 @@ export default function BoutiquePage() {
     if (searchParams.size === 0) fetchAmigurumis();
     else {
       const filters: AmigurumiFilters = {
-        category: categoryParams,
-        univers: universParams,
-        size: sizeParams as ("S" | "M" | "L")[],
+        categories: categoryParams,
+        universes: universParams,
         price: priceParams as [number, number],
       };
       fetchAmigurumis(filters);
     }
-  }, [searchParams, categoryParams, universParams, sizeParams, priceParams]);
+  }, [searchParams, categoryParams, universParams, priceParams]);
 
   // Filters changed, update url params and fetch filtered amigurumis
   async function handleFiltersChanged(
     filtres: AmigurumiFilters
   ): Promise<void> {
     const url = new URL(pathname, window.location.origin);
-    if (filtres.category)
-      url.searchParams.set("category", filtres.category.join(","));
-    if (filtres.univers)
-      url.searchParams.set("univers", filtres.univers.join(","));
-    if (filtres.size) url.searchParams.set("size", filtres.size.join(","));
+    if (filtres.categories)
+      url.searchParams.set("category", filtres.categories.join(","));
+    if (filtres.universes)
+      url.searchParams.set("univers", filtres.universes.join(","));
     if (filtres.price) url.searchParams.set("price", filtres.price.join(","));
 
     window.history.pushState({}, "", url);

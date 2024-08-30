@@ -29,16 +29,28 @@ import {
   getBijouxFleurs,
   getBijouxMatieres,
 } from "@/sanity/lib/bijoux/calls";
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "../ui/accordion";
 
 interface FiltresBijouProps {
   handleFiltersChange: (filters: BijouFilters) => void;
   urlParamsArray: {
-    category: string[];
-    fleur: string[];
-    matiere: string[];
-    size: string[];
-    price: number[];
+    categories: string[];
+    fleurs: string[];
+    matieres: string[];
+    price: [number, number];
   };
+}
+
+interface FormData {
+  categories: { _id: string; title: string; checked: boolean }[];
+  matieres: { _id: string; title: string; checked: boolean }[];
+  fleurs: { _id: string; title: string; checked: boolean }[];
+  price: [number, number];
 }
 
 const FiltresBijouxWrapper = ({
@@ -46,16 +58,11 @@ const FiltresBijouxWrapper = ({
   urlParamsArray,
 }: FiltresBijouProps) => {
   const { register, handleSubmit, setValue, control, watch, getValues } =
-    useForm<any>({
+    useForm<FormData>({
       defaultValues: {
-        category: [{ _id: "1234-5678", title: "Categorie", checked: true }],
-        matiere: [{ _id: "1234-5678", title: "Matière", checked: true }],
-        fleur: [{ _id: "1234-5678", title: "Fleur", checked: true }],
-        size: [
-          { _id: "S", title: "Small", checked: true },
-          { _id: "M", title: "Medium", checked: true },
-          { _id: "L", title: "Large", checked: true },
-        ],
+        categories: [{ _id: "1234-5678", title: "Categorie", checked: true }],
+        matieres: [{ _id: "1234-5678", title: "Matière", checked: true }],
+        fleurs: [{ _id: "1234-5678", title: "Fleur", checked: true }],
         price: [0, 100],
       },
     });
@@ -64,7 +71,7 @@ const FiltresBijouxWrapper = ({
     async function fetchBijouxMatieres() {
       const data = await getBijouxMatieres();
       setValue(
-        "matiere",
+        "matieres",
         data.map((matiere) => ({
           ...matiere,
           checked: true,
@@ -76,7 +83,7 @@ const FiltresBijouxWrapper = ({
     async function fetchBijouxFleurs() {
       const data = await getBijouxFleurs();
       setValue(
-        "fleur",
+        "fleurs",
         data.map((fleur) => ({
           ...fleur,
           checked: true,
@@ -88,7 +95,7 @@ const FiltresBijouxWrapper = ({
     async function fetchBijouxCategories() {
       const data = await getBijouxCategories();
       setValue(
-        "category",
+        "categories",
         data.map((category) => ({
           ...category,
           checked: true,
@@ -100,47 +107,36 @@ const FiltresBijouxWrapper = ({
 
   // Check and uncheck filtres according to URLparams
   useEffect(() => {
-    const currentCategory = getValues("category");
-    const currentMatiere = getValues("matiere");
-    const currentFleur = getValues("fleur");
-    const currentSize = getValues("size");
+    const currentCategory = getValues("categories");
+    const currentMatiere = getValues("matieres");
+    const currentFleur = getValues("fleurs");
 
-    if (urlParamsArray.category.length > 0) {
+    if (urlParamsArray.categories && urlParamsArray.categories.length > 0) {
       setValue(
-        "category",
+        "categories",
         currentCategory.map((category: any) => ({
           ...category,
-          checked: urlParamsArray.category.includes(category._id),
+          checked: urlParamsArray.categories.includes(category._id),
         }))
       );
     }
 
-    if (urlParamsArray.matiere.length > 0) {
+    if (urlParamsArray.matieres && urlParamsArray.matieres.length > 0) {
       setValue(
-        "matiere",
+        "matieres",
         currentMatiere.map((matiere: any) => ({
           ...matiere,
-          checked: urlParamsArray.matiere.includes(matiere._id),
+          checked: urlParamsArray.matieres.includes(matiere._id),
         }))
       );
     }
 
-    if (urlParamsArray.fleur.length > 0) {
+    if (urlParamsArray.fleurs && urlParamsArray.fleurs.length > 0) {
       setValue(
-        "fleur",
+        "fleurs",
         currentFleur.map((fleur: any) => ({
           ...fleur,
-          checked: urlParamsArray.fleur.includes(fleur._id),
-        }))
-      );
-    }
-
-    if (urlParamsArray.size.length > 0) {
-      setValue(
-        "size",
-        currentSize.map((size: any) => ({
-          ...size,
-          checked: urlParamsArray.size.includes(size._id),
+          checked: urlParamsArray.fleurs.includes(fleur._id),
         }))
       );
     }
@@ -152,34 +148,30 @@ const FiltresBijouxWrapper = ({
 
   const onSubmit: SubmitHandler<any> = (data) => {
     const newFilters: BijouFilters = {
-      category: getValues("category")
+      categories: getValues("categories")
         .filter((category: any) => category.checked)
         .map((category: any) => category._id),
-      matiere: getValues("matiere")
+      matieres: getValues("matieres")
         .filter((matiere: any) => matiere.checked)
         .map((matiere: any) => matiere._id),
-      fleur: getValues("fleur")
+      fleurs: getValues("fleurs")
         .filter((fleur: any) => fleur.checked)
         .map((fleur: any) => fleur._id),
-      size: getValues("size")
-        .filter((size: any) => size.checked)
-        .map((size: any) => size._id),
       price: getValues("price"),
     };
     handleFiltersChange(newFilters);
   };
 
-  const { fields: fieldSize } = useFieldArray({ name: "size", control });
   const { fields: fieldCategory } = useFieldArray({
-    name: "category",
+    name: "categories",
     control,
   });
   const { fields: fieldMatiere } = useFieldArray({
-    name: "matiere",
+    name: "matieres",
     control,
   });
   const { fields: fieldFleur } = useFieldArray({
-    name: "fleur",
+    name: "fleurs",
     control,
   });
 
@@ -194,16 +186,13 @@ const FiltresBijouxWrapper = ({
 
   function handleSelectAll(bool: boolean): void {
     fieldCategory.forEach((_, index) => {
-      setValue(`category.${index}.checked`, bool, { shouldDirty: true });
+      setValue(`categories.${index}.checked`, bool, { shouldDirty: true });
     });
     fieldMatiere.forEach((_, index) => {
-      setValue(`matiere.${index}.checked`, bool, { shouldDirty: true });
+      setValue(`matieres.${index}.checked`, bool, { shouldDirty: true });
     });
     fieldFleur.forEach((_, index) => {
-      setValue(`fleur.${index}.checked`, bool, { shouldDirty: true });
-    });
-    fieldSize.forEach((_, index) => {
-      setValue(`size.${index}.checked`, bool, { shouldDirty: true });
+      setValue(`fleurs.${index}.checked`, bool, { shouldDirty: true });
     });
   }
 
@@ -236,109 +225,117 @@ const FiltresBijouxWrapper = ({
         </SheetHeader>
         <form onSubmit={handleSubmit(onSubmit)}>
           <div className="py-4">
-            <Label className="py-4 italic">Categories :</Label>
-            <div className="flex flex-wrap m-4">
-              {fieldCategory.map((category: any, i) => (
-                <div
-                  key={category._id} // Ensure unique key
-                  className="flex items-center gap-2 justify-center p-1"
-                >
-                  <CheckboxFilters
-                    id={category._id}
-                    checked={watchedFields.category?.[i]?.checked ?? false}
-                    {...register(`category.${i}._id`)}
-                    onCheckedChange={(checked: boolean) => {
-                      setValue(`category.${i}.checked`, checked, {
-                        shouldDirty: true,
-                      });
-                    }}
-                  >
-                    {category.title}
-                  </CheckboxFilters>
-                </div>
-              ))}
-            </div>
-
-            <Label className="py-4 italic">Matière :</Label>
-            <div className="flex flex-wrap m-4">
-              {fieldMatiere.map((matiere: any, i) => (
-                <div
-                  key={matiere._id} // Ensure unique key
-                  className="flex items-center gap-2 justify-center p-1"
-                >
-                  <CheckboxFilters
-                    id={matiere._id}
-                    checked={watchedFields.matiere?.[i]?.checked ?? false}
-                    {...register(`matiere.${i}._id`)}
-                    onCheckedChange={(checked: boolean) => {
-                      setValue(`matiere.${i}.checked`, checked, {
-                        shouldDirty: true,
-                      });
-                    }}
-                  >
-                    {matiere.title}
-                  </CheckboxFilters>
-                </div>
-              ))}
-            </div>
-
-            <Label className="py-4 italic">Fleur :</Label>
-            <div className="flex flex-wrap m-4">
-              {fieldFleur.map((fleur: any, i) => (
-                <div
-                  key={fleur._id} // Ensure unique key
-                  className="flex items-center gap-2 justify-center p-1"
-                >
-                  <CheckboxFilters
-                    id={fleur._id}
-                    checked={watchedFields.fleur?.[i]?.checked ?? false}
-                    {...register(`fleur.${i}._id`)}
-                    onCheckedChange={(checked: boolean) => {
-                      setValue(`fleur.${i}.checked`, checked, {
-                        shouldDirty: true,
-                      });
-                    }}
-                  >
-                    {fleur.title}
-                  </CheckboxFilters>
-                </div>
-              ))}
-            </div>
-
-            <Label className="py-4 italic">Tailles :</Label>
-            <div className="flex flex-wrap m-4">
-              {fieldSize.map((size: any, i) => (
-                <div
-                  key={size._id} // Ensure unique key
-                  className="flex items-center gap-2 justify-center p-1"
-                >
-                  <CheckboxFilters
-                    id={size._id}
-                    checked={watchedFields.size?.[i]?.checked ?? false}
-                    {...register(`size.${i}._id`)}
-                    onCheckedChange={(checked: boolean) => {
-                      setValue(`size.${i}.checked`, checked, {
-                        shouldDirty: true,
-                      });
-                    }}
-                  >
-                    {size.title}
-                  </CheckboxFilters>
-                </div>
-              ))}
-            </div>
-            <Label className="py-4 italic">Prix :</Label>
-            <div className="rounded-none border-none h-10 w-full flex justify-center items-center">
-              <p className="text-base px-2">{watch("price")[0]}</p>
-              <Slider
-                min={0}
-                max={100}
-                step={1}
-                defaultValue={[getValues("price")[0], getValues("price")[1]]}
-                onValueChange={handleSliderChange}
-              />
-              <p className="text-base px-2">{watch("price")[1]}</p>
-            </div>
+            <Accordion type="single" collapsible className="w-full">
+              <AccordionItem value="item-1">
+                <AccordionTrigger>
+                  <Label className="py-4 italic">Categories :</Label>
+                </AccordionTrigger>
+                <AccordionContent>
+                  <div className="flex flex-wrap">
+                    {fieldCategory.map((category: any, i) => (
+                      <div
+                        key={category._id} // Ensure unique key
+                        className="flex items-center gap-2 justify-center p-1"
+                      >
+                        <CheckboxFilters
+                          id={category._id}
+                          checked={
+                            watchedFields.categories?.[i]?.checked ?? false
+                          }
+                          {...register(`categories.${i}._id`)}
+                          onCheckedChange={(checked: boolean) => {
+                            setValue(`categories.${i}.checked`, checked, {
+                              shouldDirty: true,
+                            });
+                          }}
+                        >
+                          {category.title}
+                        </CheckboxFilters>
+                      </div>
+                    ))}
+                  </div>
+                </AccordionContent>
+              </AccordionItem>
+              <AccordionItem value="item-2">
+                <AccordionTrigger>
+                  <Label className="py-4 italic">Matière :</Label>
+                </AccordionTrigger>
+                <AccordionContent>
+                  <div className="flex flex-wrap">
+                    {fieldMatiere.map((matiere: any, i) => (
+                      <div
+                        key={matiere._id} // Ensure unique key
+                        className="flex items-center gap-2 justify-center p-1"
+                      >
+                        <CheckboxFilters
+                          id={matiere._id}
+                          checked={
+                            watchedFields.matieres?.[i]?.checked ?? false
+                          }
+                          {...register(`matieres.${i}._id`)}
+                          onCheckedChange={(checked: boolean) => {
+                            setValue(`matieres.${i}.checked`, checked, {
+                              shouldDirty: true,
+                            });
+                          }}
+                        >
+                          {matiere.title}
+                        </CheckboxFilters>
+                      </div>
+                    ))}
+                  </div>
+                </AccordionContent>
+              </AccordionItem>
+              <AccordionItem value="item-3">
+                <AccordionTrigger>
+                  <Label className="py-4 italic">Fleur :</Label>
+                </AccordionTrigger>
+                <AccordionContent>
+                  <div className="flex flex-wrap">
+                    {fieldFleur.map((fleur: any, i) => (
+                      <div
+                        key={fleur._id} // Ensure unique key
+                        className="flex items-center gap-2 justify-center p-1"
+                      >
+                        <CheckboxFilters
+                          id={fleur._id}
+                          checked={watchedFields.fleurs?.[i]?.checked ?? false}
+                          {...register(`fleurs.${i}._id`)}
+                          onCheckedChange={(checked: boolean) => {
+                            setValue(`fleurs.${i}.checked`, checked, {
+                              shouldDirty: true,
+                            });
+                          }}
+                        >
+                          {fleur.title}
+                        </CheckboxFilters>
+                      </div>
+                    ))}
+                  </div>
+                </AccordionContent>
+              </AccordionItem>
+              <AccordionItem value="item-4">
+                <AccordionTrigger>
+                  <Label className="py-4 italic">Prix :</Label>
+                </AccordionTrigger>
+                <AccordionContent>
+                  <div className="rounded-none border-none h-10 w-full flex justify-center items-center">
+                    <p className="text-base px-2">{watch("price")[0]}</p>
+                    <Slider
+                      min={0}
+                      max={100}
+                      step={1}
+                      defaultValue={[
+                        getValues("price")[0],
+                        getValues("price")[1],
+                      ]}
+                      onValueChange={handleSliderChange}
+                    />
+                    <p className="text-base px-2">{watch("price")[1]}</p>
+                  </div>
+                </AccordionContent>
+              </AccordionItem>
+            </Accordion>
           </div>
           <SheetFooter>
             <SheetClose

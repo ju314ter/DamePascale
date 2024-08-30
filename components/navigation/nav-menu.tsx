@@ -9,11 +9,12 @@ import {
   NavigationMenuLink,
   NavigationMenuList,
   NavigationMenuTrigger,
+  navigationMenuTriggerStyle,
 } from "@/components/ui/navigation-menu";
 import Link from "next/link";
 import React from "react";
 import Image from "next/image";
-import { Menu } from "lucide-react";
+import { Menu, Navigation } from "lucide-react";
 
 export function NavMenu({
   amigurumisNavlink,

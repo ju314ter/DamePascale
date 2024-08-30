@@ -93,19 +93,6 @@ export const bijouProductSchema: SchemaTypeDefinition = {
       validation: (Rule) => Rule.required(),
     },
     {
-      name: "size",
-      title: "Taille",
-      type: "string",
-      options: {
-        list: [
-          { title: "Small", value: "S" },
-          { title: "Medium", value: "M" },
-          { title: "Large", value: "L" },
-        ],
-      },
-      validation: (Rule) => Rule.required(),
-    },
-    {
       name: "imageGallery",
       title: "Galerie d'images",
       type: "array",
@@ -116,25 +103,40 @@ export const bijouProductSchema: SchemaTypeDefinition = {
       validation: (Rule) => Rule.required().min(1),
     },
     {
-      name: "category",
-      title: "Catégorie",
-      type: "reference",
-      to: [{ type: "bijouCategory" }],
-      validation: (Rule) => Rule.required(),
+      name: "categories",
+      title: "Catégories",
+      type: "array",
+      of: [
+        {
+          type: "reference",
+          to: [{ type: "bijouCategory" }],
+        },
+      ],
+      validation: (Rule) => Rule.required().min(1),
     },
     {
-      name: "fleur",
-      title: "Fleur",
-      type: "reference",
-      to: [{ type: "bijouFleur" }],
-      validation: (Rule) => Rule.required(),
+      name: "fleurs",
+      title: "Fleurs",
+      type: "array",
+      of: [
+        {
+          type: "reference",
+          to: [{ type: "bijouFleur" }],
+        },
+      ],
+      validation: (Rule) => Rule.required().min(1),
     },
     {
-      name: "matiere",
-      title: "Matière",
-      type: "reference",
-      to: [{ type: "bijouMatiere" }],
-      validation: (Rule) => Rule.required(),
+      name: "matieres",
+      title: "Matières",
+      type: "array",
+      of: [
+        {
+          type: "reference",
+          to: [{ type: "bijouMatiere" }],
+        },
+      ],
+      validation: (Rule) => Rule.required().min(1),
     },
     {
       name: "stock",

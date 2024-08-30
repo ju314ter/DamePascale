@@ -28,21 +28,25 @@ import {
 import { CheckboxFilters } from "../ui/checkbox";
 import { Label } from "../ui/label";
 import { cn } from "@/lib/utils";
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "../ui/accordion";
 
 interface FiltresAmigurumiProps {
   handleFiltersChange: (filters: AmigurumiFilters) => void;
   urlParamsArray: {
-    category: string[];
-    univers: string[];
-    size: string[];
+    categories: string[];
+    universes: string[];
     price: [number, number];
   };
 }
 
 interface FormData {
-  category: { _id: string; title: string; checked: boolean }[];
-  univers: { _id: string; title: string; checked: boolean }[];
-  size: { _id: string; title: string; checked: boolean }[];
+  categories: { _id: string; title: string; checked: boolean }[];
+  universes: { _id: string; title: string; checked: boolean }[];
   price: [number, number];
 }
 
@@ -53,13 +57,8 @@ const FiltresAmigurumiWrapper = ({
   const { register, handleSubmit, setValue, control, watch, getValues } =
     useForm<FormData>({
       defaultValues: {
-        category: [{ _id: "1234-5678", title: "Category", checked: true }],
-        univers: [{ _id: "1234-5678", title: "Univers", checked: true }],
-        size: [
-          { _id: "S", title: "Small", checked: true },
-          { _id: "M", title: "Medium", checked: true },
-          { _id: "L", title: "Large", checked: true },
-        ],
+        categories: [{ _id: "1234-5678", title: "Category", checked: true }],
+        universes: [{ _id: "1234-5678", title: "Univers", checked: true }],
         price: [0, 100],
       },
     });
@@ -68,7 +67,7 @@ const FiltresAmigurumiWrapper = ({
     async function fetchAmigurumisUnivers() {
       const data = await getAmigurumisUnivers();
       setValue(
-        "univers",
+        "universes",
         data.map((univers) => ({
           ...univers,
           checked: true,
@@ -80,7 +79,7 @@ const FiltresAmigurumiWrapper = ({
     async function fetchAmigurumisCategories() {
       const data = await getAmigurumisCategories();
       setValue(
-        "category",
+        "categories",
         data.map((category) => ({
           ...category,
           checked: true,
@@ -92,36 +91,25 @@ const FiltresAmigurumiWrapper = ({
 
   // Check and uncheck filtres according to URLparams
   useEffect(() => {
-    const currentCategory = getValues("category");
-    const currentUnivers = getValues("univers");
-    const currentSize = getValues("size");
+    const currentCategory = getValues("categories");
+    const currentUnivers = getValues("universes");
 
-    if (urlParamsArray.category.length > 0) {
+    if (urlParamsArray.categories && urlParamsArray.categories.length > 0) {
       setValue(
-        "category",
+        "categories",
         currentCategory.map((category: any) => ({
           ...category,
-          checked: urlParamsArray.category.includes(category._id),
+          checked: urlParamsArray.categories.includes(category._id),
         }))
       );
     }
 
-    if (urlParamsArray.univers.length > 0) {
+    if (urlParamsArray.universes && urlParamsArray.universes.length > 0) {
       setValue(
-        "univers",
+        "universes",
         currentUnivers.map((univers: any) => ({
           ...univers,
-          checked: urlParamsArray.univers.includes(univers._id),
-        }))
-      );
-    }
-
-    if (urlParamsArray.size.length > 0) {
-      setValue(
-        "size",
-        currentSize.map((size: any) => ({
-          ...size,
-          checked: urlParamsArray.size.includes(size._id),
+          checked: urlParamsArray.universes.includes(univers._id),
         }))
       );
     }
@@ -133,27 +121,23 @@ const FiltresAmigurumiWrapper = ({
 
   const onSubmit: SubmitHandler<any> = (data) => {
     const newFilters: AmigurumiFilters = {
-      category: getValues("category")
+      categories: getValues("categories")
         .filter((category: any) => category.checked)
         .map((category: any) => category._id),
-      univers: getValues("univers")
+      universes: getValues("universes")
         .filter((univers: any) => univers.checked)
         .map((univers: any) => univers._id),
-      size: getValues("size")
-        .filter((size: any) => size.checked)
-        .map((size: any) => size._id),
       price: getValues("price"),
     };
     handleFiltersChange(newFilters);
   };
 
-  const { fields: fieldSize } = useFieldArray({ name: "size", control });
   const { fields: fieldCategory } = useFieldArray({
-    name: "category",
+    name: "categories",
     control,
   });
   const { fields: fieldUnivers } = useFieldArray({
-    name: "univers",
+    name: "universes",
     control,
   });
 
@@ -168,13 +152,10 @@ const FiltresAmigurumiWrapper = ({
 
   function handleSelectAll(bool: boolean): void {
     fieldCategory.forEach((_, index) => {
-      setValue(`category.${index}.checked`, bool, { shouldDirty: true });
+      setValue(`categories.${index}.checked`, bool, { shouldDirty: true });
     });
     fieldUnivers.forEach((_, index) => {
-      setValue(`univers.${index}.checked`, bool, { shouldDirty: true });
-    });
-    fieldSize.forEach((_, index) => {
-      setValue(`size.${index}.checked`, bool, { shouldDirty: true });
+      setValue(`universes.${index}.checked`, bool, { shouldDirty: true });
     });
   }
 
@@ -207,87 +188,89 @@ const FiltresAmigurumiWrapper = ({
         </SheetHeader>
         <form onSubmit={handleSubmit(onSubmit)}>
           <div className="py-4">
-            <Label className="py-4 italic">Categories :</Label>
-            <div className="flex flex-wrap m-4">
-              {fieldCategory.map((category: any, i) => (
-                <div
-                  key={category._id} // Ensure unique key
-                  className="flex items-center gap-2 justify-center p-1"
-                >
-                  <CheckboxFilters
-                    id={category._id}
-                    checked={watchedFields.category?.[i]?.checked ?? false}
-                    {...register(`category.${i}._id`)}
-                    onCheckedChange={(checked: boolean) => {
-                      setValue(`category.${i}.checked`, checked, {
-                        shouldDirty: true,
-                      });
-                    }}
-                  >
-                    {category.title}
-                  </CheckboxFilters>
-                </div>
-              ))}
-            </div>
-
-            <Label className="py-4 italic">Univers :</Label>
-            <div className="flex flex-wrap m-4">
-              {fieldUnivers.map((univers: any, i) => (
-                <div
-                  key={univers._id} // Ensure unique key
-                  className="flex items-center gap-2 justify-center p-1"
-                >
-                  <CheckboxFilters
-                    id={univers._id}
-                    checked={watchedFields.univers?.[i]?.checked ?? false}
-                    {...register(`univers.${i}._id`)}
-                    onCheckedChange={(checked: boolean) => {
-                      setValue(`univers.${i}.checked`, checked, {
-                        shouldDirty: true,
-                      });
-                    }}
-                  >
-                    {univers.title}
-                  </CheckboxFilters>
-                </div>
-              ))}
-            </div>
-
-            <Label className="py-4 italic">Tailles :</Label>
-            <div className="flex flex-wrap m-4">
-              {fieldSize.map((size: any, i) => (
-                <div
-                  key={size._id} // Ensure unique key
-                  className="flex items-center gap-2 justify-center p-1"
-                >
-                  <CheckboxFilters
-                    id={size._id}
-                    checked={watchedFields.size?.[i]?.checked ?? false}
-                    {...register(`size.${i}._id`)}
-                    onCheckedChange={(checked: boolean) => {
-                      setValue(`size.${i}.checked`, checked, {
-                        shouldDirty: true,
-                      });
-                    }}
-                  >
-                    {size.title}
-                  </CheckboxFilters>
-                </div>
-              ))}
-            </div>
-
-            <Label className="py-4 italic">Prix :</Label>
-            <div className="rounded-none border-none h-10 w-full flex justify-center items-center">
-              <p className="px-2">{watch("price")[0]}</p>
-              <Slider
-                min={0}
-                max={100}
-                step={1}
-                defaultValue={[getValues("price")[0], getValues("price")[1]]}
-                onValueChange={handleSliderChange}
-              />
-              <p className="px-2">{watch("price")[1]}</p>
-            </div>
+            <Accordion type="single" collapsible className="w-full">
+              <AccordionItem value="item-1">
+                <AccordionTrigger>
+                  <Label className="py-4 italic">Categories :</Label>
+                </AccordionTrigger>
+                <AccordionContent>
+                  <div className="flex flex-wrap">
+                    {fieldCategory.map((category: any, i) => (
+                      <div
+                        key={category._id} // Ensure unique key
+                        className="flex items-center gap-2 justify-center p-1"
+                      >
+                        <CheckboxFilters
+                          id={category._id}
+                          checked={
+                            watchedFields.categories?.[i]?.checked ?? false
+                          }
+                          {...register(`categories.${i}._id`)}
+                          onCheckedChange={(checked: boolean) => {
+                            setValue(`categories.${i}.checked`, checked, {
+                              shouldDirty: true,
+                            });
+                          }}
+                        >
+                          {category.title}
+                        </CheckboxFilters>
+                      </div>
+                    ))}
+                  </div>
+                </AccordionContent>
+              </AccordionItem>
+              <AccordionItem value="item-2">
+                <AccordionTrigger>
+                  <Label className="py-4 italic">Univers :</Label>
+                </AccordionTrigger>
+                <AccordionContent>
+                  <div className="flex flex-wrap">
+                    {fieldUnivers.map((univers: any, i) => (
+                      <div
+                        key={univers._id} // Ensure unique key
+                        className="flex items-center gap-2 justify-center p-1"
+                      >
+                        <CheckboxFilters
+                          id={univers._id}
+                          checked={
+                            watchedFields.universes?.[i]?.checked ?? false
+                          }
+                          {...register(`universes.${i}._id`)}
+                          onCheckedChange={(checked: boolean) => {
+                            setValue(`universes.${i}.checked`, checked, {
+                              shouldDirty: true,
+                            });
+                          }}
+                        >
+                          {univers.title}
+                        </CheckboxFilters>
+                      </div>
+                    ))}
+                  </div>
+                </AccordionContent>
+              </AccordionItem>
+              <AccordionItem value="item-3">
+                <AccordionTrigger>
+                  <Label className="py-4 italic">Prix :</Label>
+                </AccordionTrigger>
+                <AccordionContent>
+                  <div className="rounded-none border-none h-10 w-full flex justify-center items-center">
+                    <p className="px-2">{watch("price")[0]}</p>
+                    <Slider
+                      min={0}
+                      max={100}
+                      step={1}
+                      defaultValue={[
+                        getValues("price")[0],
+                        getValues("price")[1],
+                      ]}
+                      onValueChange={handleSliderChange}
+                    />
+                    <p className="px-2">{watch("price")[1]}</p>
+                  </div>
+                </AccordionContent>
+              </AccordionItem>
+            </Accordion>
           </div>
           <SheetFooter>
             <SheetClose

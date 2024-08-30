@@ -5,21 +5,15 @@ import Image from "next/image";
 import { NavMenu } from "@/components/navigation/nav-menu";
 import Link from "next/link";
 import { Jacques_Francois, Italiana } from "next/font/google";
-import {
-  getAmigurumiNavlinks,
-  getAmigurumisCategories,
-} from "@/sanity/lib/amigurumis/calls";
-import {
-  getBijouNavlinks,
-  getBijouxCategories,
-} from "@/sanity/lib/bijoux/calls";
+import { getAmigurumiNavlinks } from "@/sanity/lib/amigurumis/calls";
+import { getBijouNavlinks } from "@/sanity/lib/bijoux/calls";
 import { getBlogPostsCategories } from "@/sanity/lib/blog/calls";
 import PanierWrapper from "@/components/panier/panier";
 import { Toaster } from "@/components/ui/toaster";
-import { AnimatePresence, motion } from "framer-motion";
-import Transition from "@/components/ui/transition";
 import { Suspense } from "react";
 import { Loader } from "lucide-react";
+import { navigationMenuTriggerStyle } from "@/components/ui/navigation-menu";
+import { Button } from "@/components/ui/button";
 
 const jaquesFrancoisFont = Jacques_Francois({
   weight: "400",
@@ -57,7 +51,7 @@ export default function RootLayout({
       >
         <div className="fixed z-10 header flex w-full h-[50px] justify-center items-center bg-opacity-20 bg-white backdrop-blur-xl shadow-sm">
           <div className="logo ml-2 absolute left-0">
-            <Link href="/">
+            <Link href="/" className="flex gap-2">
               <Image
                 src="/logo.png"
                 alt="Pascale FEGER Logo"
@@ -65,6 +59,9 @@ export default function RootLayout({
                 height={40}
                 priority
               />
+              <Button className={cn(navigationMenuTriggerStyle(), "text-xl")}>
+                Accueil
+              </Button>
             </Link>
           </div>
           <NavMenu

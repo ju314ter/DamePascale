@@ -45,16 +45,12 @@ export default function BoutiqueBijouPage() {
     () => searchParams.get("price")?.split(",").map(Number) || [0, 100],
     [searchParams]
   );
-  const sizeParams = useMemo(
-    () => searchParams.get("size")?.split(",") || [],
-    [searchParams]
-  );
+
   const urlParamsArray = {
-    category: categoryParams,
-    matiere: matiereParams,
-    fleur: fleurParams,
-    size: sizeParams,
-    price: priceParams,
+    categories: categoryParams,
+    matieres: matiereParams,
+    fleurs: fleurParams,
+    price: priceParams as [number, number],
   };
 
   useEffect(() => {
@@ -62,32 +58,23 @@ export default function BoutiqueBijouPage() {
     if (searchParams.size === 0) fetchBijoux();
     else {
       const filters: BijouFilters = {
-        category: categoryParams,
-        matiere: matiereParams,
-        fleur: fleurParams,
-        size: sizeParams as ("S" | "M" | "L")[],
+        categories: categoryParams,
+        matieres: matiereParams,
+        fleurs: fleurParams,
         price: priceParams as [number, number],
       };
       fetchBijoux(filters);
     }
-  }, [
-    searchParams,
-    categoryParams,
-    matiereParams,
-    fleurParams,
-    sizeParams,
-    priceParams,
-  ]);
+  }, [searchParams, categoryParams, matiereParams, fleurParams, priceParams]);
 
   // Filters changed, update url params and fetch filtered amigurumis
   async function handleFiltersChanged(filtres: BijouFilters): Promise<void> {
     const url = new URL(pathname, window.location.origin);
-    if (filtres.category)
-      url.searchParams.set("category", filtres.category.join(","));
-    if (filtres.matiere)
-      url.searchParams.set("matiere", filtres.matiere.join(","));
-    if (filtres.fleur) url.searchParams.set("fleur", filtres.fleur.join(","));
-    if (filtres.size) url.searchParams.set("size", filtres.size.join(","));
+    if (filtres.categories)
+      url.searchParams.set("category", filtres.categories.join(","));
+    if (filtres.matieres)
+      url.searchParams.set("matiere", filtres.matieres.join(","));
+    if (filtres.fleurs) url.searchParams.set("fleur", filtres.fleurs.join(","));
     if (filtres.price) url.searchParams.set("price", filtres.price.join(","));
 
     window.history.pushState({}, "", url);

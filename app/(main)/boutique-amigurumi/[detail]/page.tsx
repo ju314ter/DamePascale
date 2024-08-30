@@ -50,8 +50,8 @@ const ProductDetailAmigurumiPage = () => {
         <div className="product-info w-full md:w-1/2 flex flex-col gap-4">
           <h1 className="text-3xl font-bold text-primary">{amigurumi.name}</h1>
           <div className="product-tags flex gap-2">
-            <Badge variant={"outline"}>{amigurumi.category.title}</Badge>
-            <Badge variant={"default"}>{amigurumi.univers.title}</Badge>
+            {/* <Badge variant={"outline"}>{amigurumi.categories.title}</Badge>
+            <Badge variant={"default"}>{amigurumi.universes.title}</Badge> */}
             {amigurumi.promotionDiscount && (
               <Badge variant={"destructive"}>Promo</Badge>
             )}

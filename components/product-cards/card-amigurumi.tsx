@@ -24,10 +24,9 @@ interface CardAmigurumiProps {
 
 const CardAmigurumi = ({ ami }: CardAmigurumiProps) => {
   const { addToPanier, removeFromPanier } = usePanier();
-  const hasItemInCart = usePanier().panier.some(
-    (item) => item.type._id === ami._id
-  );
   const { toast } = useToast();
+
+  if (!ami) return null;
 
   return (
     <Card className="w-full min-h-[400px] group bg-white border-secondary rounded-md product-card flex justify-center items-center flex-col drop-shadow-sm hover:bg-secondary hover:-translate-y-1 transition-all duration-700">
@@ -36,8 +35,28 @@ const CardAmigurumi = ({ ami }: CardAmigurumiProps) => {
         className="w-full h-full flex justify-between flex-col"
       >
         <div className="card-tags w-full flex justify-around p-2 start flex-wrap gap-1">
-          <Badge variant={"outline"}>{ami.category.title}</Badge>
-          <Badge variant={"default"}>{ami.univers.title}</Badge>
+          <div className="flex flex-wrap gap-1 justify-center">
+            {ami.categories && ami.categories.length > 0 ? (
+              ami.categories.map((cat) => (
+                <Badge variant="default" key={cat._id}>
+                  {cat.title}
+                </Badge>
+              ))
+            ) : (
+              <Badge variant="default">No category</Badge>
+            )}
+          </div>
+          <div className="flex flex-wrap gap-1 justify-center">
+            {ami.universes && ami.universes.length > 0 ? (
+              ami.universes.map((uni) => (
+                <Badge variant="outline" key={uni._id}>
+                  {uni.title}
+                </Badge>
+              ))
+            ) : (
+              <Badge variant="outline">No univers</Badge>
+            )}
+          </div>
         </div>
         <div className="overflow-hidden relative w-full h-[55%] flex justify-center items-center">
           {ami.promotionDiscount && (
@@ -47,11 +66,6 @@ const CardAmigurumi = ({ ami }: CardAmigurumiProps) => {
             >
               Promo
             </Badge>
-          )}
-          {ami.size && (
-            <div className="absolute bottom-2 right-2 z-10 text-lg rounded-full h-12 w-12 bg-secondary flex justify-center items-center group-hover:bg-primary group-hover:text-secondary transition-colors duration-500">
-              {ami.size}
-            </div>
           )}
           <Image
             priority

@@ -2,11 +2,10 @@ import { groq } from "next-sanity";
 import { client } from "../client";
 
 export interface BijouFilters {
-  size?: ("S" | "M" | "L")[];
   price?: [number, number];
-  matiere?: string[];
-  fleur?: string[];
-  category?: string[];
+  matieres?: string[];
+  fleurs?: string[];
+  categories?: string[];
 }
 
 export interface Bijou {
@@ -14,19 +13,18 @@ export interface Bijou {
   name: string;
   description: string;
   price: number;
-  size: string;
-  matiere: {
+  matieres: {
     _id: string;
     title: string;
-  };
-  category: {
+  }[];
+  categories: {
     _id: string;
     title: string;
-  };
-  fleur: {
+  }[];
+  fleurs: {
     _id: string;
     title: string;
-  };
+  }[];
   stock: number;
   highlightedImg: any;
   imageGallery: any[];
@@ -43,38 +41,40 @@ export interface BijouHerobanner {
 }
 
 export const getBijoux = async (filtres?: BijouFilters) => {
-  const sizePartialQuery = filtres?.size
-    ? ` && size in [${filtres.size.map((size) => `"${size}"`)}]`
-    : "";
   const pricePartialQuery = filtres?.price
     ? ` && price >= ${filtres.price[0]} && price <= ${filtres.price[1]}`
     : "";
-  const matierePartialQuery = filtres?.matiere
-    ? ` && matiere._ref in [${filtres.matiere.map((matiere) => `"${matiere}"`)}]`
-    : "";
-  const fleurPartialQuery = filtres?.fleur
-    ? ` && fleur._ref in [${filtres.fleur.map((fleur) => `"${fleur}"`)}]`
-    : "";
-  const categoryPartialQuery = filtres?.category
-    ? ` && category._ref in [${filtres.category.map((category) => `"${category}"`)}]`
-    : "";
-  const query = `*[_type == "bijoux"${sizePartialQuery}${pricePartialQuery}${matierePartialQuery}${fleurPartialQuery}${categoryPartialQuery}]{
+  const matierePartialQuery =
+    filtres?.matieres && filtres.matieres.length > 0
+      ? ` && (${filtres.matieres.map((matiere) => `"${matiere}" in matieres[]->_id`).join(" || ")})`
+      : "";
+  const fleurPartialQuery =
+    filtres?.fleurs && filtres.fleurs.length > 0
+      ? ` && (${filtres.fleurs.map((fleur) => `"${fleur}" in fleurs[]->_id`).join(" || ")})`
+      : "";
+
+  const categoryPartialQuery =
+    filtres?.categories && filtres.categories.length > 0
+      ? ` && (${filtres.categories.map((cat) => `"${cat}" in categories[]->_id`).join(" || ")})`
+      : "";
+
+  const query = `*[_type == "bijoux"${pricePartialQuery}${matierePartialQuery}${fleurPartialQuery}${categoryPartialQuery}]{
     _id,
     name,
     description,
     price,
     size,
-    matiere->{
+    "matieres": matieres[]-> {
       _id,
-      title
+      title,
     },
-    category->{
+    "categories": categories[]-> {
       _id,
-      title
+      title,
     },
-    fleur->{
+    "fleurs": fleurs[]-> {
       _id,
-      title
+      title,
     },
     stock,
     highlightedImg,
@@ -120,17 +120,17 @@ export const getLastNBijoux = async (n: number) => {
     description,
     price,
     size,
-    matiere->{
+    "matieres": matieres[]-> {
       _id,
-      title
+      title,
     },
-    fleur->{
+    "categories": categories[]-> {
       _id,
-      title
+      title,
     },
-    category->{
+    "fleurs": fleurs[]-> {
       _id,
-      title
+      title,
     },
     stock,
     highlightedImg,
