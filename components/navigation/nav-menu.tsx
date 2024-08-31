@@ -9,11 +9,29 @@ import {
   NavigationMenuLink,
   NavigationMenuList,
   NavigationMenuTrigger,
+  navigationMenuTriggerStyle,
 } from "@/components/ui/navigation-menu";
 import Link from "next/link";
 import React from "react";
 import Image from "next/image";
 import { Menu } from "lucide-react";
+import {
+  Sheet,
+  SheetClose,
+  SheetContent,
+  SheetDescription,
+  SheetFooter,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from "../ui/sheet";
+import { Button } from "../ui/button";
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "../ui/accordion";
 
 export function NavMenu({
   amigurumisNavlink,
@@ -26,7 +44,7 @@ export function NavMenu({
 }) {
   return (
     <>
-      <NavigationMenu className="hidden md:block">
+      <NavigationMenu className="hidden lg:block">
         <NavigationMenuList>
           <NavigationMenuItem>
             <NavigationMenuTrigger className="text-xl">
@@ -133,8 +151,113 @@ export function NavMenu({
         </NavigationMenuList>
         <NavigationMenuIndicator />
       </NavigationMenu>
-      <div className="cursor-pointer block md:hidden">
-        <Menu size={36} strokeWidth={1.5} />
+      <div className="cursor-pointer block lg:hidden">
+        <Sheet key={"left"}>
+          <SheetTrigger className="relative flex justify-center items-center">
+            <Menu size={36} strokeWidth={1.5} />
+          </SheetTrigger>
+          <SheetContent side="left" className="overflow-y-auto">
+            <SheetHeader>
+              <SheetTitle className="text-xl flex justify-center items-center gap-2">
+                <Image
+                  src="/logo.png"
+                  alt="Pascale FEGER Logo"
+                  width={24}
+                  height={24}
+                  priority
+                />
+                Navigation menu
+              </SheetTitle>
+              <SheetDescription>
+                Explorez nos univers colorés et populaires.
+              </SheetDescription>
+            </SheetHeader>
+            <div className="pt-4">
+              <Link
+                href="/"
+                className={cn(
+                  navigationMenuTriggerStyle(),
+                  "flex gap-2 w-full justify-center"
+                )}
+              >
+                <Button>Accueil</Button>
+              </Link>
+              <Accordion type="single" collapsible className="w-full">
+                <AccordionItem value="item-1">
+                  <AccordionTrigger>
+                    <p>Amigurumis</p>
+                  </AccordionTrigger>
+                  <AccordionContent>
+                    <SheetClose asChild>
+                      <Button
+                        asChild
+                        className="flex gap-2 justify-start w-full"
+                      >
+                        <Link href="/boutique-amigurumi">Tous</Link>
+                      </Button>
+                    </SheetClose>
+                    {amigurumisNavlink.map((link) => (
+                      <SheetClose asChild key={link.title}>
+                        <Button asChild className="flex gap-2 justify-start">
+                          <Link href={`/${link.href}`}>{link.title}</Link>
+                        </Button>
+                      </SheetClose>
+                    ))}
+                  </AccordionContent>
+                </AccordionItem>
+                <AccordionItem value="item-2">
+                  <AccordionTrigger>
+                    <p>Bijoux</p>
+                  </AccordionTrigger>
+                  <AccordionContent>
+                    <SheetClose asChild>
+                      <Button
+                        asChild
+                        className="flex gap-2 justify-start w-full"
+                      >
+                        <Link href="/boutique-bijou">Tous</Link>
+                      </Button>
+                    </SheetClose>
+                    {bijouxNavlink.map((link) => (
+                      <SheetClose asChild key={link.title}>
+                        <Button asChild className="flex gap-2 justify-start">
+                          <Link href={`/${link.href}`}>{link.title}</Link>
+                        </Button>
+                      </SheetClose>
+                    ))}
+                  </AccordionContent>
+                </AccordionItem>
+                <AccordionItem value="item-3">
+                  <AccordionTrigger>
+                    <p>Collections</p>
+                  </AccordionTrigger>
+                  <AccordionContent>
+                    <SheetClose asChild>
+                      <Button
+                        asChild
+                        className="flex gap-2 justify-start w-full"
+                      >
+                        <Link href="/blog">Tous</Link>
+                      </Button>
+                    </SheetClose>
+                    {blogNavlink.map((link) => (
+                      <SheetClose asChild key={link.title}>
+                        <Button asChild className="flex gap-2 justify-start">
+                          <Link href={`/blog`}>{link.title}</Link>
+                        </Button>
+                      </SheetClose>
+                    ))}
+                  </AccordionContent>
+                </AccordionItem>
+              </Accordion>
+            </div>
+            <SheetFooter>
+              <SheetClose>
+                <p>Close</p>
+              </SheetClose>
+            </SheetFooter>
+          </SheetContent>
+        </Sheet>
       </div>
     </>
   );

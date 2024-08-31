@@ -1,12 +1,12 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { Suspense, useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import { Amigurumi, getAmigurumiById } from "@/sanity/lib/amigurumis/calls";
 import Image from "next/image";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, Loader } from "lucide-react";
 import { urlFor } from "@/sanity/lib/client";
 import { usePanier } from "@/store/panier-store";
 import { ToastAction } from "@/components/ui/toast";

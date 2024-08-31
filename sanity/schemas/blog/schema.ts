@@ -1,3 +1,4 @@
+import { HotspotPreview } from "@/sanity/lib/blog/hotspotpreview";
 import { SchemaTypeDefinition } from "sanity";
 
 export const blogCategorySchema: SchemaTypeDefinition = {
@@ -28,8 +29,9 @@ export const blogPostSchema: SchemaTypeDefinition = {
     {
       name: "content",
       title: "Contenu",
-      type: "text",
-      validation: (Rule) => Rule.required().min(10).max(5000),
+      type: "array",
+      of: [{ type: "block" }, { type: "image" }],
+      validation: (Rule) => Rule.required().min(1),
     },
     {
       name: "author",
@@ -60,6 +62,22 @@ export const blogPostSchema: SchemaTypeDefinition = {
       validation: (Rule) => Rule.required(),
     },
     {
+      name: "hotpots",
+      title: "Hotpots image principale",
+      type: "array",
+      of: [{ type: "spot" }],
+      options: {
+        // plugin adds support for this option
+        imageHotspot: {
+          // see `Image and description path` setup below
+          imagePath: `mainImage`,
+          descriptionPath: `details`,
+          // see `Custom tooltip` setup below
+          tooltip: HotspotPreview,
+        },
+      },
+    },
+    {
       name: "tags",
       title: "Étiquettes",
       type: "array",
@@ -69,4 +87,44 @@ export const blogPostSchema: SchemaTypeDefinition = {
       },
     },
   ],
+};
+
+export const spotSchema = {
+  name: "spot",
+  title: "Spot",
+  type: "object",
+  fieldsets: [{ name: "position", options: { columns: 2 } }],
+  fields: [
+    { name: "details", type: "text", rows: 2 },
+    {
+      name: "x",
+      type: "number",
+      readOnly: true,
+      fieldset: "position",
+      initialValue: 50,
+      validation: (Rule: any) => Rule.required().min(0).max(100),
+    },
+    {
+      name: "y",
+      type: "number",
+      readOnly: true,
+      fieldset: "position",
+      initialValue: 50,
+      validation: (Rule: any) => Rule.required().min(0).max(100),
+    },
+  ],
+  preview: {
+    select: {
+      title: "details",
+      x: "x",
+      y: "y",
+    },
+    prepare(selection: Record<string, any>) {
+      const { x, y, title } = selection;
+      return {
+        title,
+        subtitle: x && y ? `${x}% x ${y}%` : `No position set`,
+      };
+    },
+  },
 };

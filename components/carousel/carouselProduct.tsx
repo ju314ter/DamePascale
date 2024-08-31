@@ -1,10 +1,11 @@
 import * as React from "react";
 import Image from "next/image";
 import { EmblaOptionsType } from "embla-carousel";
-import { useCallback, useEffect, useState } from "react";
+import { Suspense, useCallback, useEffect, useState } from "react";
 import { urlFor } from "@/sanity/lib/client";
 import useEmblaCarousel from "embla-carousel-react";
 import "./embla.css";
+import { Loader } from "lucide-react";
 
 type CarouselProductProps = {
   slides: {
@@ -41,13 +42,21 @@ const Thumb: React.FC<ThumbPropType> = (props) => {
         className="embla-thumbs__slide__number"
       >
         {slide.asset && (
-          <Image
-            className="embla__slide__img rounded-xl"
-            src={urlFor(slide.asset).url()}
-            alt={`Slide ${index + 1}`}
-            width={500}
-            height={300}
-          />
+          <Suspense
+            fallback={
+              <div className="w-full h-full flex justify-center items-center">
+                <Loader className="animate-spin" />
+              </div>
+            }
+          >
+            <Image
+              className="embla__slide__img rounded-xl"
+              src={urlFor(slide.asset).url()}
+              alt={`Slide ${index + 1}`}
+              width={500}
+              height={300}
+            />
+          </Suspense>
         )}
       </button>
     </div>
@@ -99,13 +108,21 @@ export function CarouselProduct({ slides, options }: CarouselProductProps) {
               >
                 <div className="embla__slide__inner">
                   {slide.asset && (
-                    <Image
-                      className="embla__slide__img"
-                      src={urlFor(slide.asset).url()}
-                      alt={`Slide ${index + 1}`}
-                      width={500}
-                      height={300}
-                    />
+                    <Suspense
+                      fallback={
+                        <div className="w-full h-full flex justify-center items-center">
+                          <Loader className="animate-spin" />
+                        </div>
+                      }
+                    >
+                      <Image
+                        className="embla__slide__img"
+                        src={urlFor(slide.asset).url()}
+                        alt={`Slide ${index + 1}`}
+                        width={500}
+                        height={300}
+                      />
+                    </Suspense>
                   )}
                 </div>
               </div>

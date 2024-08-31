@@ -59,7 +59,12 @@ export default function RootLayout({
                 height={40}
                 priority
               />
-              <Button className={cn(navigationMenuTriggerStyle(), "text-xl")}>
+              <Button
+                className={cn(
+                  navigationMenuTriggerStyle(),
+                  "text-xl hidden md:block"
+                )}
+              >
                 Accueil
               </Button>
             </Link>
