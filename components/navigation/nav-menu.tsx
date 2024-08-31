@@ -251,11 +251,6 @@ export function NavMenu({
                 </AccordionItem>
               </Accordion>
             </div>
-            <SheetFooter>
-              <SheetClose>
-                <p>Close</p>
-              </SheetClose>
-            </SheetFooter>
           </SheetContent>
         </Sheet>
       </div>
