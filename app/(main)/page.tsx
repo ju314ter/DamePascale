@@ -4,14 +4,7 @@ import { CarouselLanding } from "@/components/carousel/carouselLanding";
 import { Button } from "@/components/ui/button";
 import { Amigurumi, getLastNAmigurumis } from "@/sanity/lib/amigurumis/calls";
 import { Bijou, getLastNBijoux } from "@/sanity/lib/bijoux/calls";
-import {
-  SpringOptions,
-  motion,
-  useMotionValueEvent,
-  useScroll,
-  useSpring,
-  useTransform,
-} from "framer-motion";
+import { motion, useScroll, useTransform } from "framer-motion";
 import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";

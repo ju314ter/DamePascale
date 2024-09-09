@@ -1,5 +1,6 @@
 import { groq } from "next-sanity";
 import { client } from "../client";
+import { ContentBlock } from "../amigurumis/calls";
 
 export interface BlogPostsFilters {
   category?: string[];
@@ -8,7 +9,8 @@ export interface BlogPostsFilters {
 export interface BlogPost {
   _id: string;
   title: string;
-  content: string;
+  content: ContentBlock[];
+  introduction: string;
   publishedDate: string;
   author: string;
   category: {
@@ -16,6 +18,7 @@ export interface BlogPost {
     title: string;
   };
   mainImage: any;
+  hotspots: { x: number; y: number; details: string }[];
   tags: any[];
 }
 
@@ -42,12 +45,14 @@ export const getBlogPostById = async (id: string) => {
   const query = `*[_type == "blogPost" && _id == $id]{
     _id,
     title,
+    introduction,
     content,
     category->{
       _id,
       title
     },
     mainImage,
+    hotspots,
     tags
   }[0]`;
   const blogPost: BlogPost = await client.fetch(groq`${query}`, { id });

@@ -6,7 +6,6 @@ import Image from "next/image";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { ArrowRight } from "lucide-react";
-import { urlFor } from "@/sanity/lib/client";
 import { Bijou, getBijouById } from "@/sanity/lib/bijoux/calls";
 import { usePanier } from "@/store/panier-store";
 import { useToast } from "@/components/ui/use-toast";

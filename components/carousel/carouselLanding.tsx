@@ -1,6 +1,5 @@
 import * as React from "react";
 import Image from "next/image";
-import { Card, CardContent } from "@/components/ui/card";
 import {
   Carousel,
   CarouselApi,
@@ -12,6 +11,9 @@ import { useState } from "react";
 import { urlFor } from "@/sanity/lib/client";
 import Link from "next/link";
 import { Button } from "../ui/button";
+import { usePanier } from "@/store/panier-store";
+import { useToast } from "../ui/use-toast";
+import { ToastAction } from "../ui/toast";
 
 type CarouselLandingProps = {
   direction: "forward" | "backward";
@@ -19,6 +21,8 @@ type CarouselLandingProps = {
 };
 export function CarouselLanding({ direction, items }: CarouselLandingProps) {
   const [api, setApi] = useState<CarouselApi>();
+  const { addToPanier, removeFromPanier } = usePanier();
+  const { toast } = useToast();
 
   const handleMouseEnter = () => {
     const autoscroll = api?.plugins().autoScroll;
@@ -52,9 +56,26 @@ export function CarouselLanding({ direction, items }: CarouselLandingProps) {
               <div className="w-full z-10 absolute bottom-4 flex justify-center items-center">
                 <Button
                   variant="cta"
-                  className="relative uppercase font-serif top-5 opacity-0 group-hover:top-0 group-hover:opacity-100 transition-all"
+                  className="relative uppercase font-serif top-5 opacity-0 group-hover:top-0 group-hover:opacity-100 hover:bg-secondary transition-all"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    addToPanier(item);
+                    toast({
+                      title: `${item.name} ajouté au panier`,
+                      action: (
+                        <ToastAction
+                          altText="Retirer du panier"
+                          onClick={() => {
+                            removeFromPanier(item);
+                          }}
+                        >
+                          Annuler
+                        </ToastAction>
+                      ),
+                    });
+                  }}
                 >
-                  Ajouter
+                  <span className="tracking-widest">Ajouter</span>
                 </Button>
               </div>
               <Link href={`/boutique-amigurumi/${item._id}`}>

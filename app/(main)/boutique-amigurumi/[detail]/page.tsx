@@ -12,6 +12,7 @@ import { ToastAction } from "@/components/ui/toast";
 import { useToast } from "@/components/ui/use-toast";
 import { CarouselProduct } from "@/components/carousel/carouselProduct";
 import ProductDescription from "@/components/product-description/productDescription";
+import { PortableText } from "@portabletext/react";
 
 interface Params {
   [key: string]: string | string[];
@@ -34,10 +35,6 @@ const ProductDetailAmigurumiPage = () => {
     }
     fetchAmigurumi();
   }, [params]);
-
-  useEffect(() => {
-    console.log(amigurumi);
-  }, [amigurumi]);
 
   if (!amigurumi) {
     return <div>Loading...</div>;

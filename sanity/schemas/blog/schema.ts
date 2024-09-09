@@ -27,6 +27,12 @@ export const blogPostSchema: SchemaTypeDefinition = {
       validation: (Rule) => Rule.required().min(3).max(100),
     },
     {
+      name: "introduction",
+      title: "Introduction",
+      type: "string",
+      validation: (Rule) => Rule.required().min(100).max(750),
+    },
+    {
       name: "content",
       title: "Contenu",
       type: "array",
@@ -62,8 +68,8 @@ export const blogPostSchema: SchemaTypeDefinition = {
       validation: (Rule) => Rule.required(),
     },
     {
-      name: "hotpots",
-      title: "Hotpots image principale",
+      name: "hotspots",
+      title: "Hotspots image principale",
       type: "array",
       of: [{ type: "spot" }],
       options: {

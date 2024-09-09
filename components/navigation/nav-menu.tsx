@@ -130,23 +130,14 @@ export function NavMenu({
           </NavigationMenuItem>
 
           <NavigationMenuItem>
-            <NavigationMenuTrigger className="text-xl">
-              Collections
-            </NavigationMenuTrigger>
-            <NavigationMenuContent>
-              <ul className="grid gap-3 p-4 min-w-[500px] w-[40vw] lg:grid-cols-[.75fr_1fr]">
-                {blogNavlink.map((component) => (
-                  <ListItem
-                    className="hover:bg-secondary"
-                    key={component.title}
-                    title={component.title}
-                    href={`/blog`}
-                  >
-                    {component.title}
-                  </ListItem>
-                ))}
-              </ul>
-            </NavigationMenuContent>
+            <Link href={`/blog`}>
+              <NavigationMenuLink
+                asChild
+                className={navigationMenuTriggerStyle()}
+              >
+                <p className="text-xl">Collections</p>
+              </NavigationMenuLink>
+            </Link>
           </NavigationMenuItem>
         </NavigationMenuList>
         <NavigationMenuIndicator />

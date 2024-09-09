@@ -13,8 +13,6 @@ interface Params {
 
 const BlogPage = () => {
   const [blogPosts, setBlogPosts] = useState<BlogPost[]>([]);
-  const pathname = usePathname();
-  const searchParams = useSearchParams();
 
   useEffect(() => {
     async function fetchBlogPosts() {
@@ -26,13 +24,21 @@ const BlogPage = () => {
 
   return (
     <div className="blog-page w-full max-w-[1200px] mx-auto p-5 pt-[10vh]">
-      <div className="blog-header flex flex-col items-center gap-4">
-        <h1 className="text-5xl font-bold font-serif text-primary">
-          Le blog de Dame Pascale
-        </h1>
-        <p className="text-lg text-accent">
-          Suivez-moi sur les réseaux pour de nouveaux articles réguliers !
-        </p>
+      <div className="blog-header flex items-center justify-center gap-4">
+        <div className="flex flex-col gap-4 items-center">
+          <h1 className="text-5xl font-bold font-serif text-primary">
+            Le blog de Dame Pascale
+          </h1>
+          <p className="text-lg text-accent">
+            Suivez-moi sur les réseaux pour de nouveaux articles réguliers !
+          </p>
+        </div>
+        <Image
+          src="/illustrationhome-removebg-compressed.png"
+          alt="Logo"
+          width={300}
+          height={300}
+        />
       </div>
       <div className="blog-posts grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 py-10">
         {blogPosts.map((post, index) => (
