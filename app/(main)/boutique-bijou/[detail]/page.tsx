@@ -12,6 +12,7 @@ import { usePanier } from "@/store/panier-store";
 import { useToast } from "@/components/ui/use-toast";
 import { ToastAction } from "@/components/ui/toast";
 import { CarouselProduct } from "@/components/carousel/carouselProduct";
+import ProductDescription from "@/components/product-description/productDescription";
 
 interface Params {
   [key: string]: string | string[];
@@ -102,13 +103,7 @@ const ProductDetailBijouPage = () => {
             {bijou.description &&
               // Legacy behaviour: description used to be a text string before being an array of blocks
               (Array.isArray(bijou.description) ? (
-                bijou.description.map((block: any) => (
-                  <div key={block._key}>
-                    {block.children.map((child: any) => (
-                      <p key={child._key}>{child.text}</p>
-                    ))}
-                  </div>
-                ))
+                <ProductDescription content={bijou.description} />
               ) : (
                 <p>{bijou.description}</p>
               ))}

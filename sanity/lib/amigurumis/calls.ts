@@ -7,18 +7,27 @@ export interface AmigurumiFilters {
   categories?: string[];
 }
 
-export interface TextBlock {
-  children: { mark: any[]; text: string; _key: string; _type: string }[];
-  markDefs: any[];
+export interface ContentChild {
+  _type: string;
+  marks: string[];
+  text: string;
+  _key: string;
+}
+
+export interface ContentBlock {
+  _type: string;
   style: string;
   _key: string;
-  _type: string;
+  markDefs: any[];
+  children: ContentChild[];
+  level?: number;
+  listItem?: string;
 }
 
 export interface Amigurumi {
   _id: string;
   name: string;
-  description?: TextBlock[];
+  description?: ContentBlock[];
   price: number;
   universes: {
     _id: string;

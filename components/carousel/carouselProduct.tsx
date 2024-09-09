@@ -39,24 +39,17 @@ const Thumb: React.FC<ThumbPropType> = (props) => {
       <button
         onClick={onClick}
         type="button"
-        className="embla-thumbs__slide__number"
+        className="embla-thumbs__slide__number rounded-xl"
       >
         {slide.asset && (
-          <Suspense
-            fallback={
-              <div className="w-full h-full flex justify-center items-center">
-                <Loader className="animate-spin" />
-              </div>
-            }
-          >
-            <Image
-              className="embla__slide__img rounded-xl"
-              src={urlFor(slide.asset).url()}
-              alt={`Slide ${index + 1}`}
-              width={500}
-              height={300}
-            />
-          </Suspense>
+          <Image
+            className="embla__slide__img object-cover"
+            src={urlFor(slide.asset).url()}
+            priority
+            alt={`Slide ${index + 1}`}
+            width={500}
+            height={300}
+          />
         )}
       </button>
     </div>
@@ -108,21 +101,13 @@ export function CarouselProduct({ slides, options }: CarouselProductProps) {
               >
                 <div className="embla__slide__inner">
                   {slide.asset && (
-                    <Suspense
-                      fallback={
-                        <div className="w-full h-full flex justify-center items-center">
-                          <Loader className="animate-spin" />
-                        </div>
-                      }
-                    >
-                      <Image
-                        className="embla__slide__img"
-                        src={urlFor(slide.asset).url()}
-                        alt={`Slide ${index + 1}`}
-                        width={500}
-                        height={300}
-                      />
-                    </Suspense>
+                    <Image
+                      className="embla__slide__img rounded-xl object-cover"
+                      src={urlFor(slide.asset).url()}
+                      alt={`Slide ${index + 1}`}
+                      width={1000}
+                      height={600}
+                    />
                   )}
                 </div>
               </div>

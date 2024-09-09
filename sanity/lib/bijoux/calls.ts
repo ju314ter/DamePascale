@@ -1,6 +1,6 @@
 import { groq } from "next-sanity";
 import { client } from "../client";
-import { TextBlock } from "../amigurumis/calls";
+import { ContentBlock } from "../amigurumis/calls";
 
 export interface BijouFilters {
   price?: [number, number];
@@ -12,7 +12,7 @@ export interface BijouFilters {
 export interface Bijou {
   _id: string;
   name: string;
-  description: TextBlock[];
+  description: ContentBlock[];
   price: number;
   matieres: {
     _id: string;
@@ -62,7 +62,6 @@ export const getBijoux = async (filtres?: BijouFilters) => {
   const query = `*[_type == "bijoux"${pricePartialQuery}${matierePartialQuery}${fleurPartialQuery}${categoryPartialQuery}]{
     _id,
     name,
-    description,
     price,
     "matieres": matieres[]-> {
       _id,
@@ -89,6 +88,7 @@ export const getBijouById = async (id: string) => {
   const query = `*[_type == "bijoux" && _id == $id]{
     _id,
     name,
+    description,
     price,
     "matieres": matieres[]-> {
       _id,

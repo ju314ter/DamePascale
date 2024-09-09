@@ -1,17 +1,17 @@
 "use client";
 
-import React, { Suspense, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import { Amigurumi, getAmigurumiById } from "@/sanity/lib/amigurumis/calls";
 import Image from "next/image";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { ArrowRight, Loader } from "lucide-react";
-import { urlFor } from "@/sanity/lib/client";
 import { usePanier } from "@/store/panier-store";
 import { ToastAction } from "@/components/ui/toast";
 import { useToast } from "@/components/ui/use-toast";
 import { CarouselProduct } from "@/components/carousel/carouselProduct";
+import ProductDescription from "@/components/product-description/productDescription";
 
 interface Params {
   [key: string]: string | string[];
@@ -34,6 +34,10 @@ const ProductDetailAmigurumiPage = () => {
     }
     fetchAmigurumi();
   }, [params]);
+
+  useEffect(() => {
+    console.log(amigurumi);
+  }, [amigurumi]);
 
   if (!amigurumi) {
     return <div>Loading...</div>;
@@ -88,13 +92,7 @@ const ProductDetailAmigurumiPage = () => {
             {amigurumi.description &&
               // Legacy behaviour: description used to be a text string before being an array of blocks
               (Array.isArray(amigurumi.description) ? (
-                amigurumi.description.map((block: any) => (
-                  <div key={block._key}>
-                    {block.children.map((child: any) => (
-                      <p key={child._key}>{child.text}</p>
-                    ))}
-                  </div>
-                ))
+                <ProductDescription content={amigurumi.description} />
               ) : (
                 <p>{amigurumi.description}</p>
               ))}
