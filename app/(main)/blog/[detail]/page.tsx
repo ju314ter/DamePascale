@@ -8,6 +8,9 @@ import { urlFor } from "@/sanity/lib/client";
 import { HoverCard, HoverCardContent } from "@/components/ui/hover-card";
 import { HoverCardTrigger } from "@radix-ui/react-hover-card";
 import { PortableText, PortableTextReactComponents } from "@portabletext/react";
+import { Button } from "@/components/ui/button";
+import { PlusCircle } from "lucide-react";
+import Link from "next/link";
 
 const portableTextComponents: Partial<PortableTextReactComponents> = {
   types: {
@@ -77,10 +80,6 @@ const BlogDetailCollectionPage = () => {
     fetchBlogpost();
   }, [params]);
 
-  useEffect(() => {
-    console.log(blogPost);
-  }, [blogPost]);
-
   if (!blogPost) {
     return (
       <div className="w-[100vw] h-[100vh] flex justify-center items-center">
@@ -123,22 +122,34 @@ const BlogDetailCollectionPage = () => {
           />
           {/* TODO: add hotspots */}
           {blogPost.hotspots &&
-            blogPost.hotspots.map((spot) => (
-              <HoverCard key={spot.y + spot.x + spot.details} openDelay={100}>
-                <HoverCardTrigger asChild>
-                  <div
-                    className="absolute cursor-pointer w-6 h-6 md:w-10 md:h-10 lg:w-16 lg:h-16 bg-white/50 border border-secondary b-4 rounded-full z-30"
-                    style={{
-                      left: spot.x * 0.95 + "%",
-                      top: spot.y * 0.95 + "%",
-                    }}
-                  ></div>
-                </HoverCardTrigger>
-                <HoverCardContent className="w-80">
-                  <p>{spot.details}</p>
-                </HoverCardContent>
-              </HoverCard>
-            ))}
+            blogPost.hotspots.map(
+              (spot: {
+                x: number;
+                y: number;
+                details: string;
+                url?: string;
+              }) => (
+                <HoverCard key={spot.y + spot.x + spot.details} openDelay={100}>
+                  <HoverCardTrigger asChild>
+                    <div
+                      className="absolute cursor-pointer w-6 h-6 md:w-10 md:h-10 lg:w-16 lg:h-16 bg-white/50 border border-primary b-4 rounded-full z-30"
+                      style={{
+                        left: spot.x * 0.95 + "%",
+                        top: spot.y * 0.95 + "%",
+                      }}
+                    ></div>
+                  </HoverCardTrigger>
+                  <HoverCardContent className="w-40 md:w-80 flex flex-col md:flex-row justify-around items-center gap-4">
+                    <p className="text-secondary">{spot.details}</p>
+                    {spot.url && (
+                      <Link href={spot.url}>
+                        <Button variant="hotspot">Détails</Button>
+                      </Link>
+                    )}
+                  </HoverCardContent>
+                </HoverCard>
+              )
+            )}
         </div>
         {blogPost.content && (
           <PortableText

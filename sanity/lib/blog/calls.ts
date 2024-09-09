@@ -18,7 +18,7 @@ export interface BlogPost {
     title: string;
   };
   mainImage: any;
-  hotspots: { x: number; y: number; details: string }[];
+  hotspots: { x: number; y: number; details: string; url?: string }[];
   tags: any[];
 }
 

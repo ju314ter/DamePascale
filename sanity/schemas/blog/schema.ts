@@ -102,6 +102,7 @@ export const spotSchema = {
   fieldsets: [{ name: "position", options: { columns: 2 } }],
   fields: [
     { name: "details", type: "text", rows: 2 },
+    { name: "url", type: "text", rows: 2 },
     {
       name: "x",
       type: "number",
@@ -122,13 +123,15 @@ export const spotSchema = {
   preview: {
     select: {
       title: "details",
+      url: "url",
       x: "x",
       y: "y",
     },
     prepare(selection: Record<string, any>) {
-      const { x, y, title } = selection;
+      const { x, y, title, url } = selection;
       return {
         title,
+        url,
         subtitle: x && y ? `${x}% x ${y}%` : `No position set`,
       };
     },
