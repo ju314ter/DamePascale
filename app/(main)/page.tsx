@@ -295,12 +295,15 @@ export default function LandingPage() {
             />
             <p className="text-md md:text-lg lg:text-xl leading-6 p-4 text-left">
               Entrez dans notre écrin où <b>les fleurs deviennent bijoux</b>.
-              Nos
-              <b>créations uniques</b> allient la délicatesse naturelle à
-              l&apos;art de la joaillerie. Découvrez des pièces exquises faites
+              Nos <b>créations uniques</b> allient la délicatesse naturelle à
+              l&apos;art de la bijouterie. Découvrez des pièces exquises faites
               de <b>véritables fleurs préservées</b>, capturant la beauté
-              éphémère de la nature dans des parures intemporelles. Offrez-vous{" "}
-              <b>un morceau de poésie florale à porter</b>.
+              éphémère de la nature dans des parures intemporelles. Offrez-vous
+              <b>un morceau de poésie florale à porter</b>. Bien souvent les
+              modèles proposés sont des modèles uniques. Les bijoux peuvent
+              présenter quelques variations minimes par rapport aux photos, car
+              les fleurs ne sont pas naturellement strictement identiques entre
+              elles.
             </p>
             <Link href="/boutique-bijou">
               <Button
