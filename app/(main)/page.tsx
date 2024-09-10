@@ -164,12 +164,17 @@ export default function LandingPage() {
       <section className="relative flex flex-col items-center my-16 w-full pb-16 overflow-hidden">
         <div className="w-full pt-16 mb-2">
           <CarouselLanding
+            boutiqueUrl="boutique-amigurumi"
             direction="backward"
             items={carouselAmigurumisItem}
           />
         </div>
         <div className="w-full mt-2">
-          <CarouselLanding direction="forward" items={carouselBijouxItem} />
+          <CarouselLanding
+            boutiqueUrl="boutique-bijou"
+            direction="forward"
+            items={carouselBijouxItem}
+          />
         </div>
       </section>
       <section

@@ -17,9 +17,14 @@ import { ToastAction } from "../ui/toast";
 
 type CarouselLandingProps = {
   direction: "forward" | "backward";
+  boutiqueUrl: "boutique-amigurumi" | "boutique-bijou";
   items: any[];
 };
-export function CarouselLanding({ direction, items }: CarouselLandingProps) {
+export function CarouselLanding({
+  direction,
+  items,
+  boutiqueUrl,
+}: CarouselLandingProps) {
   const [api, setApi] = useState<CarouselApi>();
   const { addToPanier, removeFromPanier } = usePanier();
   const { toast } = useToast();
@@ -78,7 +83,7 @@ export function CarouselLanding({ direction, items }: CarouselLandingProps) {
                   <span className="tracking-widest">Ajouter</span>
                 </Button>
               </div>
-              <Link href={`/boutique-amigurumi/${item._id}`}>
+              <Link href={`/${boutiqueUrl}/${item._id}`}>
                 <Image
                   priority
                   src={urlFor(item.highlightedImg).url()}
