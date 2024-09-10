@@ -139,6 +139,17 @@ export function NavMenu({
               </NavigationMenuLink>
             </Link>
           </NavigationMenuItem>
+
+          <NavigationMenuItem>
+            <Link href={`/contact`}>
+              <NavigationMenuLink
+                asChild
+                className={navigationMenuTriggerStyle()}
+              >
+                <p className="text-xl">Contact</p>
+              </NavigationMenuLink>
+            </Link>
+          </NavigationMenuItem>
         </NavigationMenuList>
         <NavigationMenuIndicator />
       </NavigationMenu>
@@ -164,15 +175,30 @@ export function NavMenu({
               </SheetDescription>
             </SheetHeader>
             <div className="pt-4">
-              <Link
-                href="/"
-                className={cn(
-                  navigationMenuTriggerStyle(),
-                  "flex gap-2 w-full justify-center"
-                )}
-              >
-                <Button>Accueil</Button>
-              </Link>
+              <SheetClose asChild>
+                <Link
+                  href="/"
+                  className={cn(
+                    navigationMenuTriggerStyle(),
+                    "flex gap-2 w-full justify-center"
+                  )}
+                >
+                  <Button>Accueil</Button>
+                </Link>
+              </SheetClose>
+
+              <SheetClose asChild>
+                <Link
+                  href="/contact"
+                  className={cn(
+                    navigationMenuTriggerStyle(),
+                    "flex gap-2 w-full justify-center"
+                  )}
+                >
+                  <Button>Contact</Button>
+                </Link>
+              </SheetClose>
+
               <Accordion type="single" collapsible className="w-full">
                 <AccordionItem value="item-1">
                   <AccordionTrigger>

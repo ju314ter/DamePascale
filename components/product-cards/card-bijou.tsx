@@ -71,7 +71,7 @@ const CardBijou = ({ item }: CardBijouProps) => {
           <Badge variant={"outline"}>{item.fleur.title}</Badge>
           <Badge variant={"default"}>{item.category.title}</Badge> */}
         </div>
-        <div className="overflow-hidden relative w-full h-[55%] flex justify-center items-center">
+        <div className="overflow-hidden relative w-full h-[40%] flex justify-center items-center">
           {item.promotionDiscount && (
             <Badge
               className="absolute bottom-2 left-2 z-10"

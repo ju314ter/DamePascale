@@ -1,6 +1,7 @@
 "use client";
 
 import { CarouselLanding } from "@/components/carousel/carouselLanding";
+import { ContactForm } from "@/components/contact/contact-form";
 import { Button } from "@/components/ui/button";
 import { Amigurumi, getLastNAmigurumis } from "@/sanity/lib/amigurumis/calls";
 import { Bijou, getLastNBijoux } from "@/sanity/lib/bijoux/calls";
@@ -306,6 +307,12 @@ export default function LandingPage() {
             </Link>
           </div>
         </motion.div>
+      </section>
+      <section className="h-[80vh] flex flex-col items-center justify-center overflow-hidden snap-center">
+        <h1 className="pb-16 text-5xl font-bold text-primary">
+          Contactez moi !
+        </h1>
+        <ContactForm />
       </section>
     </div>
   );

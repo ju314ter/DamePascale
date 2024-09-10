@@ -32,7 +32,7 @@ const CardAmigurumi = ({ ami }: CardAmigurumiProps) => {
     <Card className="w-full min-h-[400px] group bg-white border-secondary rounded-md product-card flex justify-center items-center flex-col drop-shadow-sm hover:bg-secondary hover:-translate-y-1 transition-all duration-700">
       <Link
         href={`/boutique-amigurumi/${ami._id}`}
-        className="w-full h-full flex justify-between flex-col"
+        className="w-full h-full flex justify-start flex-col"
       >
         <div className="card-tags w-full flex justify-around p-2 start flex-wrap gap-1">
           <div className="flex flex-wrap gap-1 justify-center">
@@ -58,7 +58,7 @@ const CardAmigurumi = ({ ami }: CardAmigurumiProps) => {
             )}
           </div>
         </div>
-        <div className="overflow-hidden relative w-full h-[55%] flex justify-center items-center">
+        <div className="overflow-hidden relative w-full h-[40%] flex justify-center items-center">
           {ami.promotionDiscount && (
             <Badge
               className="absolute bottom-2 left-2 z-10"
@@ -76,7 +76,7 @@ const CardAmigurumi = ({ ami }: CardAmigurumiProps) => {
             className="w-[100%]"
           />
         </div>
-        <p className="text-2xl text-center p-2 mt-4 text-primary font-serif font-bold group-hover:text-black group-hover:translate-x-1 transition-all duration-700">
+        <p className="text-2xl text-center p-2 text-primary font-serif font-bold group-hover:text-black group-hover:translate-x-1 transition-all duration-700">
           {ami.name}
         </p>
         <div className="flex w-full items-center justify-center text-lg font-bold pb-2 text-primary gap-2">
@@ -92,7 +92,7 @@ const CardAmigurumi = ({ ami }: CardAmigurumiProps) => {
             <span>€{ami.price}</span>
           )}
         </div>
-        <div className="card-buttons w-full flex justify-around items-center p-4">
+        <div className="card-buttons w-full flex justify-around items-center p-2">
           <TooltipProvider>
             <Tooltip>
               <TooltipTrigger asChild>

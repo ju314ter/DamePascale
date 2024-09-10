@@ -24,7 +24,7 @@ const BlogPage = () => {
 
   return (
     <div className="blog-page w-full max-w-[1200px] mx-auto p-5 pt-[10vh]">
-      <div className="blog-header flex items-center justify-center gap-4">
+      <div className="blog-header flex flex-col md:flex-row-reverse items-center justify-center gap-4">
         <div className="flex flex-col gap-4 items-center">
           <h1 className="text-5xl font-bold font-serif text-primary">
             Le blog de Dame Pascale
