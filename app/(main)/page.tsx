@@ -199,12 +199,12 @@ export default function LandingPage() {
               <b>décorer, offrir ou se faire plaisir</b>, ces créations
               artisanales deviendront vos compagnons préférés.
             </p>
-            <Link href="/blog">
+            <Link href="/boutique-amigurumi">
               <Button
                 variant="ctainverse"
                 className="mt-4 text-lg md:text-3xl h-21 w-52"
               >
-                Mes guides
+                Amigurumis
               </Button>
             </Link>
           </div>
@@ -297,12 +297,12 @@ export default function LandingPage() {
               éphémère de la nature dans des parures intemporelles. Offrez-vous{" "}
               <b>un morceau de poésie florale à porter</b>.
             </p>
-            <Link href="/blog">
+            <Link href="/boutique-bijou">
               <Button
                 variant="ctainverse"
                 className="mt-4 text-lg md:text-3xl h-21 w-52"
               >
-                Mes guides
+                Bijoux
               </Button>
             </Link>
           </div>
