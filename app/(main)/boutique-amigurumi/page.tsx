@@ -26,10 +26,6 @@ const cardVariants = {
 export default function BoutiquePage() {
   const [amigurumis, setAmigurumis] = useState<Amigurumi[]>([]);
 
-  // useEffect(() => {
-  //   console.log(amigurumis);
-  // }, [amigurumis]);
-
   async function fetchAmigurumis(filters?: AmigurumiFilters) {
     const data = filters ? await getAmigurumis(filters) : await getAmigurumis();
     setAmigurumis(data);

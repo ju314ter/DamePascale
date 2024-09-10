@@ -85,10 +85,6 @@ export function CarouselProduct({ slides, options }: CarouselProductProps) {
     emblaMainApi.on("select", onSelect).on("reInit", onSelect);
   }, [emblaMainApi, onSelect]);
 
-  useEffect(() => {
-    console.log(slides);
-  }, [slides]);
-
   return (
     <div className="carouselProductWrapper w-full h-full">
       <div className="embla">
