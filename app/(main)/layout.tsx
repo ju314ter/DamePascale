@@ -14,6 +14,7 @@ import { Suspense } from "react";
 import { Loader } from "lucide-react";
 import { navigationMenuTriggerStyle } from "@/components/ui/navigation-menu";
 import { Button } from "@/components/ui/button";
+import RecaptchaProvider from "@/components/contact/recaptcha";
 
 const jaquesFrancoisFont = Jacques_Francois({
   weight: "400",
@@ -49,45 +50,47 @@ export default function RootLayout({
           italianaFont.variable
         )}
       >
-        <div className="fixed z-50 header flex w-full h-[50px] justify-center items-center bg-opacity-20 bg-white backdrop-blur-xl shadow-sm">
-          <div className="logo ml-2 absolute left-0">
-            <Link href="/" className="flex gap-2">
-              <Image
-                src="/logo.png"
-                alt="Pascale FEGER Logo"
-                width={40}
-                height={40}
-                priority
-              />
-              <Button
-                className={cn(
-                  navigationMenuTriggerStyle(),
-                  "text-xl hidden md:block"
-                )}
-              >
-                Accueil
-              </Button>
-            </Link>
-          </div>
-          <NavMenu
-            amigurumisNavlink={amigurumisNavlink}
-            bijouxNavlink={bijouxNavlink}
-            blogNavlink={blogCategories}
-          />
-          <div className="options mr-2 flex justify-center items-center absolute right-0">
-            <PanierWrapper />
-          </div>
-        </div>
-        <Suspense
-          fallback={
-            <div className="w-full h-full flex justify-center items-center">
-              <Loader className="animate-spin" />
+        <RecaptchaProvider>
+          <div className="fixed z-50 header flex w-full h-[50px] justify-center items-center bg-opacity-20 bg-white backdrop-blur-xl shadow-sm">
+            <div className="logo ml-2 absolute left-0">
+              <Link href="/" className="flex gap-2">
+                <Image
+                  src="/logo.png"
+                  alt="Pascale FEGER Logo"
+                  width={40}
+                  height={40}
+                  priority
+                />
+                <Button
+                  className={cn(
+                    navigationMenuTriggerStyle(),
+                    "text-xl hidden md:block"
+                  )}
+                >
+                  Accueil
+                </Button>
+              </Link>
             </div>
-          }
-        >
-          <main>{children}</main>
-        </Suspense>
-        <Toaster />
+            <NavMenu
+              amigurumisNavlink={amigurumisNavlink}
+              bijouxNavlink={bijouxNavlink}
+              blogNavlink={blogCategories}
+            />
+            <div className="options mr-2 flex justify-center items-center absolute right-0">
+              <PanierWrapper />
+            </div>
+          </div>
+          <Suspense
+            fallback={
+              <div className="w-full h-full flex justify-center items-center">
+                <Loader className="animate-spin" />
+              </div>
+            }
+          >
+            <main>{children}</main>
+          </Suspense>
+          <Toaster />
+        </RecaptchaProvider>
       </body>
     </html>
   );

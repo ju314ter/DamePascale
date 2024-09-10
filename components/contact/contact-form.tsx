@@ -7,11 +7,14 @@ import { Input } from "../ui/input";
 import { Label } from "../ui/label";
 import { sendEmail } from "@/app/(main)/contact/action";
 import { useState } from "react";
+import Recaptcha from "./recaptcha";
+import { useGoogleReCaptcha } from "react-google-recaptcha-v3";
 
 export type ContactFormData = {
   name: string;
   email: string;
   message: string;
+  recaptchaToken: string;
 };
 
 export function ContactForm() {
@@ -21,15 +24,24 @@ export function ContactForm() {
     formState: { errors },
   } = useForm<ContactFormData>();
   const [submissionStatus, setSubmissionStatus] = useState<string | null>(null);
+  const { executeRecaptcha } = useGoogleReCaptcha();
 
   const onSubmit = async (data: ContactFormData) => {
+    if (!executeRecaptcha) {
+      console.log("Execute recaptcha not yet available");
+      return;
+    }
+
     try {
-      const result = await sendEmail(data);
+      const recaptchaToken = await executeRecaptcha("form_submit");
+      const result = await sendEmail({ ...data, recaptchaToken });
       if (result.success) {
         setSubmissionStatus(result.message);
+      } else {
+        setSubmissionStatus(result.message || "Echec de l'envoi du mail");
       }
     } catch (error) {
-      setSubmissionStatus("An error occurred");
+      setSubmissionStatus("Une erreur est survenue");
     }
   };
 
