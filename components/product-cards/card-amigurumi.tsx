@@ -29,12 +29,12 @@ const CardAmigurumi = ({ ami }: CardAmigurumiProps) => {
   if (!ami) return null;
 
   return (
-    <Card className="w-full min-h-[400px] group bg-white border-secondary rounded-md product-card flex justify-center items-center flex-col drop-shadow-sm hover:bg-secondary hover:-translate-y-1 transition-all duration-700">
+    <Card className="w-full group bg-white border-secondary rounded-md product-card flex justify-center items-center flex-col drop-shadow-sm hover:bg-secondary hover:-translate-y-1 transition-all duration-700">
       <Link
         href={`/boutique-amigurumi/${ami._id}`}
-        className="w-full h-full flex justify-start flex-col"
+        className="w-full h-full flex justify-around flex-col"
       >
-        <div className="card-tags w-full flex justify-around p-2 start flex-wrap gap-1">
+        <div className="card-tags w-full flex justify-around p-2 flex-wrap gap-1">
           <div className="flex flex-wrap gap-1 justify-center">
             {ami.categories && ami.categories.length > 0 ? (
               ami.categories.map((cat) => (

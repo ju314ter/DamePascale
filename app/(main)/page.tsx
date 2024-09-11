@@ -107,7 +107,7 @@ export default function LandingPage() {
 
   return (
     <div
-      className="relative h-[100vh] overflow-auto w-full scroll-smooth pt-[5vh] lg:snap-proximity lg:snap-y"
+      className="relative h-[100vh] overflow-auto w-full scroll-smooth pt-[5vh]"
       ref={containerRef}
     >
       <div className="relative flex flex-col w-full h-[100vh] justify-start items-center mt-16">
@@ -179,7 +179,7 @@ export default function LandingPage() {
       </section>
       <section
         ref={refSectionAmigurumi}
-        className="relative h-[200vh] items-start snap-center"
+        className="relative h-[200vh] items-start"
       >
         <motion.div
           style={{ y: scrollYAmigurumiSection }}
@@ -190,13 +190,20 @@ export default function LandingPage() {
               style={{ y: scrollYAmigurumiSection }}
               className="mask pointer-events-none absolute top-0 bottom-0 left-0 right-0 bg-gradient-to-b from-transparent from-[-10%] via-white to-white"
             ></motion.div>
-            <Image
-              src="/daruma-group-nobg.png"
-              alt="Daruma"
-              className="-scale-x-100 hidden sm:block"
-              width={200}
-              height={200}
-            />
+            <motion.div
+              initial={{ x: "-100%", opacity: 0 }}
+              whileInView={{ x: 0, opacity: 1 }}
+              transition={{ duration: 0.5, ease: "easeOut" }}
+              viewport={{ once: true }}
+            >
+              <Image
+                src="/daruma-group-nobg.png"
+                alt="Daruma"
+                className="-scale-x-100 hidden sm:block"
+                width={200}
+                height={200}
+              />
+            </motion.div>
             <p className="text-md md:text-lg lg:text-xl leading-6 p-4 text-left">
               Découvrez nos <b>amigurumis</b>, de charmantes peluches{" "}
               <b>crochetées à la main</b> avec amour. Uniques et adorables,
@@ -246,7 +253,7 @@ export default function LandingPage() {
       </section>
       <section
         ref={refSectionBijou}
-        className="relative h-[200vh] items-start overflow-hidden snap-center"
+        className="relative h-[200vh] items-start overflow-hidden"
       >
         <motion.div
           style={{ y: scrollYBijouSection }}
@@ -286,13 +293,21 @@ export default function LandingPage() {
               style={{ y: scrollYBijouSection }}
               className="mask pointer-events-none absolute top-0 bottom-0 left-0 right-0 bg-gradient-to-b from-transparent from-[-10%] via-white to-white"
             ></motion.div>
-            <Image
-              src="/fleur-nobg.png"
-              alt="Fleur"
-              className="-scale-x-100 hidden sm:block"
-              width={200}
-              height={200}
-            />
+            <motion.div
+              initial={{ x: "100%", opacity: 0 }}
+              whileInView={{ x: 0, opacity: 1 }}
+              transition={{ duration: 0.5, ease: "easeOut" }}
+              viewport={{ once: true }}
+            >
+              <Image
+                src="/fleur-nobg.png"
+                alt="Fleur"
+                className="-scale-x-100 hidden sm:block"
+                width={200}
+                height={200}
+              />
+            </motion.div>
+
             <p className="text-md md:text-lg lg:text-xl leading-6 p-4 text-left">
               Entrez dans notre écrin où <b>les fleurs deviennent bijoux</b>.
               Nos <b>créations uniques</b> allient la délicatesse naturelle à
@@ -316,11 +331,18 @@ export default function LandingPage() {
           </div>
         </motion.div>
       </section>
-      <section className="h-[80vh] flex flex-col items-center justify-center overflow-hidden snap-center">
-        <h1 className="pb-16 text-5xl font-bold text-primary">
-          Contactez moi !
-        </h1>
-        <ContactForm />
+      <section className="h-[80vh] flex flex-col items-center justify-start overflow-hidden">
+        <motion.div
+          initial={{ y: "100%", opacity: 0 }}
+          whileInView={{ y: 0, opacity: 1 }}
+          transition={{ duration: 0.5, ease: "easeOut" }}
+          viewport={{ once: true }}
+        >
+          <h1 className="pb-16 text-5xl font-bold text-primary">
+            Contactez moi !
+          </h1>
+          <ContactForm />
+        </motion.div>
       </section>
     </div>
   );
