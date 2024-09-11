@@ -98,11 +98,11 @@ export function CarouselProduct({ slides, options }: CarouselProductProps) {
                 <div className="embla__slide__inner">
                   {slide.asset && (
                     <Image
-                      className="embla__slide__img rounded-xl object-cover"
+                      className="embla__slide__img relative rounded-xl object-contain"
                       src={urlFor(slide.asset).url()}
                       alt={`Slide ${index + 1}`}
-                      width={1000}
-                      height={600}
+                      fill
+                      sizes="(max-width: 768px) 100vw, 1200px"
                     />
                   )}
                 </div>

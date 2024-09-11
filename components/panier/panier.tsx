@@ -28,12 +28,21 @@ const PanierWrapper = () => {
         asChild
       >
         <div className="panier h-full flex justify-center items-center">
-          <Button className="border border-transparent hover:border-black hover:border-primary hover:bg-[#ffedd1]/50 focus:bg-[#ffedd1]/50 transition-colors">
-            <ShoppingCart
-              size={36}
-              strokeWidth={2}
-              className="text-secondary-foreground transition-all"
-            />
+          <Button className="relative">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="32"
+              height="32"
+              viewBox="0 0 24 24"
+              className="hover:fill-secondary"
+            >
+              <path d="M16 6v-2c0-2.209-1.791-4-4-4s-4 1.791-4 4v2h-5v18h18v-18h-5zm-7-2c0-1.654 1.346-3 3-3s3 1.346 3 3v2h-6v-2zm10 18h-14v-14h3v1.5c0 .276.224.5.5.5s.5-.224.5-.5v-1.5h6v1.5c0 .276.224.5.5.5s.5-.224.5-.5v-1.5h3v14z" />
+            </svg>
+            {panier && panier.length > 0 && (
+              <div className="absolute rounded-full bg-secondary w-4 h-4 right-[50%] bottom-0 flex justify-center items-end animate-scale origin-center">
+                <span className="text-xs">{panier.length}</span>
+              </div>
+            )}
           </Button>
         </div>
       </SheetTrigger>
@@ -82,6 +91,7 @@ const PanierCard = (item: Item) => {
           alt={item.type.name}
           width={50}
           height={50}
+          className="p-2"
         />
       </div>
       <div>{item.type.name}</div>
