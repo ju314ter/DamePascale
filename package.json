@@ -47,7 +47,7 @@
     "extract-colors": "^4.0.6",
     "framer-motion": "^11.2.13",
     "lucide-react": "^0.383.0",
-    "next": "14.2.3",
+    "next": "^14.2.3",
     "next-sanity": "^9.3.10",
     "nodemailer": "^6.9.15",
     "react": "^18",

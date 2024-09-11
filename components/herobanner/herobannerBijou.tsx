@@ -56,15 +56,17 @@ export default function HeroBannerAmigurumi({
         <h2 className="text-2xl font-bold p-2 text-black">
           {herobanner[0].subtitle}
         </h2>
-        <Link href={herobanner[0].buttonLink}>
-          <Button
-            variant="destructive"
-            size="lg"
-            className="my-4 uppercase hover:scale-105 transition-all duration-300"
-          >
-            {herobanner[0].buttonText}
-          </Button>
-        </Link>
+        {herobanner[0].buttonLink && (
+          <Link href={herobanner[0].buttonLink}>
+            <Button
+              variant="destructive"
+              size="lg"
+              className="my-4 uppercase hover:scale-105 transition-all duration-300"
+            >
+              {herobanner[0].buttonText}
+            </Button>
+          </Link>
+        )}
       </motion.div>
     </div>
   );

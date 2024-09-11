@@ -1,31 +1,40 @@
+// app/actions/stripe.js
 "use server";
 
 import Stripe from "stripe";
 
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
-  apiVersion: "2024-06-20",
-});
+const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
 
-export async function createPaymentIntent(amount: number) {
+export async function createCheckoutSession(data: {
+  product: string;
+  price: number;
+  quantity: number;
+}) {
+  const { product, price, quantity } = data;
+
   try {
-    const paymentIntent = await stripe.paymentIntents.create({
-      amount,
-      currency: "eur",
+    const session = await stripe.checkout.sessions.create({
+      payment_method_types: ["card"],
+      line_items: [
+        {
+          price_data: {
+            currency: "eur",
+            product_data: {
+              name: product,
+            },
+            unit_amount: price * 100, // Stripe utilise les centimes
+          },
+          quantity: quantity,
+        },
+      ],
+      mode: "payment",
+      success_url: `${process.env.NEXT_PUBLIC_URL}/success`,
+      cancel_url: `${process.env.NEXT_PUBLIC_URL}/cancel`,
     });
 
-    return { clientSecret: paymentIntent.client_secret };
+    return { url: session.url };
   } catch (error) {
-    console.error("Error creating payment intent:", error);
-    throw new Error("Failed to create payment intent");
-  }
-}
-
-export async function confirmPayment(paymentIntentId: string) {
-  try {
-    const paymentIntent = await stripe.paymentIntents.confirm(paymentIntentId);
-    return { success: paymentIntent.status === "succeeded" };
-  } catch (error) {
-    console.error("Error confirming payment:", error);
-    throw new Error("Failed to confirm payment");
+    console.error("Erreur lors de la création de la session:", error);
+    return { error: "Impossible de créer la session de paiement." };
   }
 }
