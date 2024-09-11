@@ -70,11 +70,12 @@ export default function BoutiqueBijouPage() {
   // Filters changed, update url params and fetch filtered amigurumis
   async function handleFiltersChanged(filtres: BijouFilters): Promise<void> {
     const url = new URL(pathname, window.location.origin);
-    if (filtres.categories)
+    if (filtres.categories && filtres.categories.length > 0)
       url.searchParams.set("category", filtres.categories.join(","));
-    if (filtres.matieres)
+    if (filtres.matieres && filtres.matieres.length > 0)
       url.searchParams.set("matiere", filtres.matieres.join(","));
-    if (filtres.fleurs) url.searchParams.set("fleur", filtres.fleurs.join(","));
+    if (filtres.fleurs && filtres.fleurs.length > 0)
+      url.searchParams.set("fleur", filtres.fleurs.join(","));
     if (filtres.price) url.searchParams.set("price", filtres.price.join(","));
 
     window.history.pushState({}, "", url);

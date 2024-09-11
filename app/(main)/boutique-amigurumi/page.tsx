@@ -70,9 +70,10 @@ export default function BoutiquePage() {
     filtres: AmigurumiFilters
   ): Promise<void> {
     const url = new URL(pathname, window.location.origin);
-    if (filtres.categories)
+
+    if (filtres.categories && filtres.categories.length > 0)
       url.searchParams.set("category", filtres.categories.join(","));
-    if (filtres.universes)
+    if (filtres.universes && filtres.universes.length > 0)
       url.searchParams.set("univers", filtres.universes.join(","));
     if (filtres.price) url.searchParams.set("price", filtres.price.join(","));
 
