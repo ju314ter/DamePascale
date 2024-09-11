@@ -12,14 +12,24 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "../ui/sheet";
-import { MinusCircle, ShoppingCart } from "lucide-react";
+import { MinusCircle } from "lucide-react";
 import { usePanier, Item } from "@/store/panier-store";
 import Image from "next/image";
 import { urlFor } from "@/sanity/lib/client";
 import { Textarea } from "../ui/textarea";
+import { useForm } from "react-hook-form";
+import { createCheckoutSession } from "@/app/(main)/(context)/actions";
 
 const PanierWrapper = () => {
   const { panier } = usePanier();
+  const { register, handleSubmit } = useForm();
+
+  const onSubmit = async (formData: any) => {
+    const result = await createCheckoutSession(panier);
+    if (result.url) {
+      window.location.href = result.url;
+    }
+  };
 
   return (
     <Sheet key={"right"}>
@@ -54,24 +64,34 @@ const PanierWrapper = () => {
         {panier.length <= 0 && (
           <div>Vous n&apos;avez aucun objet dans le panier</div>
         )}
-        {panier.length > 0 &&
-          panier.map((item) => <PanierCard key={item.type._id} {...item} />)}
-        <SheetFooter className="flex flex-col justify-center items-center pt-10 gap-10">
-          <div className="flex flex-col items-start justify-end w-full gap-3">
-            <span className="underline">Total</span>
-            <span>Panier</span>
-            <span>Livraison</span>
-            <Textarea placeholder="Un message, une précision sur la commande ?" />
-          </div>
-          <SheetClose
-            asChild
-            className="flex justify-center items-center w-[75%]"
-          >
-            <Button type="submit" variant={"cta"}>
-              Confirmer
-            </Button>
-          </SheetClose>
-        </SheetFooter>
+        {panier.length > 0 && (
+          <>
+            {panier.map((item) => (
+              <PanierCard key={item.type._id} {...item} />
+            ))}
+            <SheetFooter className="flex flex-col justify-center items-center pt-10 gap-10">
+              <form onSubmit={handleSubmit(onSubmit)} className="w-full">
+                <div className="flex flex-col items-start justify-end w-full gap-3">
+                  <span className="underline">Total</span>
+                  <span>Panier</span>
+                  <span>Livraison</span>
+                  <Textarea
+                    {...register("message")}
+                    placeholder="Un message, une précision sur la commande ?"
+                  />
+                </div>
+                <SheetClose
+                  asChild
+                  className="flex justify-center items-center w-[75%]"
+                >
+                  <Button type="submit" variant={"cta"}>
+                    Confirmer
+                  </Button>
+                </SheetClose>
+              </form>
+            </SheetFooter>
+          </>
+        )}
       </SheetContent>
     </Sheet>
   );
