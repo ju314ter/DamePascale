@@ -52,6 +52,8 @@ const BlogPage = () => {
               width={500}
               height={500}
               className="w-full h-48 object-cover mb-4"
+              placeholder="blur"
+              blurDataURL="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAACklEQVR4nGMAAQAABQABDQottAAAAABJRU5ErkJggg=="
             />
             <h2 className="text-xl font-bold mb-2">{post.title}</h2>
             <p className="text-gray-700">{post.category.title}</p>

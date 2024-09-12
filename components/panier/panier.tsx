@@ -126,6 +126,8 @@ const PanierCard = (item: Item) => {
           width={50}
           height={50}
           className="p-2"
+          placeholder="blur"
+          blurDataURL="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAACklEQVR4nGMAAQAABQABDQottAAAAABJRU5ErkJggg=="
         />
       </div>
       <div>{item.type.name}</div>

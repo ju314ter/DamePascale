@@ -1,11 +1,11 @@
 import * as React from "react";
 import Image from "next/image";
 import { EmblaOptionsType } from "embla-carousel";
-import { Suspense, useCallback, useEffect, useState } from "react";
-import { urlFor } from "@/sanity/lib/client";
+import { useCallback, useEffect, useState } from "react";
 import useEmblaCarousel from "embla-carousel-react";
 import "./embla.css";
-import { Loader } from "lucide-react";
+import { urlForImage } from "@/sanity/lib/image";
+import ImageWithPlaceholder from "../ui/imageWithPlaceholder";
 
 type CarouselProductProps = {
   slides: {
@@ -42,10 +42,9 @@ const Thumb: React.FC<ThumbPropType> = (props) => {
         className="embla-thumbs__slide__number rounded-xl"
       >
         {slide.asset && (
-          <Image
+          <ImageWithPlaceholder
             className="embla__slide__img object-cover"
-            src={urlFor(slide.asset).url()}
-            priority
+            src={urlForImage(slide.asset)}
             alt={`Slide ${index + 1}`}
             width={500}
             height={300}
@@ -97,12 +96,12 @@ export function CarouselProduct({ slides, options }: CarouselProductProps) {
               >
                 <div className="embla__slide__inner">
                   {slide.asset && (
-                    <Image
-                      className="embla__slide__img relative rounded-xl object-contain"
-                      src={urlFor(slide.asset).url()}
+                    <ImageWithPlaceholder
+                      className="embla__slide__img relative rounded-xl object-contain w-full h-full"
+                      src={urlForImage(slide.asset)}
                       alt={`Slide ${index + 1}`}
-                      fill
-                      sizes="(max-width: 768px) 100vw, 1200px"
+                      width={500}
+                      height={300}
                     />
                   )}
                 </div>

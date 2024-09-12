@@ -101,6 +101,8 @@ export function CarouselLanding({
                   width={300}
                   height={300}
                   className="rounded-sm h-full saturate-150"
+                  placeholder="blur"
+                  blurDataURL="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAACklEQVR4nGMAAQAABQABDQottAAAAABJRU5ErkJggg=="
                 />
               </Link>
             </div>

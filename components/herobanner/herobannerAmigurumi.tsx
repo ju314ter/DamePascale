@@ -43,6 +43,8 @@ export default function HeroBannerAmigurumi({
           width={1600}
           height={600}
           className="w-full h-full object-cover"
+          placeholder="blur"
+          blurDataURL="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAACklEQVR4nGMAAQAABQABDQottAAAAABJRU5ErkJggg=="
         />
       </motion.div>
 

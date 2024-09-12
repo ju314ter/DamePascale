@@ -74,6 +74,8 @@ const CardAmigurumi = ({ ami }: CardAmigurumiProps) => {
             width={300}
             height={300}
             className="w-[100%]"
+            placeholder="blur"
+            blurDataURL="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAACklEQVR4nGMAAQAABQABDQottAAAAABJRU5ErkJggg=="
           />
         </div>
         <p className="text-2xl text-center p-2 text-primary font-serif font-bold group-hover:text-black group-hover:translate-x-1 transition-all duration-700">

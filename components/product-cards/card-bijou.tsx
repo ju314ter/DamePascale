@@ -87,6 +87,8 @@ const CardBijou = ({ item }: CardBijouProps) => {
             width={300}
             height={300}
             className="transition-all duration-500 w-[100%] rounded-sm"
+            placeholder="blur"
+            blurDataURL="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAACklEQVR4nGMAAQAABQABDQottAAAAABJRU5ErkJggg=="
           />
         </div>
         <p className="text-xl text-center p-2 mt-4 font-serif font-bold text-primary group-hover:text-black group-hover:translate-x-1 transition-all duration-700">

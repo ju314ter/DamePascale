@@ -21,6 +21,8 @@ const portableTextComponents: Partial<PortableTextReactComponents> = {
         width={500}
         height={500}
         className="mx-auto rounded-md"
+        placeholder="blur"
+        blurDataURL="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAACklEQVR4nGMAAQAABQABDQottAAAAABJRU5ErkJggg=="
       />
     ),
     callToAction: ({
@@ -119,6 +121,8 @@ const BlogDetailCollectionPage = () => {
               height: "auto",
             }}
             className="w-full mb-4"
+            placeholder="blur"
+            blurDataURL="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAACklEQVR4nGMAAQAABQABDQottAAAAABJRU5ErkJggg=="
           />
           {blogPost.hotspots &&
             blogPost.hotspots.map(
