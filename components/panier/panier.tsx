@@ -19,6 +19,8 @@ import { urlFor, verifyStock } from "@/sanity/lib/client";
 import { Textarea } from "../ui/textarea";
 import { useForm } from "react-hook-form";
 import { createCheckoutSession } from "@/app/(main)/(context)/actions";
+import ImageWithPlaceholder from "../ui/imageWithPlaceholder";
+import { urlForImage } from "@/sanity/lib/image";
 
 const PanierWrapper = () => {
   const { panier } = usePanier();
@@ -92,6 +94,7 @@ const PanierWrapper = () => {
                   <Textarea
                     {...register("message")}
                     placeholder="Un message, une précision sur la commande ?"
+                    className="p-4 w-full"
                   />
                 </div>
                 <SheetClose
@@ -120,14 +123,12 @@ const PanierCard = (item: Item) => {
       className="w-full flex items-center justify-between gap-5"
     >
       <div>
-        <Image
-          src={urlFor(item.type.highlightedImg).url()}
+        <ImageWithPlaceholder
+          src={urlForImage(item.type.highlightedImg)}
           alt={item.type.name}
           width={50}
           height={50}
           className="p-2"
-          placeholder="blur"
-          blurDataURL="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAACklEQVR4nGMAAQAABQABDQottAAAAABJRU5ErkJggg=="
         />
       </div>
       <div>{item.type.name}</div>

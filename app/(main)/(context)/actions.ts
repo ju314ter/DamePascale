@@ -66,6 +66,9 @@ export async function createCheckoutSession(
       mode: "payment",
       success_url: `http://${process.env.NEXT_PUBLIC_URL}/checkout/success`,
       cancel_url: `http://${process.env.NEXT_PUBLIC_URL}/checkout/cancel`,
+      metadata: {
+        message: formData.get("message") as string,
+      },
     });
 
     return { url: session.url };
