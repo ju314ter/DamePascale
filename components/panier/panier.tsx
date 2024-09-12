@@ -15,7 +15,7 @@ import {
 import { MinusCircle } from "lucide-react";
 import { usePanier, Item } from "@/store/panier-store";
 import Image from "next/image";
-import { urlFor } from "@/sanity/lib/client";
+import { urlFor, verifyStock } from "@/sanity/lib/client";
 import { Textarea } from "../ui/textarea";
 import { useForm } from "react-hook-form";
 import { createCheckoutSession } from "@/app/(main)/(context)/actions";
@@ -25,7 +25,20 @@ const PanierWrapper = () => {
   const { register, handleSubmit } = useForm();
 
   const onSubmit = async (formData: any) => {
-    const result = await createCheckoutSession(panier);
+    const itemsToVerify = panier.map((item) => ({
+      id: item.type._id,
+      quantity: item.qty,
+    }));
+    const { allAvailable, stockStatus } = await verifyStock(itemsToVerify);
+
+    if (!allAvailable) {
+      console.error(
+        "Some items are out of stock:",
+        stockStatus.filter((item: any) => !item.isAvailable)
+      );
+      return;
+    }
+    const result = await createCheckoutSession(panier, formData);
 
     if (result.url) {
       window.location.href = result.url;
@@ -85,7 +98,7 @@ const PanierWrapper = () => {
                   asChild
                   className="flex justify-center items-center w-[75%]"
                 >
-                  <Button type="submit" variant={"cta"}>
+                  <Button type="submit" variant={"cta"} className="w-full py-4">
                     Confirmer
                   </Button>
                 </SheetClose>

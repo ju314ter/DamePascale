@@ -40,7 +40,10 @@ export async function updateSanityStock(lineItems: Stripe.LineItem[]) {
   }
 }
 
-export async function createCheckoutSession(panier: Item[]) {
+export async function createCheckoutSession(
+  panier: Item[],
+  formData: FormData
+) {
   try {
     const session = await stripe.checkout.sessions.create({
       payment_method_types: ["card", "link", "paypal"],
