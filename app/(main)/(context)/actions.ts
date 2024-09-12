@@ -93,7 +93,7 @@ export async function handleStripeWebhook(formData: FormData) {
 
     // Mettez à jour le stock dans Sanity
     try {
-      // await updateSanityStock(lineItems.data);
+      await updateSanityStock(lineItems.data);
       console.log("Stock mis à jour dans Sanity");
     } catch (error) {
       console.error(
