@@ -1,4 +1,3 @@
-// app/api/stripe-webhook/route.ts
 import { handleStripeWebhook } from "@/app/(main)/(context)/actions";
 import { NextRequest, NextResponse } from "next/server";
 
@@ -15,9 +14,3 @@ export async function POST(request: NextRequest) {
 
   return NextResponse.json(result);
 }
-
-export const config = {
-  api: {
-    bodyParser: false,
-  },
-};
