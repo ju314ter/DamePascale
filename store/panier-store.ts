@@ -23,6 +23,7 @@ export const usePanier = create<PanierState>((set) => ({
   panier: [],
   addToPanier: (itemType: ItemType) =>
     set((s: PanierState) => {
+      // TODO : try implement check to see if there is stock for item, if not try => show toast
       const alreadyHasItem = s.panier.some(
         (item: Item) => item.type._id === itemType._id
       );

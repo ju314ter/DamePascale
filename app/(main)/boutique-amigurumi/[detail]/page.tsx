@@ -112,6 +112,7 @@ const ProductDetailAmigurumiPage = () => {
             className="mt-4"
             onClick={(e) => {
               e.preventDefault();
+              // TODO : check stock before adding to cart, if no stock => show toast
               addToPanier(amigurumi);
               toast({
                 title: `${amigurumi.name} ajouté au panier`,

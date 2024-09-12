@@ -114,6 +114,7 @@ const CardBijou = ({ item }: CardBijouProps) => {
                   className={clsx("min-w-24")}
                   onClick={(e) => {
                     e.preventDefault();
+                    // TODO : check stock before adding to cart, if no stock => show toast
                     addToPanier(item);
                     toast({
                       title: `${item.name} ajouté au panier`,

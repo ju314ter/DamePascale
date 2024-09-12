@@ -3,8 +3,11 @@
 
 import { Item } from "@/store/panier-store";
 import Stripe from "stripe";
+import { headers } from "next/headers";
+import { updateSanityStock } from "@/sanity/lib/client";
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
+const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET!;
 
 export async function createCheckoutSession(panier: Item[]) {
   try {
@@ -36,4 +39,39 @@ export async function createCheckoutSession(panier: Item[]) {
     console.error("Erreur lors de la création de la session:", error);
     return { error: "Impossible de créer la session de paiement." };
   }
+}
+
+export async function handleStripeWebhook(formData: FormData) {
+  const body = (await formData.get("body")) as string;
+  const signature = headers().get("stripe-signature") as string;
+
+  let event: Stripe.Event;
+
+  try {
+    event = stripe.webhooks.constructEvent(body, signature, webhookSecret);
+  } catch (err: any) {
+    console.error(`Webhook Error: ${err.message}`);
+    return { error: `Webhook Error: ${err.message}` };
+  }
+
+  if (event.type === "checkout.session.completed") {
+    const session = event.data.object as Stripe.Checkout.Session;
+
+    // Récupérez les informations de la commande
+    const lineItems = await stripe.checkout.sessions.listLineItems(session.id);
+
+    // Mettez à jour le stock dans Sanity
+    try {
+      await updateSanityStock(lineItems.data);
+      console.log("Stock mis à jour dans Sanity");
+    } catch (error) {
+      console.error(
+        "Erreur lors de la mise à jour du stock dans Sanity:",
+        error
+      );
+      return { error: "Erreur lors de la mise à jour du stock" };
+    }
+  }
+
+  return { received: true };
 }

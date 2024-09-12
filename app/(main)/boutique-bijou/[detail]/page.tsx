@@ -125,6 +125,7 @@ const ProductDetailBijouPage = () => {
             className="mt-4"
             onClick={(e) => {
               e.preventDefault();
+              // TODO : check stock before adding to cart, if no stock => show toast
               addToPanier(bijou);
               toast({
                 title: `${bijou.name} ajouté au panier`,

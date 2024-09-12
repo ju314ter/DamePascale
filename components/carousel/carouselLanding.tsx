@@ -64,6 +64,7 @@ export function CarouselLanding({
                   className="relative uppercase font-serif top-5 opacity-0 group-hover:top-0 group-hover:opacity-100 hover:bg-secondary transition-all"
                   onClick={(e) => {
                     e.preventDefault();
+                    // TODO : check stock before adding to cart, if no stock => show toast
                     addToPanier(item);
                     toast({
                       title: `${item.name} ajouté au panier`,
