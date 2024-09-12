@@ -12,7 +12,7 @@ import {
   navigationMenuTriggerStyle,
 } from "@/components/ui/navigation-menu";
 import Link from "next/link";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import { Menu } from "lucide-react";
 import {
@@ -20,7 +20,6 @@ import {
   SheetClose,
   SheetContent,
   SheetDescription,
-  SheetFooter,
   SheetHeader,
   SheetTitle,
   SheetTrigger,
@@ -32,16 +31,41 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "../ui/accordion";
+import { getBijouNavlinks } from "@/sanity/lib/bijoux/calls";
+import { getAmigurumiNavlinks } from "@/sanity/lib/amigurumis/calls";
+import { getBlogPostsCategories } from "@/sanity/lib/blog/calls";
 
-export function NavMenu({
-  amigurumisNavlink,
-  bijouxNavlink,
-  blogNavlink,
-}: {
-  amigurumisNavlink: { title: string; href: string }[];
-  bijouxNavlink: { title: string; href: string }[];
-  blogNavlink: { _id: string; title: string }[];
-}) {
+export function NavMenu() {
+  const [bijouxNavlink, setBijouxNavlink] = useState<
+    { title: string; href: string }[]
+  >([]);
+  const [amigurumisNavlink, setAmigurumisNavlink] = useState<
+    { title: string; href: string }[]
+  >([]);
+  const [blogNavlink, setBlogNavlink] = useState<
+    { _id: string; title: string }[]
+  >([]);
+
+  useEffect(() => {
+    async function fetchBijouxNavlinks() {
+      const data = await getBijouNavlinks();
+      setBijouxNavlink(data);
+    }
+    fetchBijouxNavlinks();
+
+    async function fetchAmigurumisNavlinks() {
+      const data = await getAmigurumiNavlinks();
+      setAmigurumisNavlink(data);
+    }
+    fetchAmigurumisNavlinks();
+
+    async function fetchBlogNavlinks() {
+      const data = await getBlogPostsCategories();
+      setBlogNavlink(data);
+    }
+    fetchBlogNavlinks();
+  }, []);
+
   return (
     <>
       <NavigationMenu className="hidden lg:block">
@@ -116,7 +140,7 @@ export function NavMenu({
                   </Link>
                 </div>
                 <div className="basis-6/12 hover:basis-8/12 h-full transition-all overflow-auto">
-                  {bijouxNavlink.map((bijouLink) => (
+                  {bijouxNavlink.map((bijouLink: any) => (
                     <ListItem
                       className="hover:bg-secondary"
                       key={bijouLink.title}
@@ -235,7 +259,7 @@ export function NavMenu({
                         <Link href="/boutique-bijou">Tous</Link>
                       </Button>
                     </SheetClose>
-                    {bijouxNavlink.map((link) => (
+                    {bijouxNavlink.map((link: any) => (
                       <SheetClose asChild key={link.title}>
                         <Button asChild className="flex gap-2 justify-start">
                           <Link href={`/${link.href}`}>{link.title}</Link>

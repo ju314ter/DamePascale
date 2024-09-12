@@ -146,6 +146,7 @@ export const getBijouNavlinks = async () => {
   const navlinks: { title: string; href: string }[] = await client.fetch(
     groq`${query}`
   );
+
   return navlinks;
 };
 

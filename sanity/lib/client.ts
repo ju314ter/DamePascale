@@ -1,6 +1,5 @@
 import { createClient } from "next-sanity";
 import imageUrlBuilder from "@sanity/image-url";
-import { Stripe } from "stripe";
 
 import { apiVersion, dataset, projectId, useCdn, viewtoken } from "../env";
 
