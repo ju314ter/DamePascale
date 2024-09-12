@@ -85,6 +85,8 @@ export async function handleStripeWebhook(formData: FormData) {
     return { error: `Webhook Error: ${err.message}` };
   }
 
+  console.log("!!!! WEBHOOK RECEIVED AND TREATED !!!!");
+
   if (event.type === "checkout.session.completed") {
     const session = event.data.object as Stripe.Checkout.Session;
 
@@ -92,16 +94,16 @@ export async function handleStripeWebhook(formData: FormData) {
     const lineItems = await stripe.checkout.sessions.listLineItems(session.id);
 
     // Mettez à jour le stock dans Sanity
-    try {
-      await updateSanityStock(lineItems.data);
-      console.log("Stock mis à jour dans Sanity");
-    } catch (error) {
-      console.error(
-        "Erreur lors de la mise à jour du stock dans Sanity:",
-        error
-      );
-      return { error: "Erreur lors de la mise à jour du stock" };
-    }
+    // try {
+    //   await updateSanityStock(lineItems.data);
+    //   console.log("Stock mis à jour dans Sanity");
+    // } catch (error) {
+    //   console.error(
+    //     "Erreur lors de la mise à jour du stock dans Sanity:",
+    //     error
+    //   );
+    //   return { error: "Erreur lors de la mise à jour du stock" };
+    // }
   }
 
   return { received: true };

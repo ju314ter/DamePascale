@@ -23,7 +23,6 @@ type PanierState = {
 export const usePanier = create<PanierState>((set, get) => ({
   panier: [],
   addToPanier: async (itemType: ItemType) => {
-    console.log("addToPanier");
     const state = get();
     const alreadyHasItem = state.panier.some(
       (item: Item) => item.type._id === itemType._id
@@ -37,8 +36,6 @@ export const usePanier = create<PanierState>((set, get) => ({
     const hasStock = await verifyStock([
       { id: itemType._id, quantity: currentQuantity + 1 },
     ]);
-
-    console.log("hasStock ?", hasStock);
 
     if (!hasStock.allAvailable) {
       throw new Error("No stock available for this item");
