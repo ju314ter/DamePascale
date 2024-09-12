@@ -10,7 +10,7 @@ import { createClient } from "next-sanity";
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
 const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET!;
 
-export const client = createClient({
+const client = createClient({
   projectId,
   dataset,
   apiVersion,
@@ -25,7 +25,7 @@ export async function updateSanityStock(lineItems: Stripe.LineItem[]) {
     const quantitySold = item.quantity || 0;
 
     // Recherchez le produit dans Sanity
-    const query = `*[_type == "product" && name == $productName][0]`;
+    const query = `*[name == $productName][0]`;
     const product = await client.fetch(query, { productName });
 
     if (product) {
