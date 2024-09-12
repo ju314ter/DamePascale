@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useContext, useEffect } from "react";
+import React from "react";
 import { Button } from "../ui/button";
 import {
   Sheet,
@@ -26,12 +26,10 @@ const PanierWrapper = () => {
 
   const onSubmit = async (formData: any) => {
     const result = await createCheckoutSession(panier);
-    console.log("result", result);
 
-    // TODO : If result.url = success, descrease panier items sanity stock
-    // if (result.url) {
-    //   window.location.href = result.url;
-    // }
+    if (result.url) {
+      window.location.href = result.url;
+    }
   };
 
   return (
