@@ -110,23 +110,32 @@ const ProductDetailAmigurumiPage = () => {
           <Button
             variant={"cta"}
             className="mt-4"
-            onClick={(e) => {
+            onClick={async (e) => {
               e.preventDefault();
-              // TODO : check stock before adding to cart, if no stock => show toast
-              addToPanier(amigurumi);
-              toast({
-                title: `${amigurumi.name} ajouté au panier`,
-                action: (
-                  <ToastAction
-                    altText="Retirer du panier"
-                    onClick={() => {
-                      removeFromPanier(amigurumi);
-                    }}
-                  >
-                    Annuler
-                  </ToastAction>
-                ),
-              });
+              try {
+                await addToPanier(amigurumi);
+                toast({
+                  title: `${amigurumi.name} ajouté au panier`,
+                  action: (
+                    <ToastAction
+                      altText="Retirer du panier"
+                      onClick={() => {
+                        removeFromPanier(amigurumi);
+                      }}
+                    >
+                      Annuler
+                    </ToastAction>
+                  ),
+                });
+              } catch (error) {
+                if (error instanceof Error) {
+                  // Handle the error (e.g., show a toast notification)
+                  console.error(error.message);
+                  toast({
+                    title: `${amigurumi.name} plus de stock disponible!`,
+                  });
+                }
+              }
             }}
           >
             Ajouter au panier

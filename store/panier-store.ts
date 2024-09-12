@@ -1,3 +1,4 @@
+import { verifyStock } from "@/sanity/lib/client";
 import { create } from "zustand";
 
 type ItemType = {
@@ -15,18 +16,35 @@ export type Item = {
 
 type PanierState = {
   panier: Item[];
-  addToPanier: (item: ItemType) => void;
+  addToPanier: (item: ItemType) => Promise<void>;
   removeFromPanier: (item: ItemType) => void;
 };
 
-export const usePanier = create<PanierState>((set) => ({
+export const usePanier = create<PanierState>((set, get) => ({
   panier: [],
-  addToPanier: (itemType: ItemType) =>
+  addToPanier: async (itemType: ItemType) => {
+    console.log("addToPanier");
+    const state = get();
+    const alreadyHasItem = state.panier.some(
+      (item: Item) => item.type._id === itemType._id
+    );
+
+    const currentQuantity = alreadyHasItem
+      ? state.panier.find((item: Item) => item.type._id === itemType._id)
+          ?.qty || 0
+      : 0;
+
+    const hasStock = await verifyStock([
+      { id: itemType._id, quantity: currentQuantity + 1 },
+    ]);
+
+    console.log("hasStock ?", hasStock);
+
+    if (!hasStock.allAvailable) {
+      throw new Error("No stock available for this item");
+    }
+
     set((s: PanierState) => {
-      // TODO : try implement check to see if there is stock for item, if not try => show toast
-      const alreadyHasItem = s.panier.some(
-        (item: Item) => item.type._id === itemType._id
-      );
       const newState = {
         ...s,
         panier: !alreadyHasItem
@@ -39,7 +57,8 @@ export const usePanier = create<PanierState>((set) => ({
             ],
       };
       return newState;
-    }),
+    });
+  },
   removeFromPanier: (item: ItemType) =>
     set((s: PanierState) => ({
       ...s,

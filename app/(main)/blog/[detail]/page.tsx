@@ -120,7 +120,6 @@ const BlogDetailCollectionPage = () => {
             }}
             className="w-full mb-4"
           />
-          {/* TODO: add hotspots */}
           {blogPost.hotspots &&
             blogPost.hotspots.map(
               (spot: {

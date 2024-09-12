@@ -112,23 +112,32 @@ const CardBijou = ({ item }: CardBijouProps) => {
                 <Button
                   variant={"cta"}
                   className={clsx("min-w-24")}
-                  onClick={(e) => {
+                  onClick={async (e) => {
                     e.preventDefault();
-                    // TODO : check stock before adding to cart, if no stock => show toast
-                    addToPanier(item);
-                    toast({
-                      title: `${item.name} ajouté au panier`,
-                      action: (
-                        <ToastAction
-                          altText="Retirer du panier"
-                          onClick={() => {
-                            removeFromPanier(item);
-                          }}
-                        >
-                          Annuler
-                        </ToastAction>
-                      ),
-                    });
+                    try {
+                      await addToPanier(item);
+                      toast({
+                        title: `${item.name} ajouté au panier`,
+                        action: (
+                          <ToastAction
+                            altText="Retirer du panier"
+                            onClick={() => {
+                              removeFromPanier(item);
+                            }}
+                          >
+                            Annuler
+                          </ToastAction>
+                        ),
+                      });
+                    } catch (error) {
+                      if (error instanceof Error) {
+                        // Handle the error (e.g., show a toast notification)
+                        console.error(error.message);
+                        toast({
+                          title: `${item.name} plus de stock disponible!`,
+                        });
+                      }
+                    }
                   }}
                 >
                   <ShoppingCart size={24} strokeWidth={2} />

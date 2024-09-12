@@ -123,23 +123,32 @@ const ProductDetailBijouPage = () => {
           <Button
             variant={"cta"}
             className="mt-4"
-            onClick={(e) => {
+            onClick={async (e) => {
               e.preventDefault();
-              // TODO : check stock before adding to cart, if no stock => show toast
-              addToPanier(bijou);
-              toast({
-                title: `${bijou.name} ajouté au panier`,
-                action: (
-                  <ToastAction
-                    altText="Retirer du panier"
-                    onClick={() => {
-                      removeFromPanier(bijou);
-                    }}
-                  >
-                    Annuler
-                  </ToastAction>
-                ),
-              });
+              try {
+                await addToPanier(bijou);
+                toast({
+                  title: `${bijou.name} ajouté au panier`,
+                  action: (
+                    <ToastAction
+                      altText="Retirer du panier"
+                      onClick={() => {
+                        removeFromPanier(bijou);
+                      }}
+                    >
+                      Annuler
+                    </ToastAction>
+                  ),
+                });
+              } catch (error) {
+                if (error instanceof Error) {
+                  // Handle the error (e.g., show a toast notification)
+                  console.error(error.message);
+                  toast({
+                    title: `${bijou.name} plus de stock disponible!`,
+                  });
+                }
+              }
             }}
           >
             Ajouter au panier

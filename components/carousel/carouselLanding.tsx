@@ -62,23 +62,32 @@ export function CarouselLanding({
                 <Button
                   variant="cta"
                   className="relative uppercase font-serif top-5 opacity-0 group-hover:top-0 group-hover:opacity-100 hover:bg-secondary transition-all"
-                  onClick={(e) => {
+                  onClick={async (e) => {
                     e.preventDefault();
-                    // TODO : check stock before adding to cart, if no stock => show toast
-                    addToPanier(item);
-                    toast({
-                      title: `${item.name} ajouté au panier`,
-                      action: (
-                        <ToastAction
-                          altText="Retirer du panier"
-                          onClick={() => {
-                            removeFromPanier(item);
-                          }}
-                        >
-                          Annuler
-                        </ToastAction>
-                      ),
-                    });
+                    try {
+                      await addToPanier(item);
+                      toast({
+                        title: `${item.name} ajouté au panier`,
+                        action: (
+                          <ToastAction
+                            altText="Retirer du panier"
+                            onClick={() => {
+                              removeFromPanier(item);
+                            }}
+                          >
+                            Annuler
+                          </ToastAction>
+                        ),
+                      });
+                    } catch (error) {
+                      if (error instanceof Error) {
+                        // Handle the error (e.g., show a toast notification)
+                        console.error(error.message);
+                        toast({
+                          title: `${item.name} plus de stock disponible!`,
+                        });
+                      }
+                    }
                   }}
                 >
                   <span className="tracking-widest">Ajouter</span>

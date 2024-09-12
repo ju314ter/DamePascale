@@ -4,10 +4,41 @@
 import { Item } from "@/store/panier-store";
 import Stripe from "stripe";
 import { headers } from "next/headers";
-import { updateSanityStock } from "@/sanity/lib/client";
+import { apiVersion, dataset, projectId, useCdn } from "@/sanity/env";
+import { createClient } from "next-sanity";
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
 const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET!;
+
+export const client = createClient({
+  projectId,
+  dataset,
+  apiVersion,
+  useCdn,
+  perspective: "published",
+  token: process.env.SANITY_TOKEN,
+});
+
+export async function updateSanityStock(lineItems: Stripe.LineItem[]) {
+  for (const item of lineItems) {
+    const productName = item.description;
+    const quantitySold = item.quantity || 0;
+
+    // Recherchez le produit dans Sanity
+    const query = `*[_type == "product" && name == $productName][0]`;
+    const product = await client.fetch(query, { productName });
+
+    if (product) {
+      // Mettez à jour le stock
+      const updatedStock = Math.max(0, product.stock - quantitySold);
+      await client.patch(product._id).set({ stock: updatedStock }).commit();
+
+      console.log(`Stock mis à jour pour ${productName}: ${updatedStock}`);
+    } else {
+      console.log(`Produit non trouvé: ${productName}`);
+    }
+  }
+}
 
 export async function createCheckoutSession(panier: Item[]) {
   try {

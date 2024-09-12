@@ -11,15 +11,8 @@ export const client = createClient({
   useCdn,
   perspective: "published",
   token: viewtoken,
-});
-
-export const serverClient = createClient({
-  projectId,
-  dataset,
-  apiVersion,
-  useCdn,
-  perspective: "published",
-  token: process.env.SANITY_TOKEN,
+  //we can ignore warning as the token used is read-only
+  ignoreBrowserTokenWarning: true,
 });
 
 const builder = imageUrlBuilder(client);
@@ -27,27 +20,6 @@ const builder = imageUrlBuilder(client);
 export const urlFor = (source: any) => {
   return builder.image(source).auto("format").fit("max");
 };
-
-export async function updateSanityStock(lineItems: Stripe.LineItem[]) {
-  for (const item of lineItems) {
-    const productName = item.description;
-    const quantitySold = item.quantity || 0;
-
-    // Recherchez le produit dans Sanity
-    const query = `*[_type == "product" && name == $productName][0]`;
-    const product = await client.fetch(query, { productName });
-
-    if (product) {
-      // Mettez à jour le stock
-      const updatedStock = Math.max(0, product.stock - quantitySold);
-      await client.patch(product._id).set({ stock: updatedStock }).commit();
-
-      console.log(`Stock mis à jour pour ${productName}: ${updatedStock}`);
-    } else {
-      console.log(`Produit non trouvé: ${productName}`);
-    }
-  }
-}
 
 export async function verifyStock(items: { id: string; quantity: number }[]) {
   const ids = items.map((item) => item.id);

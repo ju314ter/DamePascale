@@ -13,7 +13,7 @@ export const projectId = assertValue(
 
 export const viewtoken = assertValue(
   process.env.NEXT_PUBLIC_SANITY_VIEW_TOKEN,
-  "Missing environment variable: SANITY_TOKEN"
+  "Missing environment variable: NEXT_PUBLIC_SANITY_VIEW_TOKEN"
 );
 
 export const useCdn = false;
