@@ -17,6 +17,8 @@ import { usePanier } from "@/store/panier-store";
 import clsx from "clsx";
 import { useToast } from "../ui/use-toast";
 import { ToastAction } from "../ui/toast";
+import ImageWithPlaceholder from "../ui/imageWithPlaceholder";
+import { urlForImage } from "@/sanity/lib/image";
 
 interface CardAmigurumiProps {
   ami: Amigurumi;
@@ -67,15 +69,12 @@ const CardAmigurumi = ({ ami }: CardAmigurumiProps) => {
               Promo
             </Badge>
           )}
-          <Image
-            priority
-            src={urlFor(ami.highlightedImg).url()}
+          <ImageWithPlaceholder
+            src={urlForImage(ami.highlightedImg)}
             alt={ami.name}
             width={300}
             height={300}
-            className="w-[100%]"
-            placeholder="blur"
-            blurDataURL="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAACklEQVR4nGMAAQAABQABDQottAAAAABJRU5ErkJggg=="
+            className="transition-all duration-500 w-[100%] rounded-sm"
           />
         </div>
         <p className="text-2xl text-center p-2 text-primary font-serif font-bold group-hover:text-black group-hover:translate-x-1 transition-all duration-700">

@@ -17,6 +17,8 @@ import { usePanier } from "@/store/panier-store";
 import clsx from "clsx";
 import { ToastAction } from "../ui/toast";
 import { toast } from "../ui/use-toast";
+import { urlForImage } from "@/sanity/lib/image";
+import ImageWithPlaceholder from "../ui/imageWithPlaceholder";
 
 interface CardBijouProps {
   item: Bijou;
@@ -80,15 +82,12 @@ const CardBijou = ({ item }: CardBijouProps) => {
               Promo
             </Badge>
           )}
-          <Image
-            priority
-            src={urlFor(item.highlightedImg).url()}
+          <ImageWithPlaceholder
+            src={urlForImage(item.highlightedImg)}
             alt={item.name}
             width={300}
             height={300}
             className="transition-all duration-500 w-[100%] rounded-sm"
-            placeholder="blur"
-            blurDataURL="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAACklEQVR4nGMAAQAABQABDQottAAAAABJRU5ErkJggg=="
           />
         </div>
         <p className="text-xl text-center p-2 mt-4 font-serif font-bold text-primary group-hover:text-black group-hover:translate-x-1 transition-all duration-700">
