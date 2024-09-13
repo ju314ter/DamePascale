@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Button } from "../ui/button";
 import {
   Sheet,
@@ -14,17 +14,37 @@ import {
 } from "../ui/sheet";
 import { MinusCircle } from "lucide-react";
 import { usePanier, Item } from "@/store/panier-store";
-import Image from "next/image";
-import { urlFor, verifyStock } from "@/sanity/lib/client";
+import { verifyStock } from "@/sanity/lib/client";
 import { Textarea } from "../ui/textarea";
 import { useForm } from "react-hook-form";
 import { createCheckoutSession } from "@/app/(main)/(context)/actions";
 import ImageWithPlaceholder from "../ui/imageWithPlaceholder";
 import { urlForImage } from "@/sanity/lib/image";
+import { useToast } from "../ui/use-toast";
+import { AnimatePresence, motion } from "framer-motion";
 
 const PanierWrapper = () => {
   const { panier } = usePanier();
   const { register, handleSubmit } = useForm();
+  const { toast } = useToast();
+  const [totalPanier, setTotalPanier] = useState(0);
+  const [deliveryCost, setDeliveryCost] = useState(0);
+
+  useEffect(() => {
+    const totalPanier = panier
+      .reduce(
+        (total, item) =>
+          total +
+          (item.type.promotionDiscount
+            ? ((100 - item.type.promotionDiscount) / 100) * item.type.price
+            : item.type.price),
+        0
+      )
+      .toFixed(2);
+
+    setTotalPanier(Number(totalPanier));
+    setDeliveryCost(3);
+  }, [panier]);
 
   const onSubmit = async (formData: any) => {
     const message = formData.message;
@@ -39,6 +59,10 @@ const PanierWrapper = () => {
         "Some items are out of stock:",
         stockStatus.filter((item: any) => !item.isAvailable)
       );
+      toast({
+        title: "Impossible de passer en mode de paiement",
+        description: "Certains produits ne sont plus en stock",
+      });
       return;
     }
     const result = await createCheckoutSession(panier, message);
@@ -73,25 +97,45 @@ const PanierWrapper = () => {
           </Button>
         </div>
       </SheetTrigger>
-      <SheetContent side="right" className="">
+      <SheetContent side="right" className="overflow-hidden">
         <SheetHeader>
           <SheetTitle className="text-xl">Panier</SheetTitle>
           <SheetDescription>Retrouvez tout votre sélection.</SheetDescription>
         </SheetHeader>
         {panier.length <= 0 && (
-          <div>Vous n&apos;avez aucun objet dans le panier</div>
+          <motion.div
+            initial={{ y: -300, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            className="p-4"
+          >
+            Vous n&apos;avez aucun objet dans le panier
+          </motion.div>
         )}
         {panier.length > 0 && (
           <>
-            {panier.map((item) => (
-              <PanierCard key={item.type._id} {...item} />
-            ))}
+            <AnimatePresence>
+              {panier.map((item) => (
+                <PanierCard key={item.type._id} {...item} />
+              ))}
+            </AnimatePresence>
             <SheetFooter className="flex flex-col justify-center items-center pt-10 gap-10">
               <form onSubmit={handleSubmit(onSubmit)} className="w-full">
                 <div className="flex flex-col items-start justify-end w-full gap-3">
-                  <span className="underline">Total</span>
-                  <span>Panier</span>
-                  <span>Livraison</span>
+                  <div className="flex justify-between items-center w-full">
+                    <span className="underline">Total</span>
+                    <span className="text-xl">
+                      {totalPanier + deliveryCost} €
+                    </span>
+                  </div>
+                  <div className="flex justify-between items-center w-full">
+                    <span>Panier</span>
+                    <span>{totalPanier} €</span>
+                  </div>
+                  <div className="flex justify-between items-center w-full">
+                    <span>Livraison</span>
+                    <span>{deliveryCost} €</span>
+                  </div>
+
                   <Textarea
                     {...register("message")}
                     placeholder="Un message, une précision sur la commande ?"
@@ -119,9 +163,11 @@ const PanierCard = (item: Item) => {
   const { removeFromPanier } = usePanier();
 
   return (
-    <div
+    <motion.div
       key={item.type._id}
-      className="w-full flex items-center justify-between gap-5"
+      className="w-full flex items-center justify-between gap-5 my-2"
+      animate={{ x: 0, opacity: 1 }}
+      exit={{ x: "100%", opacity: 0 }}
     >
       <div>
         <ImageWithPlaceholder
@@ -129,7 +175,7 @@ const PanierCard = (item: Item) => {
           alt={item.type.name}
           width={50}
           height={50}
-          className="p-2"
+          className="rounded-md"
         />
       </div>
       <div>{item.type.name}</div>
@@ -144,7 +190,7 @@ const PanierCard = (item: Item) => {
         </div>
       )}
       {!item.type.promotionDiscount && (
-        <div>
+        <div className="flex flex-wrap">
           {item.qty} x {item.type.price}€
         </div>
       )}
@@ -153,12 +199,12 @@ const PanierCard = (item: Item) => {
         size="sm"
         onClick={(e) => {
           e.preventDefault();
-          removeFromPanier(item.type);
+          +removeFromPanier(item.type);
         }}
       >
         <MinusCircle />
       </Button>
-    </div>
+    </motion.div>
   );
 };
 
