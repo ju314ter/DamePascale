@@ -118,7 +118,7 @@ export default function LandingPage() {
             height="130px"
           >
             <text x="50%" y="50%" dominantBaseline="middle" textAnchor="middle">
-              DamePascale
+              Dame Pascale
             </text>
           </svg>
         </div>
@@ -175,6 +175,26 @@ export default function LandingPage() {
             direction="forward"
             items={carouselBijouxItem}
           />
+        </div>
+      </section>
+      <section className="w-full flex justify-center items-center">
+        <div className="w-[50%] p-10 flex flex-col justify-center items-center gap-2 text-xl">
+          <span>
+            Bonjour ! Je suis créatrice d&apos;amigurumi et de bijoux uniques
+            faits à partir de fleurs naturelles séchées, ensuite résinées pour
+            capturer leur beauté délicate.
+          </span>
+          <span>
+            Mon travail combine la douceur et la chaleur des amigurumi, ces
+            adorables poupées en crochet, avec la sophistication des bijoux qui
+            mettent en valeur la beauté éphémère des fleurs.
+          </span>
+          <span>
+            Chaque pièce est pensée avec soin, du choix des fleurs à leur
+            transformation en objets durables et élégants. J&apos;aime créer des
+            pièces qui sont non seulement visuellement attrayantes mais aussi
+            empreintes d&apos;une touche de nature et de douceur.
+          </span>
         </div>
       </section>
       <section

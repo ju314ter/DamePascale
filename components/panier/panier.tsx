@@ -166,6 +166,7 @@ const PanierCard = (item: Item) => {
     <motion.div
       key={item.type._id}
       className="w-full flex items-center justify-between gap-5 my-2"
+      layout
       animate={{ x: 0, opacity: 1 }}
       exit={{ x: "100%", opacity: 0 }}
     >
