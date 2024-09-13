@@ -112,7 +112,7 @@ export default function BoutiquePage() {
                   variants={cardVariants}
                   className="w-full flex p-2"
                 >
-                  <CardAmigurumi ami={ami} />
+                  <CardAmigurumi item={ami} />
                 </motion.div>
               ))}
             </div>

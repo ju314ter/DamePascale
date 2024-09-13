@@ -106,7 +106,7 @@ const CardBijou = ({ item }: CardBijouProps) => {
             <span>€{item.price}</span>
           )}
         </div>
-        <div className="card-buttons w-full flex justify-around items-center p-4">
+        <div className="card-buttons w-full flex flex-col md:flex-row gap-2 justify-around items-center p-2">
           <TooltipProvider>
             <Tooltip>
               <TooltipTrigger asChild>
@@ -149,6 +149,9 @@ const CardBijou = ({ item }: CardBijouProps) => {
               </TooltipContent>
             </Tooltip>
           </TooltipProvider>
+          <div>
+            <p className="text-xs text-gray-500">Stock : {item.stock}</p>
+          </div>
         </div>
       </Link>
     </Card>
