@@ -182,7 +182,7 @@ const PanierCard = (item: Item) => {
 
       {item.type.promotionDiscount && (
         <div>
-          {item.qty} x
+          {item.qty} x{" "}
           {(item.type.price * (1 - item.type.promotionDiscount / 100)).toFixed(
             2
           )}
