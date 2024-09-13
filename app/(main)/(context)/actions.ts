@@ -40,10 +40,7 @@ export async function updateSanityStock(lineItems: Stripe.LineItem[]) {
   }
 }
 
-export async function createCheckoutSession(
-  panier: Item[],
-  formData: FormData
-) {
+export async function createCheckoutSession(panier: Item[], message: string) {
   try {
     const session = await stripe.checkout.sessions.create({
       payment_method_types: ["card", "link", "paypal"],
@@ -67,7 +64,7 @@ export async function createCheckoutSession(
       success_url: `http://${process.env.NEXT_PUBLIC_URL}/checkout/success`,
       cancel_url: `http://${process.env.NEXT_PUBLIC_URL}/checkout/cancel`,
       metadata: {
-        message: formData.get("message") as string,
+        message,
       },
     });
 

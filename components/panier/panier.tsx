@@ -27,6 +27,7 @@ const PanierWrapper = () => {
   const { register, handleSubmit } = useForm();
 
   const onSubmit = async (formData: any) => {
+    const message = formData.message;
     const itemsToVerify = panier.map((item) => ({
       id: item.type._id,
       quantity: item.qty,
@@ -40,7 +41,7 @@ const PanierWrapper = () => {
       );
       return;
     }
-    const result = await createCheckoutSession(panier, formData);
+    const result = await createCheckoutSession(panier, message);
 
     if (result.url) {
       window.location.href = result.url;

@@ -29,7 +29,7 @@ export default function ImageWithPlaceholder({
         alt={alt}
         width={width}
         height={height}
-        onLoadingComplete={() => setLoading(false)}
+        onLoad={() => setLoading(false)}
         className={`${className} transition-opacity ${isLoading ? "opacity-0" : "opacity-100"}`}
       />
     </div>
