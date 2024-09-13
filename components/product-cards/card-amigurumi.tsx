@@ -100,6 +100,7 @@ const CardAmigurumi = ({ item }: CardAmigurumiProps) => {
                 <Button
                   variant={"cta"}
                   className={clsx("min-w-24")}
+                  disabled={item.stock <= 0}
                   onClick={async (e) => {
                     e.preventDefault();
                     try {
