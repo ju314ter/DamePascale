@@ -156,10 +156,12 @@ export async function handleStripeWebhook(formData: FormData) {
     // Envoi mail de confirmation utiliseur + envoi mail notification nouvelle commande
     const resultMailCustomer = await sendConfirmationEmail(session);
     if (!resultMailCustomer.success) {
+      console.error(resultMailCustomer.message);
       return { error: resultMailCustomer.message };
     }
     const resultMailNotification = await sendNotificationEmail(session);
     if (!resultMailNotification.success) {
+      console.error(resultMailCustomer.message);
       return { error: resultMailNotification.message };
     }
   }
