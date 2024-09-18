@@ -195,14 +195,18 @@ const sendConfirmationEmail = async (
     },
   });
 
-  console.log(session);
-  console.log(lineItems);
-
   const text = `Bonjour ${session.metadata.fullName},
 Nous avons bien reçu votre commande et nous vous remercions de votre confiance.
 Voici le résumé de votre commande:
 
-${lineItems.map((item) => `- ${item.description}`).join("\n")}
+${lineItems
+  .map((item) => {
+    const name = item.description;
+    const quantitySold = item.quantity || 0;
+    const price = item.price?.unit_amount || 0;
+    return `- ${name} - ${quantitySold} x ${((price * quantitySold) / 100).toFixed(2)} €`;
+  })
+  .join("\n")}
 
 Total: ${session.amount_total ? (session.amount_total / 100).toFixed(2) : "unknown"} €
 
