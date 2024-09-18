@@ -154,6 +154,9 @@ export async function handleStripeWebhook(formData: FormData) {
     }
 
     // Envoi mail de confirmation utiliseur + envoi mail notification nouvelle commande
+
+    console.log(session);
+
     const resultMailCustomer = await sendConfirmationEmail(session);
     if (!resultMailCustomer.success) {
       console.error(resultMailCustomer.message);
@@ -170,7 +173,6 @@ export async function handleStripeWebhook(formData: FormData) {
 }
 
 const sendConfirmationEmail = async (session: Stripe.Checkout.Session) => {
-  console.log(session);
   if (!session.metadata || !session.customer_email) {
     return {
       success: false,
