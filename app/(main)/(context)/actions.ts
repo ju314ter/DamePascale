@@ -189,6 +189,8 @@ const sendConfirmationEmail = async (session: Stripe.Checkout.Session) => {
     },
   });
 
+  console.log(session);
+
   const text = `Bonjour ${session.metadata.fullName},
 Nous avons bien reçu votre commande et nous vous remercions de votre confiance.
 Voici le résumé de votre commande:
