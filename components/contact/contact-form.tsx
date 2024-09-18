@@ -5,7 +5,7 @@ import { Button } from "../ui/button";
 import { Textarea } from "../ui/textarea";
 import { Input } from "../ui/input";
 import { Label } from "../ui/label";
-import { sendEmail } from "@/app/(main)/contact/action";
+import { sendEmailContact } from "@/app/(main)/contact/action";
 import { useState } from "react";
 import Recaptcha from "./recaptcha";
 import { useGoogleReCaptcha } from "react-google-recaptcha-v3";
@@ -34,7 +34,7 @@ export function ContactForm() {
 
     try {
       const recaptchaToken = await executeRecaptcha("form_submit");
-      const result = await sendEmail({ ...data, recaptchaToken });
+      const result = await sendEmailContact({ ...data, recaptchaToken });
       if (result.success) {
         setSubmissionStatus(result.message);
       } else {

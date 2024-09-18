@@ -7,6 +7,8 @@ import { headers } from "next/headers";
 import { apiVersion, dataset, projectId, useCdn } from "@/sanity/env";
 import { createClient } from "next-sanity";
 import { DeliveryFormData } from "@/components/panier/panier";
+import nodemailer from "nodemailer";
+import Mail from "nodemailer/lib/mailer";
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
 const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET!;
@@ -36,7 +38,8 @@ export async function updateSanityStock(lineItems: Stripe.LineItem[]) {
 
       console.log(`Stock mis à jour pour ${productName}: ${updatedStock}`);
     } else {
-      console.log(`Produit non trouvé: ${productName}`);
+      if (productName !== "Frais de livraison")
+        console.log(`Produit non trouvé: ${productName}`);
     }
   }
 }
@@ -114,6 +117,12 @@ export async function handleStripeWebhook(formData: FormData) {
   if (event.type === "checkout.session.completed") {
     const session = event.data.object as Stripe.Checkout.Session;
 
+    if (!session.metadata) {
+      return {
+        error:
+          "Erreur lors de la création de la session de paiement. Metadata manquante.",
+      };
+    }
     // Récupérez les informations de la commande
     const lineItems = await stripe.checkout.sessions.listLineItems(session.id);
 
@@ -129,6 +138,7 @@ export async function handleStripeWebhook(formData: FormData) {
       return { error: "Erreur lors de la mise à jour du stock" };
     }
 
+    // Transfert des metadonnées de la session checkout au payment intent
     if (session.payment_intent) {
       try {
         await stripe.paymentIntents.update(session.payment_intent as string, {
@@ -142,7 +152,113 @@ export async function handleStripeWebhook(formData: FormData) {
         return { error: "Erreur lors du transfert des métadonnées" };
       }
     }
+
+    // Envoi mail de confirmation utiliseur + envoi mail notification nouvelle commande
+    const resultMailCustomer = await sendConfirmationEmail(session);
+    if (!resultMailCustomer.success) {
+      return { error: resultMailCustomer.message };
+    }
+    const resultMailNotification = await sendNotificationEmail(session);
+    if (!resultMailNotification.success) {
+      return { error: resultMailNotification.message };
+    }
   }
 
   return { received: true };
 }
+
+const sendConfirmationEmail = async (session: Stripe.Checkout.Session) => {
+  console.log(session);
+  if (!session.metadata || !session.customer_email) {
+    return {
+      success: false,
+      message: "Données manquantes pour envoi mail de confirmation commande",
+    };
+  }
+
+  const transport = nodemailer.createTransport({
+    service: "gmail",
+    auth: {
+      user: process.env.MY_EMAIL,
+      pass: process.env.MY_GMAIL_APP_PASSWORD,
+    },
+  });
+
+  const text = `Bonjour ${session.metadata.fullName},
+  Nous avons bien reçu votre commande et nous vous remercions de votre confiance.
+  Voici le résumé de votre commande:Bonne journée !`;
+
+  const mailOptions: Mail.Options = {
+    from: process.env.MY_EMAIL,
+    to: session.customer_email,
+    // cc: email, (uncomment this line if you want to send a copy to the sender)
+    subject: `Dame Pascale: Confirmation de votre commande`,
+    text,
+  };
+
+  const sendMailPromise = () =>
+    new Promise<string>((resolve, reject) => {
+      transport.sendMail(mailOptions, function (err) {
+        if (!err) {
+          resolve("Email envoyé");
+        } else {
+          reject(err.message);
+        }
+      });
+    });
+
+  try {
+    await sendMailPromise();
+    return { success: true, message: "Mail envoyé avec succès ! A bientôt." };
+  } catch (err) {
+    return {
+      success: false,
+      message: "Erreur lors de l'envoi du mail. Veuillez réessayer plus tard.",
+    };
+  }
+};
+
+const sendNotificationEmail = async (session: Stripe.Checkout.Session) => {
+  if (!session.metadata) {
+    return {
+      success: false,
+      message: "Données manquantes pour envoi notification commande",
+    };
+  }
+
+  const transport = nodemailer.createTransport({
+    service: "gmail",
+    auth: {
+      user: process.env.MY_EMAIL,
+      pass: process.env.MY_GMAIL_APP_PASSWORD,
+    },
+  });
+
+  const mailOptions: Mail.Options = {
+    from: process.env.MY_EMAIL,
+    to: process.env.MY_EMAIL,
+    subject: `Dame Pascale: Confirmation de votre commande`,
+    text: `Une nouvelle commande a été créée pour ${session.metadata.fullName} (${session.customer_email}).`,
+  };
+
+  const sendMailPromise = () =>
+    new Promise<string>((resolve, reject) => {
+      transport.sendMail(mailOptions, function (err) {
+        if (!err) {
+          resolve("Email envoyé");
+        } else {
+          reject(err.message);
+        }
+      });
+    });
+
+  try {
+    await sendMailPromise();
+    return { success: true, message: "Mail envoyé avec succès ! A bientôt." };
+  } catch (err) {
+    return {
+      success: false,
+      message: "Erreur lors de l'envoi du mail. Veuillez réessayer plus tard.",
+    };
+  }
+};

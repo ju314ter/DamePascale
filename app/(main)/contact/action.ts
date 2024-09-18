@@ -40,7 +40,7 @@ async function verifyRecaptcha(token: string) {
   }
 }
 
-export async function sendEmail(data: ContactFormData) {
+export async function sendEmailContact(data: ContactFormData) {
   const { email, name, message, recaptchaToken } = data;
 
   const isHuman = await verifyRecaptcha(recaptchaToken);
