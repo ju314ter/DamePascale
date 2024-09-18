@@ -190,8 +190,19 @@ const sendConfirmationEmail = async (session: Stripe.Checkout.Session) => {
   });
 
   const text = `Bonjour ${session.metadata.fullName},
-  Nous avons bien reçu votre commande et nous vous remercions de votre confiance.
-  Voici le résumé de votre commande:Bonne journée !`;
+Nous avons bien reçu votre commande et nous vous remercions de votre confiance.
+Voici le résumé de votre commande:
+
+${session.line_items?.data
+  .map(
+    (item) =>
+      `- ${item.description} x ${item.quantity} (${(item.amount_total / 100).toFixed(2)} €)`
+  )
+  .join("\n")}
+
+Total: ${session.amount_total ? (session.amount_total / 100).toFixed(2) : "unknown"} €
+
+Bonne journée !`;
 
   const mailOptions: Mail.Options = {
     from: process.env.MY_EMAIL,
