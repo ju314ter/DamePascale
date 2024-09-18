@@ -154,9 +154,6 @@ export async function handleStripeWebhook(formData: FormData) {
     }
 
     // Envoi mail de confirmation utiliseur + envoi mail notification nouvelle commande
-
-    console.log(session);
-
     const resultMailCustomer = await sendConfirmationEmail(session);
     if (!resultMailCustomer.success) {
       console.error(resultMailCustomer.message);
@@ -173,7 +170,11 @@ export async function handleStripeWebhook(formData: FormData) {
 }
 
 const sendConfirmationEmail = async (session: Stripe.Checkout.Session) => {
-  if (!session.metadata || !session.customer_email) {
+  if (
+    !session.metadata ||
+    !session.customer_details ||
+    !session.customer_details.email
+  ) {
     return {
       success: false,
       message: "Données manquantes pour envoi mail de confirmation commande",
@@ -194,7 +195,7 @@ const sendConfirmationEmail = async (session: Stripe.Checkout.Session) => {
 
   const mailOptions: Mail.Options = {
     from: process.env.MY_EMAIL,
-    to: session.customer_email,
+    to: session.customer_details.email,
     // cc: email, (uncomment this line if you want to send a copy to the sender)
     subject: `Dame Pascale: Confirmation de votre commande`,
     text,
