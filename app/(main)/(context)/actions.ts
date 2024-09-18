@@ -124,11 +124,13 @@ export async function handleStripeWebhook(formData: FormData) {
       };
     }
     // Récupérez les informations de la commande
-    const lineItems = await stripe.checkout.sessions.listLineItems(session.id);
+    const lineItemsData = await stripe.checkout.sessions.listLineItems(
+      session.id
+    );
 
     // Mettez à jour le stock dans Sanity
     try {
-      await updateSanityStock(lineItems.data);
+      await updateSanityStock(lineItemsData.data);
       console.log("Stock mis à jour dans Sanity");
     } catch (error) {
       console.error(
@@ -154,7 +156,10 @@ export async function handleStripeWebhook(formData: FormData) {
     }
 
     // Envoi mail de confirmation utiliseur + envoi mail notification nouvelle commande
-    const resultMailCustomer = await sendConfirmationEmail(session);
+    const resultMailCustomer = await sendConfirmationEmail(
+      session,
+      lineItemsData
+    );
     if (!resultMailCustomer.success) {
       console.error(resultMailCustomer.message);
       return { error: resultMailCustomer.message };
@@ -169,7 +174,10 @@ export async function handleStripeWebhook(formData: FormData) {
   return { received: true };
 }
 
-const sendConfirmationEmail = async (session: Stripe.Checkout.Session) => {
+const sendConfirmationEmail = async (
+  session: Stripe.Checkout.Session,
+  lineItems: Stripe.Response<Stripe.ApiList<Stripe.LineItem>>
+) => {
   if (
     !session.metadata ||
     !session.customer_details ||
@@ -195,7 +203,7 @@ const sendConfirmationEmail = async (session: Stripe.Checkout.Session) => {
 Nous avons bien reçu votre commande et nous vous remercions de votre confiance.
 Voici le résumé de votre commande:
 
-${session.line_items?.data
+${lineItems.data
   .map(
     (item) =>
       `- ${item.description} x ${item.quantity} (${(item.amount_total / 100).toFixed(2)} €)`
