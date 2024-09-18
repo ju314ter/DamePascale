@@ -128,6 +128,20 @@ export async function handleStripeWebhook(formData: FormData) {
       );
       return { error: "Erreur lors de la mise à jour du stock" };
     }
+
+    if (session.payment_intent) {
+      try {
+        await stripe.paymentIntents.update(session.payment_intent as string, {
+          metadata: session.metadata,
+        });
+      } catch (error) {
+        console.error(
+          "Erreur lors du transfert des métadonnées au Payment Intent:",
+          error
+        );
+        return { error: "Erreur lors du transfert des métadonnées" };
+      }
+    }
   }
 
   return { received: true };
