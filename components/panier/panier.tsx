@@ -12,7 +12,7 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "../ui/sheet";
-import { MinusCircle } from "lucide-react";
+import { Edit, MinusCircle } from "lucide-react";
 import { usePanier, Item } from "@/store/panier-store";
 import { verifyStock } from "@/sanity/lib/client";
 import { Textarea } from "../ui/textarea";
@@ -22,13 +22,35 @@ import ImageWithPlaceholder from "../ui/imageWithPlaceholder";
 import { urlForImage } from "@/sanity/lib/image";
 import { useToast } from "../ui/use-toast";
 import { AnimatePresence, motion } from "framer-motion";
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { Input } from "../ui/input";
+import { Label } from "../ui/label";
+
+const deliverySchema = z.object({
+  fullName: z.string().min(2, "Nom complet requis"),
+  addressLine1: z.string().min(5, "Address requise"),
+  addressLine2: z.string().optional(),
+  city: z.string().min(2, "Ville requise"),
+  country: z.string().min(2, "Pays requis"),
+  postalCode: z.string().regex(/^\d{5}(-\d{4})?$/, "Code postal invalide"),
+  message: z.string().optional(),
+});
+export type DeliveryFormData = z.infer<typeof deliverySchema>;
 
 const PanierWrapper = () => {
   const { panier } = usePanier();
-  const { register, handleSubmit } = useForm();
+  const {
+    register,
+    handleSubmit,
+    formState: { errors, isDirty },
+  } = useForm<DeliveryFormData>({
+    resolver: zodResolver(deliverySchema),
+  });
   const { toast } = useToast();
   const [totalPanier, setTotalPanier] = useState(0);
   const [deliveryCost, setDeliveryCost] = useState(0);
+  const [editAdress, setEditAdress] = useState(false);
 
   useEffect(() => {
     const totalPanier = panier
@@ -43,11 +65,15 @@ const PanierWrapper = () => {
       .toFixed(2);
 
     setTotalPanier(Number(totalPanier));
-    setDeliveryCost(3);
+
+    if (Number(totalPanier) > 50) {
+      setDeliveryCost(0);
+    } else {
+      setDeliveryCost(5);
+    }
   }, [panier]);
 
-  const onSubmit = async (formData: any) => {
-    const message = formData.message;
+  const onSubmit = async (formData: DeliveryFormData) => {
     const itemsToVerify = panier.map((item) => ({
       id: item.type._id,
       quantity: item.qty,
@@ -65,7 +91,7 @@ const PanierWrapper = () => {
       });
       return;
     }
-    const result = await createCheckoutSession(panier, message);
+    const result = await createCheckoutSession(panier, formData, deliveryCost);
 
     if (result.url) {
       window.location.href = result.url;
@@ -97,7 +123,7 @@ const PanierWrapper = () => {
           </Button>
         </div>
       </SheetTrigger>
-      <SheetContent side="right" className="overflow-hidden">
+      <SheetContent side="right" className="overflow-x-hidden">
         <SheetHeader>
           <SheetTitle className="text-xl">Panier</SheetTitle>
           <SheetDescription>Retrouvez tout votre sélection.</SheetDescription>
@@ -133,23 +159,118 @@ const PanierWrapper = () => {
                   </div>
                   <div className="flex justify-between items-center w-full">
                     <span>Livraison</span>
-                    <span>{deliveryCost} €</span>
+                    <span>{deliveryCost ? `${deliveryCost}€` : "Gratuit"}</span>
                   </div>
-
-                  <Textarea
-                    {...register("message")}
-                    placeholder="Un message, une précision sur la commande ?"
-                    className="p-4 w-full"
-                  />
+                  {/* Adresse de livraison */}
+                  <div className="flex justify-between items-center w-full">
+                    <span>Adresse de livraison</span>
+                    <span className="hover:text-accent">
+                      <Edit onClick={() => setEditAdress(!editAdress)} />
+                    </span>
+                  </div>
+                  <AnimatePresence>
+                    {editAdress && (
+                      <motion.div
+                        className="flex flex-col gap-2 w-full"
+                        initial={{ y: 10, opacity: 0 }}
+                        animate={{ y: 0, opacity: 1 }}
+                        exit={{ y: 10, opacity: 0 }}
+                        layout
+                      >
+                        <div>
+                          <Label htmlFor="fullName">Nom complet</Label>
+                          <Input {...register("fullName")} id="fullName" />
+                          {errors.fullName && (
+                            <span className="text-destructive">
+                              {errors.fullName.message}
+                            </span>
+                          )}
+                        </div>
+                        <div>
+                          <Label htmlFor="addressLine1">Adresse ligne 1</Label>
+                          <Input
+                            {...register("addressLine1")}
+                            id="addressLine1"
+                          />
+                          {errors.addressLine1 && (
+                            <span className="text-destructive">
+                              {errors.addressLine1.message}
+                            </span>
+                          )}
+                        </div>
+                        <div>
+                          <Label htmlFor="addressLine2">Addresse ligne 2</Label>
+                          <Input
+                            {...register("addressLine2")}
+                            id="addressLine2"
+                          />
+                        </div>
+                        <div>
+                          <Label htmlFor="city">Ville</Label>
+                          <Input {...register("city")} id="city" />
+                          {errors.city && (
+                            <span className="text-destructive">
+                              {errors.city.message}
+                            </span>
+                          )}
+                        </div>
+                        <div>
+                          <Label htmlFor="postalCode">Code postal</Label>
+                          <Input {...register("postalCode")} id="postalCode" />
+                          {errors.postalCode && (
+                            <span className="text-destructive">
+                              {errors.postalCode.message}
+                            </span>
+                          )}
+                        </div>
+                        <div>
+                          <Label htmlFor="country">Pays</Label>
+                          <Input {...register("country")} id="country" />
+                          {errors.country && (
+                            <span className="text-destructive">
+                              {errors.country.message}
+                            </span>
+                          )}
+                        </div>
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
+                  <motion.div layout className="flex flex-col gap-2 w-full">
+                    <Textarea
+                      {...register("message")}
+                      placeholder="Un message, une précision sur la commande ?"
+                      className="p-4 my-2 w-full"
+                    />
+                  </motion.div>
+                  {Object.keys(errors).length > 0 && (
+                    <span className="text-destructive">
+                      Merci de compléter les champs obligatoires
+                    </span>
+                  )}
+                  <SheetClose
+                    asChild
+                    className="flex justify-center items-center w-[75%]"
+                    onClick={(e) => {
+                      if (Object.keys(errors).length > 0 || !isDirty) {
+                        console.log("isDirty", isDirty);
+                        setEditAdress(true);
+                        toast({
+                          title: "Formulaire invalide",
+                          description: "Merci de compléter les champs requis",
+                        });
+                        e.preventDefault();
+                      }
+                    }}
+                  >
+                    <Button
+                      type="submit"
+                      variant={"cta"}
+                      className="w-full py-4"
+                    >
+                      Confirmer
+                    </Button>
+                  </SheetClose>
                 </div>
-                <SheetClose
-                  asChild
-                  className="flex justify-center items-center w-[75%]"
-                >
-                  <Button type="submit" variant={"cta"} className="w-full py-4">
-                    Confirmer
-                  </Button>
-                </SheetClose>
               </form>
             </SheetFooter>
           </>

@@ -6,6 +6,7 @@ import Stripe from "stripe";
 import { headers } from "next/headers";
 import { apiVersion, dataset, projectId, useCdn } from "@/sanity/env";
 import { createClient } from "next-sanity";
+import { DeliveryFormData } from "@/components/panier/panier";
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
 const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET!;
@@ -40,7 +41,11 @@ export async function updateSanityStock(lineItems: Stripe.LineItem[]) {
   }
 }
 
-export async function createCheckoutSession(panier: Item[], message: string) {
+export async function createCheckoutSession(
+  panier: Item[],
+  formData: DeliveryFormData,
+  deliveryCost: number
+) {
   try {
     const session = await stripe.checkout.sessions.create({
       payment_method_types: ["card", "link", "paypal"],
@@ -52,21 +57,39 @@ export async function createCheckoutSession(panier: Item[], message: string) {
               name: item.type.name,
             },
             unit_amount: item.type.promotionDiscount
-              ? ((100 - item.type.promotionDiscount) / 100) *
-                item.type.price *
-                100
-              : item.type.price * 100, // Stripe utilise les centimes
+              ? (
+                  ((100 - item.type.promotionDiscount) / 100) *
+                  item.type.price *
+                  100
+                ).toFixed(0)
+              : (item.type.price * 100).toFixed(0), // Stripe utilise les centimes
           },
           quantity: item.qty,
         })),
+        {
+          price_data: {
+            currency: "eur",
+            product_data: {
+              name: "Frais de livraison",
+            },
+            unit_amount: deliveryCost * 100, // Stripe utilise les centimes
+          },
+          quantity: 1,
+        },
       ],
       mode: "payment",
       success_url: `http://${process.env.NEXT_PUBLIC_URL}/checkout/success`,
       cancel_url: `http://${process.env.NEXT_PUBLIC_URL}/checkout/cancel`,
       metadata: {
-        message,
+        message: formData.message,
+        fullName: formData.fullName,
+        addressLine1: formData.addressLine1,
+        addressLine2: formData.addressLine2,
+        city: formData.city,
+        country: formData.country,
+        postalCode: formData.postalCode,
       },
-    });
+    } as Stripe.Checkout.SessionCreateParams);
 
     return { url: session.url };
   } catch (error) {
