@@ -17,8 +17,13 @@ const Footer: React.FC = () => {
             internalLink={true}
           />
           <CustomHoveredLink
-            label="Mention légales"
+            label="Conditions de vente"
             url="/cgv"
+            internalLink={true}
+          />
+          <CustomHoveredLink
+            label="Mention légales"
+            url="/legals"
             internalLink={true}
           />
         </div>
