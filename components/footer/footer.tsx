@@ -11,11 +11,11 @@ const Footer: React.FC = () => {
       <div className="mx-auto md:w-full px-4 flex flex-col md:flex-row gap-4 justify-around items-start">
         <div className="flex flex-col gap-2">
           <span className="font-bold uppercase text-xl">Dame Pascale</span>
-          <CustomHoveredLink
+          {/* <CustomHoveredLink
             label="Livraison & paiements"
             url="/infoCommande"
             internalLink={true}
-          />
+          /> */}
           <CustomHoveredLink
             label="Conditions de vente"
             url="/cgv"
