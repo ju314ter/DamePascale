@@ -11,6 +11,7 @@ import { motion, useScroll } from "framer-motion";
 import { usePathname, useSearchParams } from "next/navigation";
 import HerobannerAmigurumi from "@/components/herobanner/herobannerAmigurumi";
 import CardAmigurumi from "@/components/product-cards/card-amigurumi";
+import Footer from "@/components/footer/footer";
 
 const cardVariants = {
   hidden: { opacity: 0, y: -15 },
@@ -85,7 +86,7 @@ export default function BoutiquePage() {
   const { scrollYProgress } = useScroll({ container: shopWrapperRef });
 
   return (
-    <div className="shop-wrapper h-[97vh] overflow-auto" ref={shopWrapperRef}>
+    <div className="shop-wrapper h-[100vh] overflow-auto" ref={shopWrapperRef}>
       <div className="hero border-b border-secondary h-[500px] w-full bg-transparent flex justify-center items-center overflow-hidden">
         <HerobannerAmigurumi scrollPosition={scrollYProgress} />
       </div>
@@ -119,6 +120,7 @@ export default function BoutiquePage() {
           </div>
         </div>
       </div>
+      <Footer />
     </div>
   );
 }

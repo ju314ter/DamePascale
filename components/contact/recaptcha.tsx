@@ -27,6 +27,11 @@ export default function RecaptchaProvider({
       }}
     >
       {children}
+      <style jsx global>{`
+        .grecaptcha-badge {
+          visibility: hidden;
+        }
+      `}</style>
     </GoogleReCaptchaProvider>
   );
 }

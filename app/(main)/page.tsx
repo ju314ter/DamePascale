@@ -2,6 +2,7 @@
 
 import { CarouselLanding } from "@/components/carousel/carouselLanding";
 import { ContactForm } from "@/components/contact/contact-form";
+import Footer from "@/components/footer/footer";
 import { Button } from "@/components/ui/button";
 import { Amigurumi, getLastNAmigurumis } from "@/sanity/lib/amigurumis/calls";
 import { Bijou, getLastNBijoux } from "@/sanity/lib/bijoux/calls";
@@ -353,7 +354,7 @@ export default function LandingPage() {
           </div>
         </motion.div>
       </section>
-      <section className="h-[80vh] flex flex-col items-center justify-start overflow-hidden">
+      <section className="h-[70vh] flex flex-col items-center justify-between overflow-hidden">
         <motion.div
           initial={{ y: "100%", opacity: 0 }}
           whileInView={{ y: 0, opacity: 1 }}
@@ -366,6 +367,7 @@ export default function LandingPage() {
           <ContactForm />
         </motion.div>
       </section>
+      <Footer />
     </div>
   );
 }

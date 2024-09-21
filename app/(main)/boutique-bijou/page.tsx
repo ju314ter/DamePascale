@@ -7,6 +7,7 @@ import { Bijou, BijouFilters, getBijoux } from "@/sanity/lib/bijoux/calls";
 import FiltresBijouWrapper from "@/components/filtres/filtres-bijou-wrapper";
 import HerobannerBijou from "@/components/herobanner/herobannerBijou";
 import CardBijou from "@/components/product-cards/card-bijou";
+import Footer from "@/components/footer/footer";
 
 const cardVariants = {
   hidden: { opacity: 0, y: -15 },
@@ -86,7 +87,7 @@ export default function BoutiqueBijouPage() {
   const { scrollYProgress } = useScroll({ container: shopWrapperRef });
 
   return (
-    <div className="shop-wrapper h-[97vh] overflow-auto" ref={shopWrapperRef}>
+    <div className="shop-wrapper h-[100vh] overflow-auto" ref={shopWrapperRef}>
       <div className="hero border-b border-secondary h-[500px] w-full bg-transparent flex justify-center items-center overflow-hidden">
         <HerobannerBijou scrollPosition={scrollYProgress} />
       </div>
@@ -119,6 +120,7 @@ export default function BoutiqueBijouPage() {
             </div>
           </div>
         </div>
+        <Footer />
       </div>
     </div>
   );
