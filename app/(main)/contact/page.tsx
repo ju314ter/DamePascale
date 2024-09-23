@@ -11,7 +11,7 @@ const ContactPage = () => {
       <div className="w-full max-w-[1200px] mx-auto p-5 pt-[10vh] h-screen">
         <div className="flex flex-col md:flex-row items-center justify-center gap-4">
           <Image
-            src="/illustrationhome-removebg-compressed.png"
+            src="/medaillon.png"
             alt="Logo"
             width={300}
             height={300}

@@ -124,12 +124,7 @@ export default function LandingPage() {
           </svg>
         </div>
         <div className="w-full h-[60vh] flex justify-center items-center">
-          <Image
-            src="/illustrationhome-removebg-compressed.png"
-            alt="Logo"
-            width={500}
-            height={500}
-          />
+          <Image src="/medaillon.png" alt="Logo" width={500} height={500} />
         </div>
         <motion.div className="sticky top-[60%] overflow-hidden text-primary text-5xl">
           Créations
