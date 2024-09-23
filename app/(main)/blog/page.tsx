@@ -35,12 +35,7 @@ const BlogPage = () => {
               Suivez-moi sur les réseaux pour de nouveaux articles réguliers !
             </p>
           </div>
-          <Image
-            src="/illustrationhome-removebg-compressed.png"
-            alt="Logo"
-            width={300}
-            height={300}
-          />
+          <Image src="/medaillon.png" alt="Logo" width={300} height={300} />
         </div>
         <div className="blog-posts grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 py-10">
           {blogPosts.map((post, index) => (
