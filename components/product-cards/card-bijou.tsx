@@ -74,6 +74,11 @@ const CardBijou = ({ item }: CardBijouProps) => {
           <Badge variant={"default"}>{item.category.title}</Badge> */}
         </div>
         <div className="overflow-hidden relative w-full h-[40%] flex justify-center items-center">
+          {item.stock === 0 && (
+            <div className="absolute flex justify-center items-center bg-orange-500 top-0 left-0 right-0 z-10">
+              Victime de son succès !
+            </div>
+          )}
           {item.promotionDiscount && (
             <Badge
               className="absolute bottom-2 left-2 z-10"

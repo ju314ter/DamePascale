@@ -2,9 +2,7 @@ import { Amigurumi } from "@/sanity/lib/amigurumis/calls";
 import React from "react";
 import { Card } from "../ui/card";
 import { Badge } from "../ui/badge";
-import Image from "next/image";
-import { urlFor } from "@/sanity/lib/client";
-import { ArrowRight, Eye, ShoppingCart } from "lucide-react";
+import { ArrowRight, ShoppingCart } from "lucide-react";
 import {
   Tooltip,
   TooltipContent,
@@ -61,7 +59,12 @@ const CardAmigurumi = ({ item }: CardAmigurumiProps) => {
           </div>
         </div>
         <div className="overflow-hidden relative w-full h-[40%] flex justify-center items-center">
-          {item.promotionDiscount && (
+          {item.stock === 0 && (
+            <div className="absolute flex justify-center items-center bg-orange-500 top-0 left-0 right-0 z-10">
+              Victime de son succès !
+            </div>
+          )}
+          {item.promotionDiscount === 0 && (
             <Badge
               className="absolute bottom-2 left-2 z-10"
               variant={"destructive"}
