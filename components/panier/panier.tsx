@@ -92,7 +92,13 @@ const PanierWrapper = () => {
       return;
     }
     const result = await createCheckoutSession(panier, formData, deliveryCost);
-
+    console.log(result);
+    if (!result.url) {
+      toast({
+        title: "Impossible de passer en mode de paiement",
+      });
+      return;
+    }
     if (result.url) {
       window.location.href = result.url;
     }

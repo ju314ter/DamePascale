@@ -51,7 +51,8 @@ export async function createCheckoutSession(
 ) {
   try {
     const session = await stripe.checkout.sessions.create({
-      payment_method_types: ["card", "link", "paypal"],
+      // TODO : ajouter 'paypal' lorsque paypal sera activé coté stripe (necessite compte paypal pro)
+      payment_method_types: ["card", "link"],
       line_items: [
         ...panier.map((item) => ({
           price_data: {
