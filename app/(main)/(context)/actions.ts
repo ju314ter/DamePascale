@@ -176,18 +176,13 @@ export async function handleStripeWebhook(formData: FormData) {
     }
   }
 
-  if (event.type === "charge.updated") {
+  if (event.type === "charge.succeeded") {
     const charge = event.data.object as Stripe.Charge;
     const resultReceiptMail = await sendReceiptEmail(charge);
     if (!resultReceiptMail.success) {
       console.error(resultReceiptMail.message);
       return { error: resultReceiptMail.message };
     }
-  }
-
-  if (event.type === "charge.succeeded") {
-    const charge = event.data.object as Stripe.Charge;
-    console.log("Payment succeeded", charge);
   }
 
   return { received: true };
