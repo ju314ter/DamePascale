@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 import { Facebook, Instagram } from "lucide-react";
 import Link from "next/link";
 import React, { useState } from "react";
+import Image from "next/image";
 
 const Footer: React.FC = () => {
   return (
@@ -53,13 +54,42 @@ const Footer: React.FC = () => {
         <div className="flex flex-col gap-2">
           <div>
             <span className="font-bold uppercase text-xl">Paiement</span>
-            <div className="flex gap-2 p-4">Icones des moyens de paiements</div>
+            <div className="flex gap-2 p-4">
+              <Image src="/paypal.png" alt="paypal" width={50} height={30} />
+              <Image src="/visa.png" alt="visa" width={50} height={30} />
+              <Image
+                src="/mastercard.png"
+                alt="mastercard"
+                width={50}
+                height={30}
+              />
+            </div>
           </div>
           <div>
             <span className="font-bold uppercase text-xl">Réseaux sociaux</span>
             <div className="flex gap-2 p-4 cursor-pointer">
-              <Facebook className="hover:text-primary" />
-              <Instagram className="hover:text-primary" />
+              <Link
+                href="https://www.facebook.com/p/Mes-petites-cr%C3%A9a-ch%C3%A9ries-100057342554163/"
+                target="_blank"
+                rel="noreferrer"
+              >
+                <Facebook
+                  className="hover:text-primary"
+                  width={50}
+                  height={30}
+                />
+              </Link>
+              <Link
+                href="https://www.instagram.com/dame_pascale"
+                target="_blank"
+                rel="noreferrer"
+              >
+                <Instagram
+                  className="hover:text-primary"
+                  width={50}
+                  height={30}
+                />
+              </Link>
             </div>
           </div>
         </div>
