@@ -143,7 +143,13 @@ export async function handleStripeWebhook(formData: FormData) {
     if (session.payment_intent) {
       try {
         await stripe.paymentIntents.update(session.payment_intent as string, {
-          metadata: { ...session.metadata },
+          metadata: {
+            ...session.metadata,
+            email:
+              session.customer_email ||
+              session.customer_details?.email ||
+              session.metadata.email,
+          },
         });
       } catch (error) {
         console.error(
@@ -170,9 +176,10 @@ export async function handleStripeWebhook(formData: FormData) {
     }
   }
 
-  if (event.type === "payment_intent.succeeded") {
-    console.log("Payment intent succeeded");
-    console.log(event);
+  if (event.type === "charge.updated") {
+    const charge = event.data.object as Stripe.Charge;
+    console.log("Payment charged", charge);
+    console.log(charge);
   }
 
   return { received: true };
@@ -202,8 +209,8 @@ const sendConfirmationEmail = async (
   });
 
   const text = `Bonjour ${session.metadata.fullName},
-Nous avons bien reçu votre commande et nous vous remercions de votre confiance.
-Voici le résumé de votre commande:
+  Nous avons bien reçu votre commande et nous vous remercions de votre confiance.
+  Voici le résumé de votre commande:
 
 ${lineItems
   .map((item) => {
@@ -268,7 +275,7 @@ const sendNotificationEmail = async (session: Stripe.Checkout.Session) => {
     from: process.env.MY_EMAIL,
     to: process.env.MY_EMAIL,
     subject: `Dame Pascale: Confirmation de votre commande`,
-    text: `Une nouvelle commande a été créée pour ${session.metadata.fullName} (${session.customer_email || session.metadata.email}).`,
+    text: `Une nouvelle commande a été créée pour ${session.metadata.fullName} (${session.customer_email || session.customer_details?.email || session.metadata.email}).`,
   };
 
   const sendMailPromise = () =>
