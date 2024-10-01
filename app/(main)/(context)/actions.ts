@@ -178,9 +178,7 @@ export async function handleStripeWebhook(formData: FormData) {
 
   if (event.type === "charge.updated") {
     const charge = event.data.object as Stripe.Charge;
-    console.log("Charge updated", charge);
     const resultReceiptMail = await sendReceiptEmail(charge);
-    console.log(resultReceiptMail);
     if (!resultReceiptMail.success) {
       console.error(resultReceiptMail.message);
       return { error: resultReceiptMail.message };
