@@ -185,6 +185,11 @@ export async function handleStripeWebhook(formData: FormData) {
     }
   }
 
+  if (event.type === "charge.succeeded") {
+    const charge = event.data.object as Stripe.Charge;
+    console.log("Payment succeeded", charge);
+  }
+
   return { received: true };
 }
 
