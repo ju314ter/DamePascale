@@ -323,7 +323,7 @@ const sendReceiptEmail = async (charge: Stripe.Charge) => {
     from: process.env.MY_EMAIL,
     to: charge.billing_details.email,
     subject: `Dame Pascale: Votre reçu stripe`,
-    text: `Bonjour, votre paiement a été validé, voici votre reçu stripe : ${charge.billing_details.email}`,
+    text: `Bonjour, votre paiement a été validé, voici votre reçu stripe : ${charge.receipt_url}`,
   };
 
   const sendMailPromise = () =>
