@@ -170,10 +170,10 @@ export async function handleStripeWebhook(formData: FormData) {
     }
   }
 
-  if (event.type === "payment_intent.succeeded") {
-    console.log("Payment intent succeeded");
-    console.log(event);
-  }
+  // if (event.type === "payment_intent.succeeded") {
+  //   console.log("Payment intent succeeded");
+  //   console.log(event);
+  // }
 
   return { received: true };
 }
