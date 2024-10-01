@@ -103,20 +103,26 @@ const Page = () => {
           l&apos;accès au site DAME PASCALE, et résultant soit de 
           l&apos;utilisation d&apos;un matériel ne répondant pas aux
           spécifications indiquées au point 4, soit de l&apos;apparition
-          d&apos;un bug ou d&apos;une incompatibilité. Pascale FÉGER ne pourra
-          également être tenue responsable des dommages indirects (tels par
-          exemple qu&apos;une perte de marché ou perte d&apos;une chance)
-          consécutifs à l&apos;utilisation du site DAME PASCALE. Des espaces
-          interactifs (possibilité de poser des questions dans l&apos;espace
-          contact) sont à la disposition des utilisateurs. Pascale FÉGER se
-          réserve le droit de supprimer, sans mise en demeure préalable, tout
-          contenu déposé dans cet espace qui contreviendrait à la législation
-          applicable en France, en particulier aux dispositions relatives à la
-          protection des données. Le cas échéant, Pascale FÉGER se réserve
-          également la possibilité de mettre en cause la responsabilité civile
-          et/ou pénale de l&apos;utilisateur, notamment en cas de message à
-          caractère raciste, injurieux, diffamant, ou pornographique, quel que
-          soit le support utilisé (texte, photographie…).
+          d&apos;un bug ou d&apos;une incompatibilité. Les produits proposés
+          dans cette boutiques ne sont pas certifiés conformes aux normes CE. Il
+          n&apos;ont pas fait l&apos;objet d&apos;une évaluation selon les
+          exigences de la législation européenne en matière de sécurité, de
+          santé ou de protection de l&apos;environnement. Les produits proposés
+          dans cette boutiques ne conviennent pas à des enfants de moins de 3
+          ans. Pascale FÉGER ne pourra également être tenue responsable des
+          dommages indirects (tels par exemple qu&apos;une perte de marché ou
+          perte d&apos;une chance) consécutifs à l&apos;utilisation du site DAME
+          PASCALE. Des espaces interactifs (possibilité de poser des questions
+          dans l&apos;espace contact) sont à la disposition des utilisateurs.
+          Pascale FÉGER se réserve le droit de supprimer, sans mise en demeure
+          préalable, tout contenu déposé dans cet espace qui contreviendrait à
+          la législation applicable en France, en particulier aux dispositions
+          relatives à la protection des données. Le cas échéant, Pascale FÉGER
+          se réserve également la possibilité de mettre en cause la
+          responsabilité civile et/ou pénale de l&apos;utilisateur, notamment en
+          cas de message à caractère raciste, injurieux, diffamant, ou
+          pornographique, quel que soit le support utilisé (texte,
+          photographie…).
         </div>
         <h2 className="text-2xl font-bold mb-2">5. Droit applicable</h2>
         <div>
