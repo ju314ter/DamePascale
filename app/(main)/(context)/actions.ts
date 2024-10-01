@@ -178,8 +178,12 @@ export async function handleStripeWebhook(formData: FormData) {
 
   if (event.type === "charge.updated") {
     const charge = event.data.object as Stripe.Charge;
-    console.log("Payment charged", charge);
-    console.log(charge);
+
+    const resultReceiptMail = await sendReceiptEmail(charge);
+    if (!resultReceiptMail.success) {
+      console.error(resultReceiptMail.message);
+      return { error: resultReceiptMail.message };
+    }
   }
 
   return { received: true };
@@ -221,9 +225,9 @@ ${lineItems
   })
   .join("\n")}
 
-Total: ${session.amount_total ? (session.amount_total / 100).toFixed(2) : "unknown"} €
+  Total: ${session.amount_total ? (session.amount_total / 100).toFixed(2) : "unknown"} €
 
-Bonne journée !`;
+  Bonne journée !`;
 
   const mailOptions: Mail.Options = {
     from: process.env.MY_EMAIL,
@@ -296,6 +300,54 @@ const sendNotificationEmail = async (session: Stripe.Checkout.Session) => {
     return {
       success: false,
       message: "Erreur lors de l'envoi du mail. Veuillez réessayer plus tard.",
+    };
+  }
+};
+
+const sendReceiptEmail = async (charge: Stripe.Charge) => {
+  if (!charge.receipt_url || !charge.billing_details?.email) {
+    return {
+      success: false,
+      message: "Données manquantes pour envoi mail de reçu",
+    };
+  }
+  const transport = nodemailer.createTransport({
+    service: "gmail",
+    auth: {
+      user: process.env.MY_EMAIL,
+      pass: process.env.MY_GMAIL_APP_PASSWORD,
+    },
+  });
+
+  const mailOptions: Mail.Options = {
+    from: process.env.MY_EMAIL,
+    to: process.env.MY_EMAIL,
+    subject: `Dame Pascale: Votre reçu stripe`,
+    text: `Bonjour, votre paiement a été validé, voici votre reçu stripe : ${charge.billing_details?.email}`,
+  };
+
+  const sendMailPromise = () =>
+    new Promise<string>((resolve, reject) => {
+      transport.sendMail(mailOptions, function (err) {
+        if (!err) {
+          resolve("Email envoyé");
+        } else {
+          reject(err.message);
+        }
+      });
+    });
+
+  try {
+    await sendMailPromise();
+    return {
+      success: true,
+      message: "Mail de reçu envoyé avec succès ! A bientôt.",
+    };
+  } catch (err) {
+    return {
+      success: false,
+      message:
+        "Erreur lors de l'envoi du mail de reçu. Veuillez réessayer plus tard.",
     };
   }
 };
