@@ -173,8 +173,13 @@ export default function LandingPage() {
           />
         </div>
       </section>
-      <section className="w-full flex justify-center items-center">
+      <section className="w-full flex justify-center items-center relative">
         <div className="w-[100%] md:w-[75%] lg:w-[50%] p-10 flex flex-col justify-center items-center gap-2 text-xl lg:text-2xl">
+          <div className="absolute top-0 left-0 w-10 h-10 bg-primary rounded-br-full"></div>
+
+          {/* Bottom Right Corner */}
+          <div className="absolute bottom-0 right-0 w-10 h-10 bg-primary rounded-tl-full"></div>
+
           <span>
             <b>Bonjour</b> ! Je suis Dame Pascale, créatrice passionnée
             d&apos;amigurumi et de bijoux uniques.
@@ -186,7 +191,7 @@ export default function LandingPage() {
                 d&apos;une part, des amigurumi faits main, ces petites créations
                 en crochet qui apportent douceur et charme ;
               </li>
-              <li>
+              <li className="m-2">
                 d&apos;autre part, des bijoux raffinés réalisés avec des fleurs
                 naturelles séchées, encapsulées dans de la résine pour préserver
                 leur beauté délicate.
