@@ -165,8 +165,15 @@ const PanierWrapper = () => {
                   </div>
                   <div className="flex justify-between items-center w-full">
                     <span>Livraison</span>
-                    <span>{deliveryCost ? `${deliveryCost}€` : "Gratuit"}</span>
+                    <span>{deliveryCost ? `${deliveryCost}€` : "Offert"}</span>
                   </div>
+                  {deliveryCost ? (
+                    <div className="flex justify-between items-center w-full italic">
+                      <span className="text-sm text-accent">
+                        Frais de port offerts au dessus de 50€
+                      </span>
+                    </div>
+                  ) : null}
                   {/* Adresse de livraison */}
                   <div className="flex justify-between items-center w-full">
                     <span>Adresse de livraison</span>
