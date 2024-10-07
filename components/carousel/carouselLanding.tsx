@@ -51,13 +51,13 @@ export function CarouselLanding({
       onMouseLeave={() => handleMouseLeave()}
       className="w-full bg-transparent"
     >
-      <CarouselContent>
+      <CarouselContent className="">
         {items.map((item, index) => (
           <CarouselItem
             key={index}
-            className="basis-1/3 lg:basis-1/4 xl:basis-1/6 bg-transparent"
+            className="basis-1/3 lg:basis-1/4 xl:basis-1/6 bg-transparent pl-8 sm:pl-12 md:pl-16 lg:pl-24"
           >
-            <div className="overflow-hidden group bg-transparent border-none relative w-[120px] sm:w-[160px] md:w-[200px] h-full flex justify-center items-center">
+            <div className="overflow-hidden group bg-transparent border-none relative w-full h-full flex justify-center items-center">
               <div className="w-full z-10 absolute bottom-4 flex justify-center items-center">
                 <Button
                   variant="cta"

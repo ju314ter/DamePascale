@@ -126,7 +126,7 @@ export default function LandingPage() {
         <div className="w-full h-[60vh] flex justify-center items-center">
           <Image src="/medaillon.png" alt="Logo" width={500} height={500} />
         </div>
-        <motion.div className="sticky top-[60%] overflow-hidden text-primary text-5xl">
+        <motion.div className="sticky top-[60%] overflow-hidden text-primary text-7xl font-bold">
           Créations
           <motion.div
             style={{ scaleX: scaleXBorderCreation }}
@@ -157,7 +157,7 @@ export default function LandingPage() {
           height={1024}
         />
       </div>
-      <section className="relative flex flex-col items-center my-16 w-full pb-16 overflow-hidden">
+      <section className="relative flex flex-col items-center my-20 w-full pb-20 overflow-hidden">
         <div className="w-full pt-16 mb-2">
           <CarouselLanding
             boutiqueUrl="boutique-amigurumi"
@@ -174,11 +174,12 @@ export default function LandingPage() {
         </div>
       </section>
       <section className="w-full flex justify-center items-center relative">
-        <div className="w-[100%] md:w-[75%] lg:w-[50%] p-10 flex flex-col justify-center items-center gap-2 text-xl lg:text-2xl">
-          <div className="absolute top-0 left-0 w-10 h-10 bg-primary rounded-br-full"></div>
+        <div className="relative z-10 w-[100%] md:w-[75%] lg:w-[50%] p-10 flex flex-col justify-center items-center gap-2 text-xl lg:text-2xl ">
+          {/* Top Left Corner */}
+          <div className="absolute top-0 left-0 w-10 h-10 bg-primary z-[-1] rounded-br-full" />
 
           {/* Bottom Right Corner */}
-          <div className="absolute bottom-0 right-0 w-10 h-10 bg-primary rounded-tl-full"></div>
+          <div className="absolute bottom-0 right-0 w-10 h-10 bg-primary z-[-1] rounded-tl-full" />
 
           <span>
             <b>Bonjour</b> ! Je suis Dame Pascale, créatrice passionnée
@@ -206,7 +207,7 @@ export default function LandingPage() {
       >
         <motion.div
           style={{ y: scrollYAmigurumiSection }}
-          className="h-[100vh] flex justify-around items-center relative"
+          className="h-[100vh] flex flex-col-reverse md:flex-row justify-around items-center relative"
         >
           <div className="relative basis-1/2 flex flex-col items-center justify-start">
             <motion.div
@@ -280,7 +281,7 @@ export default function LandingPage() {
       >
         <motion.div
           style={{ y: scrollYBijouSection }}
-          className="h-[100vh] flex justify-around items-center relative"
+          className="h-[100vh] flex flex-col md:flex-row justify-around items-center relative"
         >
           <div className="relative flex perspective-top">
             <motion.div style={{ rotateY: rotateCardBijou }}>
