@@ -12,6 +12,7 @@ import { Loader } from "lucide-react";
 import { navigationMenuTriggerStyle } from "@/components/ui/navigation-menu";
 import { Button } from "@/components/ui/button";
 import RecaptchaProvider from "@/components/contact/recaptcha";
+import { Analytics } from "@vercel/analytics/react";
 
 const jaquesFrancoisFont = Jacques_Francois({
   weight: "400",
@@ -79,6 +80,7 @@ export default function RootLayout({
           >
             <main>{children}</main>
           </Suspense>
+          <Analytics />
           <Toaster />
         </RecaptchaProvider>
       </body>

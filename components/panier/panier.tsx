@@ -273,7 +273,6 @@ const PanierWrapper = () => {
                     className="flex justify-center items-center w-[75%]"
                     onClick={(e) => {
                       if (Object.keys(errors).length > 0 || !isDirty) {
-                        console.log("isDirty", isDirty);
                         setEditAdress(true);
                         toast({
                           title: "Formulaire invalide",

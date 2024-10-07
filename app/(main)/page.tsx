@@ -174,7 +174,12 @@ export default function LandingPage() {
         </div>
       </section>
       <section className="w-full flex justify-center items-center relative">
-        <div className="relative z-10 w-[100%] md:w-[75%] lg:w-[50%] p-10 flex flex-col justify-center items-center gap-2 text-xl lg:text-2xl ">
+        <motion.div
+          initial={{ x: "-50px", opacity: 0 }}
+          whileInView={{ x: 0, opacity: 1 }}
+          transition={{ duration: 0.5, ease: "easeIn" }}
+          className="relative z-10 w-[100%] md:w-[75%] lg:w-[50%] p-10 flex flex-col justify-center items-center gap-2 text-xl lg:text-2xl "
+        >
           {/* Top Left Corner */}
           <div className="absolute top-0 left-0 w-10 h-10 bg-primary z-[-1] rounded-br-full" />
 
@@ -199,25 +204,15 @@ export default function LandingPage() {
               </li>
             </ul>
           </span>
-        </div>
+        </motion.div>
       </section>
-      <section
-        ref={refSectionAmigurumi}
-        className="relative h-[200vh] items-start"
-      >
-        <motion.div
-          style={{ y: scrollYAmigurumiSection }}
-          className="h-[100vh] flex flex-col-reverse md:flex-row justify-around items-center relative"
-        >
-          <div className="relative basis-1/2 flex flex-col items-center justify-start">
+      <section ref={refSectionAmigurumi} className="relative">
+        <div className="h-[100vh] flex flex-col-reverse md:flex-row justify-around items-center relative">
+          <div className="relative basis-2/3 flex flex-col items-center justify-start">
             <motion.div
-              style={{ y: scrollYAmigurumiSection }}
-              className="mask pointer-events-none absolute top-0 bottom-0 left-0 right-0 bg-gradient-to-b from-transparent from-[-10%] via-white to-white"
-            ></motion.div>
-            <motion.div
-              initial={{ x: "-100%", opacity: 0 }}
+              initial={{ x: "-100px", opacity: 0 }}
               whileInView={{ x: 0, opacity: 1 }}
-              transition={{ duration: 0.5, ease: "easeOut" }}
+              transition={{ duration: 0.5, ease: "easeIn" }}
               viewport={{ once: true }}
             >
               <Image
@@ -228,7 +223,7 @@ export default function LandingPage() {
                 height={200}
               />
             </motion.div>
-            <p className="text-md md:text-lg lg:text-xl leading-6 p-4 text-left">
+            <p className="text-md md:text-lg lg:text-xl leading-6 p-4 text-left max-w-[500px]">
               Découvrez nos <b>amigurumis</b>, de charmantes peluches{" "}
               <b>crochetées à la main</b> avec amour. Uniques et adorables,
               elles apportent douceur et joie à tous les âges. Parfaites pour{" "}
@@ -244,7 +239,7 @@ export default function LandingPage() {
               </Button>
             </Link>
           </div>
-          <div className="relative flex perspective-top">
+          <div className="relative basis-1/3 flex justify-center perspective-top">
             <motion.div style={{ rotateY: rotateCardAmigurumi }}>
               <Image
                 src="/totoro_nature.jpg"
@@ -273,21 +268,15 @@ export default function LandingPage() {
               </motion.svg>
             </motion.div>
           </div>
-        </motion.div>
+        </div>
       </section>
-      <section
-        ref={refSectionBijou}
-        className="relative h-[200vh] items-start overflow-hidden"
-      >
-        <motion.div
-          style={{ y: scrollYBijouSection }}
-          className="h-[100vh] flex flex-col-reverse md:flex-row justify-around items-center relative"
-        >
-          <div className="relative flex perspective-top">
+      <section ref={refSectionBijou} className="relative overflow-hidden">
+        <div className="flex flex-col h-[100vh] md:flex-row-reverse justify-around items-center relative">
+          <div className="relative basis-1/3 flex justify-center perspective-top">
             <motion.div style={{ rotateY: rotateCardBijou }}>
               <Image
                 src="/fleurmodele.jpg"
-                alt="Totoro dans la nature"
+                alt="Fleur dans la nature"
                 width={500}
                 height={500}
                 className="rounded-xl shadow-2xl saturate-150 w-[30vw] md:w-[25vw] lg:w-[20vw]"
@@ -312,27 +301,8 @@ export default function LandingPage() {
               </motion.svg>
             </motion.div>
           </div>
-          <div className="relative -top-5 basis-1/2 flex flex-col items-center justify-start">
-            <motion.div
-              style={{ y: scrollYBijouSection }}
-              className="mask pointer-events-none absolute top-0 bottom-0 left-0 right-0 bg-gradient-to-b from-transparent from-[-10%] via-white to-white"
-            ></motion.div>
-            <motion.div
-              initial={{ x: "100%", opacity: 0 }}
-              whileInView={{ x: 0, opacity: 1 }}
-              transition={{ duration: 0.5, ease: "easeOut" }}
-              viewport={{ once: true }}
-            >
-              <Image
-                src="/fleur-nobg.png"
-                alt="Fleur"
-                className="-scale-x-100 hidden sm:block"
-                width={200}
-                height={200}
-              />
-            </motion.div>
-
-            <p className="text-md md:text-lg lg:text-xl leading-6 p-4 text-left">
+          <div className="relative basis-2/3 flex flex-col items-center justify-start">
+            <p className="text-md md:text-lg lg:text-xl leading-6 p-4 text-left max-w-[500px]">
               Entrez dans notre écrin où <b>les fleurs deviennent bijoux</b>.
               Nos <b>créations uniques</b> allient la délicatesse naturelle à
               l&apos;art de la bijouterie. Découvrez des pièces exquises faites
@@ -353,7 +323,7 @@ export default function LandingPage() {
               </Button>
             </Link>
           </div>
-        </motion.div>
+        </div>
       </section>
       <section className="h-[70vh] flex flex-col items-center justify-between overflow-hidden">
         <motion.div

@@ -50,6 +50,17 @@ export async function createCheckoutSession(
   deliveryCost: number
 ) {
   try {
+    // si code promo, récupérer la reduction de prix associée et mettre a jour le deliveryCost
+    if (formData.codepromo) {
+      const query = `*[_type == "codePromo" && codePromo == $codePromo][0]`;
+      const product = await client.fetch(query, {
+        codePromo: formData.codepromo,
+      });
+      if (product) {
+        deliveryCost = product.price;
+      }
+    }
+
     const session = await stripe.checkout.sessions.create({
       payment_method_types: ["card", "link", "paypal"],
       line_items: [

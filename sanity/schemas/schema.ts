@@ -16,6 +16,8 @@ import {
 } from "./bijoux/schema";
 import { blogCategorySchema, blogPostSchema, spotSchema } from "./blog/schema";
 
+import { codePromoSchema } from "./global/schema";
+
 const schema: { types: SchemaTypeDefinition[] } = {
   types: [],
 };
@@ -36,5 +38,7 @@ schema.types.push(heroBannerBijouSchema);
 schema.types.push(blogCategorySchema);
 schema.types.push(blogPostSchema);
 schema.types.push(spotSchema);
+
+schema.types.push(codePromoSchema);
 
 export default schema;
