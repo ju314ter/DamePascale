@@ -26,6 +26,7 @@ import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Input } from "../ui/input";
 import { Label } from "../ui/label";
+import { getCodePromo } from "@/sanity/lib/general/calls";
 
 const deliverySchema = z.object({
   fullName: z.string().min(2, "Nom complet requis"),
@@ -45,6 +46,9 @@ const PanierWrapper = () => {
     register,
     handleSubmit,
     formState: { errors, isDirty },
+    getValues,
+    setError,
+    clearErrors,
   } = useForm<DeliveryFormData>({
     resolver: zodResolver(deliverySchema),
   });
@@ -52,6 +56,14 @@ const PanierWrapper = () => {
   const [totalPanier, setTotalPanier] = useState(0);
   const [deliveryCost, setDeliveryCost] = useState(0);
   const [editAdress, setEditAdress] = useState(false);
+  const [existingCodePromo, setExistingCodePromo] = useState<
+    {
+      title: string;
+      code: string;
+      reductionPercent: number;
+    }[]
+  >();
+  const [promotionMessage, setPromotionMessage] = useState<string | null>("");
 
   useEffect(() => {
     const totalPanier = panier
@@ -74,6 +86,44 @@ const PanierWrapper = () => {
     }
   }, [panier]);
 
+  // Get current code promo at init
+  useEffect(() => {
+    const fetchCodePromo = async () => {
+      const codes = await getCodePromo();
+      if (codes.length > 0) {
+        setExistingCodePromo(codes);
+      }
+    };
+
+    fetchCodePromo();
+  }, []);
+
+  const checkCodePromo = async () => {
+    const codePromo = getValues("codepromo");
+
+    if (!codePromo || codePromo.length === 0 || codePromo === "") {
+      setPromotionMessage(null);
+      return;
+    }
+
+    const isCodeValid = existingCodePromo?.some(
+      (code) => code.code.toLowerCase() === codePromo?.toLowerCase()
+    );
+
+    if (isCodeValid) {
+      const validCode = existingCodePromo?.find(
+        (code) => code.code.toLowerCase() === codePromo?.toLowerCase()
+      );
+      setPromotionMessage(
+        `Code promo "${validCode?.code}" appliqué (${validCode?.reductionPercent}% de réduction)`
+      );
+      clearErrors("codepromo");
+    } else {
+      setPromotionMessage("Code promo invalide");
+      setError("codepromo", { type: "custom", message: "Code promo invalide" });
+    }
+  };
+
   const onSubmit = async (formData: DeliveryFormData) => {
     const itemsToVerify = panier.map((item) => ({
       id: item.type._id,
@@ -93,7 +143,6 @@ const PanierWrapper = () => {
       return;
     }
     const result = await createCheckoutSession(panier, formData, deliveryCost);
-    console.log(result);
     if (!result.url) {
       toast({
         title: "Impossible de passer en mode de paiement",
@@ -261,8 +310,12 @@ const PanierWrapper = () => {
                       {...register("codepromo")}
                       placeholder="Code promo ?"
                       className="p-4 my-2 w-full"
+                      onBlur={checkCodePromo}
                     />
                   </motion.div>
+                  {promotionMessage && (
+                    <span className="text-accent">{promotionMessage}</span>
+                  )}
                   {Object.keys(errors).length > 0 && (
                     <span className="text-destructive">
                       Merci de compléter les champs obligatoires

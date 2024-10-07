@@ -9,6 +9,7 @@ import { createClient } from "next-sanity";
 import { DeliveryFormData } from "@/components/panier/panier";
 import nodemailer from "nodemailer";
 import Mail from "nodemailer/lib/mailer";
+import { getCodePromo } from "@/sanity/lib/general/calls";
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
 const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET!;
@@ -50,36 +51,50 @@ export async function createCheckoutSession(
   deliveryCost: number
 ) {
   try {
-    // si code promo, récupérer la reduction de prix associée et mettre a jour le deliveryCost
+    let codeDiscountPercent: Number | undefined = undefined;
+
     if (formData.codepromo) {
-      const query = `*[_type == "codePromo" && codePromo == $codePromo][0]`;
-      const product = await client.fetch(query, {
-        codePromo: formData.codepromo,
-      });
-      if (product) {
-        deliveryCost = product.price;
-      }
+      const codes = await getCodePromo();
+
+      const isCodeValid = codes?.some(
+        (code) => code.code.toLowerCase() === formData.codepromo?.toLowerCase()
+      );
+
+      if (isCodeValid)
+        codeDiscountPercent = codes?.find(
+          (code) =>
+            code.code.toLowerCase() === formData.codepromo?.toLowerCase()
+        )?.reductionPercent;
     }
 
     const session = await stripe.checkout.sessions.create({
       payment_method_types: ["card", "link", "paypal"],
       line_items: [
-        ...panier.map((item) => ({
-          price_data: {
-            currency: "eur",
-            product_data: {
-              name: item.type.name,
+        ...panier.map((item) => {
+          //Calcul du prix unitaire
+
+          const unit_amount_raw = Number((item.type.price * 100).toFixed(0));
+
+          const unit_amount_discounted = item.type.promotionDiscount
+            ? (unit_amount_raw * (100 - item.type.promotionDiscount)) / 100
+            : unit_amount_raw;
+
+          const unit_amount_final =
+            codeDiscountPercent !== undefined
+              ? unit_amount_discounted * (1 - Number(codeDiscountPercent) / 100)
+              : unit_amount_discounted;
+
+          return {
+            price_data: {
+              currency: "eur",
+              product_data: {
+                name: item.type.name,
+              },
+              unit_amount: unit_amount_final, // Stripe utilise les centimes
             },
-            unit_amount: item.type.promotionDiscount
-              ? (
-                  ((100 - item.type.promotionDiscount) / 100) *
-                  item.type.price *
-                  100
-                ).toFixed(0)
-              : (item.type.price * 100).toFixed(0), // Stripe utilise les centimes
-          },
-          quantity: item.qty,
-        })),
+            quantity: item.qty,
+          };
+        }),
         {
           price_data: {
             currency: "eur",
