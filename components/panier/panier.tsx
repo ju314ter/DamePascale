@@ -35,6 +35,7 @@ const deliverySchema = z.object({
   country: z.string().min(2, "Pays requis"),
   postalCode: z.string().regex(/^\d{5}(-\d{4})?$/, "Code postal invalide"),
   message: z.string().optional(),
+  codepromo: z.string().optional(),
 });
 export type DeliveryFormData = z.infer<typeof deliverySchema>;
 
@@ -252,6 +253,13 @@ const PanierWrapper = () => {
                     <Textarea
                       {...register("message")}
                       placeholder="Un message, une précision sur la commande ?"
+                      className="p-4 my-2 w-full"
+                    />
+                  </motion.div>
+                  <motion.div layout className="flex flex-col gap-2 w-full">
+                    <Input
+                      {...register("codepromo")}
+                      placeholder="Code promo ?"
                       className="p-4 my-2 w-full"
                     />
                   </motion.div>

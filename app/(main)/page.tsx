@@ -281,7 +281,7 @@ export default function LandingPage() {
       >
         <motion.div
           style={{ y: scrollYBijouSection }}
-          className="h-[100vh] flex flex-col md:flex-row justify-around items-center relative"
+          className="h-[100vh] flex flex-col-reverse md:flex-row justify-around items-center relative"
         >
           <div className="relative flex perspective-top">
             <motion.div style={{ rotateY: rotateCardBijou }}>

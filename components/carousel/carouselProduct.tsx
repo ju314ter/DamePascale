@@ -43,7 +43,7 @@ const Thumb: React.FC<ThumbPropType> = (props) => {
       >
         {slide.asset && (
           <ImageWithPlaceholder
-            className="embla__slide__img object-cover"
+            className="embla__slide__img object-cover rounded-md p-1"
             src={urlForImage(slide.asset)}
             alt={`Slide ${index + 1}`}
             width={500}
@@ -85,7 +85,7 @@ export function CarouselProduct({ slides, options }: CarouselProductProps) {
   }, [emblaMainApi, onSelect]);
 
   return (
-    <div className="carouselProductWrapper w-full h-full">
+    <div className="carouselProductWrapper rounded-md w-full h-full">
       <div className="embla">
         <div className="embla__viewport" ref={emblaMainRef}>
           <div className="embla__container">
@@ -94,10 +94,10 @@ export function CarouselProduct({ slides, options }: CarouselProductProps) {
                 className="embla__slide"
                 key={slide._key || `slide-${index}`}
               >
-                <div className="embla__slide__inner">
+                <div className="embla__slide__inner rounded-md">
                   {slide.asset && (
                     <ImageWithPlaceholder
-                      className="embla__slide__img relative rounded-xl object-contain w-full h-full"
+                      className="embla__slide__img relative rounded-md object-cover w-full h-full"
                       src={urlForImage(slide.asset)}
                       alt={`Slide ${index + 1}`}
                       width={500}
@@ -110,7 +110,7 @@ export function CarouselProduct({ slides, options }: CarouselProductProps) {
           </div>
         </div>
 
-        <div className="embla-thumbs">
+        <div className="embla-thumbs border rounded-md border-accent">
           <div className="embla-thumbs__viewport" ref={emblaThumbsRef}>
             <div className="embla-thumbs__container">
               {slides.map((slide, index) => (
