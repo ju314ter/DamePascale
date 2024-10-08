@@ -82,7 +82,7 @@ const PanierWrapper = () => {
     if (Number(totalPanier) > 50) {
       setDeliveryCost(0);
     } else {
-      setDeliveryCost(5);
+      setDeliveryCost(4.99);
     }
   }, [panier]);
 
@@ -206,7 +206,7 @@ const PanierWrapper = () => {
                   <div className="flex justify-between items-center w-full">
                     <span className="underline">Total</span>
                     <span className="text-xl">
-                      {totalPanier + deliveryCost} €
+                      {(totalPanier + deliveryCost).toFixed(2)} €
                     </span>
                   </div>
                   <div className="flex justify-between items-center w-full">

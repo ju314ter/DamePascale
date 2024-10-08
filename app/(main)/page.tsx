@@ -76,11 +76,11 @@ export default function LandingPage() {
 
   return (
     <div
-      className="relative h-[100vh] overflow-auto w-full scroll-smooth pt-[5vh]"
+      className="relative h-[100vh] overflow-auto w-full scroll-smooth"
       ref={containerRef}
     >
       {/* Home section */}
-      <div className="relative flex flex-col w-full h-[90vh] justify-start items-center mt-16">
+      <div className="relative flex flex-col w-full h-[100vh] justify-start items-center mt-16">
         <div className="w-full h-[130px] flex justify-center items-center">
           <svg
             className="font-serif text-5xl md:text-9xl"
@@ -184,7 +184,7 @@ export default function LandingPage() {
 
       {/* Amigurumi section */}
       <section className="relative">
-        <div className="h-[100vh] flex flex-col-reverse md:flex-row justify-around items-center relative">
+        <div className="h-[90vh] flex flex-col-reverse md:flex-row justify-around items-center relative">
           <motion.div
             ref={textRefAmigurumiSection}
             style={{
@@ -237,9 +237,9 @@ export default function LandingPage() {
                   ["0vh", "-10vh"]
                 ),
                 opacity: useTransform(
-                  scrollImageAmigurumiSection,
-                  [1, 0],
-                  [1, 0]
+                  scrollTextAmigurumiSection,
+                  [0.2, 0.4, 0.6, 0.7],
+                  [0, 1, 1, 0]
                 ),
               }}
             >
@@ -292,7 +292,11 @@ export default function LandingPage() {
                   [1, 0],
                   ["0vh", "-10vh"]
                 ),
-                opacity: useTransform(scrollImageBijouSection, [1, 0], [1, 0]),
+                opacity: useTransform(
+                  scrollTextBijouSection,
+                  [0.2, 0.4, 0.6, 0.7],
+                  [0, 1, 1, 0]
+                ),
               }}
             >
               <Image
