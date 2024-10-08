@@ -55,10 +55,6 @@ export default function LandingPage() {
     offset: ["start end", "end start"],
   });
 
-  useMotionValueEvent(scrollTextBijouSection, "change", () => {
-    console.log(scrollTextAmigurumiSection.get());
-  });
-
   const scaleXBorderCreation = useTransform(scrollY, [0, 500], ["0%", "100%"], {
     clamp: false,
   });
