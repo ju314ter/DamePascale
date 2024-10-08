@@ -83,7 +83,7 @@ export default function LandingPage() {
       <div className="relative flex flex-col w-full h-[100vh] justify-start items-center mt-16">
         <div className="w-full h-[130px] flex justify-center items-center">
           <svg
-            className="font-serif text-7xl md:text-9xl"
+            className="font-serif text-6xl md:text-9xl"
             width="100%"
             height="130px"
           >
