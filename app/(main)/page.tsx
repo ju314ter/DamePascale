@@ -6,7 +6,13 @@ import Footer from "@/components/footer/footer";
 import { Button } from "@/components/ui/button";
 import { Amigurumi, getLastNAmigurumis } from "@/sanity/lib/amigurumis/calls";
 import { Bijou, getLastNBijoux } from "@/sanity/lib/bijoux/calls";
-import { motion, useScroll, useTransform } from "framer-motion";
+import {
+  motion,
+  useMotionValue,
+  useMotionValueEvent,
+  useScroll,
+  useTransform,
+} from "framer-motion";
 import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
@@ -18,74 +24,40 @@ export default function LandingPage() {
   const [carouselBijouxItem, setCarouselBijouxItem] = useState<Bijou[]>([]);
   const containerRef = useRef(null);
   const refSectionAmigurumi = useRef(null);
+  const textRefAmigurumiSection = useRef(null);
   const refSectionBijou = useRef(null);
+  const textRefBijouSection = useRef(null);
 
   const { scrollY } = useScroll({
     container: containerRef,
   });
 
-  const { scrollYProgress: scrollProgessAmigurumiSection } = useScroll({
+  const { scrollYProgress: scrollImageAmigurumiSection } = useScroll({
     container: containerRef,
     target: refSectionAmigurumi,
     offset: ["start start", "end end"],
   });
-
-  const { scrollYProgress: scrollProgessBijouSection } = useScroll({
+  const { scrollYProgress: scrollImageBijouSection } = useScroll({
     container: containerRef,
     target: refSectionBijou,
     offset: ["start start", "end end"],
   });
 
-  const scrollYAmigurumiSection = useTransform(
-    scrollProgessAmigurumiSection,
-    [0, 1],
-    ["0vh", "100vh"],
-    {
-      clamp: true,
-    }
-  );
-  const scrollYBijouSection = useTransform(
-    scrollProgessBijouSection,
-    [0, 1],
-    ["0vh", "100vh"],
-    {
-      clamp: true,
-    }
-  );
+  const { scrollYProgress: scrollTextAmigurumiSection } = useScroll({
+    container: containerRef,
+    target: textRefAmigurumiSection,
+    offset: ["start end", "end start"],
+  });
 
-  const scrollYAmigurumiWord = useTransform(
-    scrollProgessAmigurumiSection,
-    [0, 1],
-    ["0vh", "-100vh"],
-    {
-      clamp: true,
-    }
-  );
-  const scrollYBijouWord = useTransform(
-    scrollProgessBijouSection,
-    [0, 1],
-    ["0vh", "-100vh"],
-    {
-      clamp: true,
-    }
-  );
+  const { scrollYProgress: scrollTextBijouSection } = useScroll({
+    container: containerRef,
+    target: textRefBijouSection,
+    offset: ["start end", "end start"],
+  });
 
-  const rotateCardAmigurumi = useTransform(
-    scrollProgessAmigurumiSection,
-    [0, 1],
-    ["0deg", "180deg"],
-    {
-      clamp: true,
-    }
-  );
-  const rotateCardBijou = useTransform(
-    scrollProgessBijouSection,
-    [0, 1],
-    ["0deg", "180deg"],
-    {
-      clamp: true,
-    }
-  );
+  useMotionValueEvent(scrollTextBijouSection, "change", () => {
+    console.log(scrollTextAmigurumiSection.get());
+  });
 
   const scaleXBorderCreation = useTransform(scrollY, [0, 500], ["0%", "100%"], {
     clamp: false,
@@ -111,7 +83,8 @@ export default function LandingPage() {
       className="relative h-[100vh] overflow-auto w-full scroll-smooth pt-[5vh]"
       ref={containerRef}
     >
-      <div className="relative flex flex-col w-full h-[100vh] justify-start items-center mt-16">
+      {/* Home section */}
+      <div className="relative flex flex-col w-full h-[90vh] justify-start items-center mt-16">
         <div className="w-full h-[130px] flex justify-center items-center">
           <svg
             className="font-serif text-5xl md:text-9xl"
@@ -157,6 +130,7 @@ export default function LandingPage() {
           height={1024}
         />
       </div>
+      {/* Carousel section */}
       <section className="relative flex flex-col items-center my-20 w-full pb-20 overflow-hidden">
         <div className="w-full pt-16 mb-2">
           <CarouselLanding
@@ -173,11 +147,12 @@ export default function LandingPage() {
           />
         </div>
       </section>
-      <section className="w-full flex justify-center items-center relative">
+      {/* Message section */}
+      <section className="w-full flex justify-center items-center relative pb-40 md:pb-20">
         <motion.div
-          initial={{ x: "-50px", opacity: 0 }}
-          whileInView={{ x: 0, opacity: 1 }}
-          transition={{ duration: 0.5, ease: "easeIn" }}
+          initial={{ y: 200, opacity: 0, scale: 0.8 }}
+          whileInView={{ y: 0, opacity: 1, scale: 1 }}
+          viewport={{ margin: "-300px", once: true }}
           className="relative z-10 w-[100%] md:w-[75%] lg:w-[50%] p-10 flex flex-col justify-center items-center gap-2 text-xl lg:text-2xl "
         >
           {/* Top Left Corner */}
@@ -186,12 +161,16 @@ export default function LandingPage() {
           {/* Bottom Right Corner */}
           <div className="absolute bottom-0 right-0 w-10 h-10 bg-primary z-[-1] rounded-tl-full" />
 
-          <span>
+          <motion.span
+          // initial={{ x: "-100px", opacity: 0, scale: 0.3 }}
+          // whileInView={{ x: 0, opacity: 1, scale: 1 }}
+          // transition={{ duration: 0.3, ease: "easeIn" }}
+          >
             <b>Bonjour</b> ! Je suis Dame Pascale, créatrice passionnée
             d&apos;amigurumi et de bijoux uniques.
-          </span>
-          <span>
-            Mon univers créatif se déploie à travers deux spécialités :
+          </motion.span>
+          <motion.span>
+            Mon univers se déploie à travers deux spécialités :
             <ul className="list-disc ml-5">
               <li className="m-2">
                 d&apos;une part, des amigurumi faits main, ces petites créations
@@ -203,27 +182,39 @@ export default function LandingPage() {
                 leur beauté délicate.
               </li>
             </ul>
-          </span>
+          </motion.span>
         </motion.div>
       </section>
-      <section ref={refSectionAmigurumi} className="relative">
+
+      {/* Amigurumi section */}
+      <section className="relative">
         <div className="h-[100vh] flex flex-col-reverse md:flex-row justify-around items-center relative">
-          <div className="relative basis-2/3 flex flex-col items-center justify-start">
-            <motion.div
-              initial={{ x: "-100px", opacity: 0 }}
-              whileInView={{ x: 0, opacity: 1 }}
-              transition={{ duration: 0.5, ease: "easeIn" }}
-              viewport={{ once: true }}
-            >
+          <motion.div
+            ref={textRefAmigurumiSection}
+            style={{
+              y: useTransform(
+                scrollTextAmigurumiSection,
+                [0, 1],
+                ["0vh", "-10vh"]
+              ),
+              opacity: useTransform(
+                scrollTextAmigurumiSection,
+                [0.2, 0.4, 0.6, 0.7],
+                [0, 1, 1, 0]
+              ),
+            }}
+            className="relative basis-1/2 flex flex-col items-center justify-start"
+          >
+            <div>
               <Image
                 src="/daruma-group-nobg.png"
                 alt="Daruma"
-                className="-scale-x-100 hidden sm:block"
-                width={200}
-                height={200}
+                className="-scale-x-100 hidden md:flex "
+                width={100}
+                height={100}
               />
-            </motion.div>
-            <p className="text-md md:text-lg lg:text-xl leading-6 p-4 text-left max-w-[500px]">
+            </div>
+            <p className="text-md md:text-lg lg:text-xl leading-6 p-4 text-left max-w-[500px] ">
               Découvrez nos <b>amigurumis</b>, de charmantes peluches{" "}
               <b>crochetées à la main</b> avec amour. Uniques et adorables,
               elles apportent douceur et joie à tous les âges. Parfaites pour{" "}
@@ -233,27 +224,49 @@ export default function LandingPage() {
             <Link href="/boutique-amigurumi">
               <Button
                 variant="ctainverse"
-                className="mt-4 text-lg md:text-3xl h-21 w-52"
+                className="mt-4 text-lg md:text-3xl h-21 w-52 "
               >
                 Amigurumis
               </Button>
             </Link>
-          </div>
-          <div className="relative basis-1/3 flex justify-center perspective-top">
-            <motion.div style={{ rotateY: rotateCardAmigurumi }}>
+          </motion.div>
+          <div className="relative basis-1/2 flex justify-center perspective-top ">
+            <motion.div
+              ref={refSectionAmigurumi}
+              className="relative"
+              style={{
+                y: useTransform(
+                  scrollImageAmigurumiSection,
+                  [1, 0],
+                  ["0vh", "-10vh"]
+                ),
+                opacity: useTransform(
+                  scrollImageAmigurumiSection,
+                  [1, 0],
+                  [1, 0]
+                ),
+              }}
+            >
               <Image
                 src="/totoro_nature.jpg"
                 alt="Totoro dans la nature"
                 width={500}
                 height={500}
-                className="rounded-xl shadow-2xl saturate-150 w-[30vw] md:w-[25vw] lg:w-[20vw]"
+                className="rounded-xl shadow-2xl saturate-150 max-w-[60vw] w-[80vw] md:w-[35vw] lg:w-[30vw] relative"
               />
               <motion.svg
-                style={{ y: scrollYAmigurumiWord }}
-                className="absolute top-0 left-5 hidden sm:block"
+                // style={{ y: scrollYAmigurumiWord }}
+                className="absolute top-0 left-5 hidden sm:block "
                 height="400%"
                 width="60px"
                 xmlns="http://www.w3.org/2000/svg"
+                style={{
+                  y: useTransform(
+                    scrollImageAmigurumiSection,
+                    [1, 0],
+                    ["0vh", "-50vh"]
+                  ),
+                }}
               >
                 <text
                   x="30"
@@ -270,23 +283,42 @@ export default function LandingPage() {
           </div>
         </div>
       </section>
-      <section ref={refSectionBijou} className="relative overflow-hidden">
-        <div className="flex flex-col h-[100vh] md:flex-row-reverse justify-around items-center relative">
-          <div className="relative basis-1/3 flex justify-center perspective-top">
-            <motion.div style={{ rotateY: rotateCardBijou }}>
+      {/* Bijou section */}
+      <section className="relative">
+        <div className="flex flex-col h-[90vh] md:flex-row-reverse justify-around items-center relative">
+          <div className="relative basis-1/2 flex justify-center perspective-top">
+            <motion.div
+              className="relative"
+              ref={refSectionBijou}
+              style={{
+                y: useTransform(
+                  scrollImageBijouSection,
+                  [1, 0],
+                  ["0vh", "-10vh"]
+                ),
+                opacity: useTransform(scrollImageBijouSection, [1, 0], [1, 0]),
+              }}
+            >
               <Image
                 src="/fleurmodele.jpg"
                 alt="Fleur dans la nature"
                 width={500}
                 height={500}
-                className="rounded-xl shadow-2xl saturate-150 w-[30vw] md:w-[25vw] lg:w-[20vw]"
+                className="rounded-xl shadow-2xl saturate-150 max-w-[60vw] w-[80vw] md:w-[35vw] lg:w-[30vw] relative"
               />
               <motion.svg
-                style={{ y: scrollYBijouWord }}
-                className="absolute top-0 left-5 hidden sm:block"
+                // style={{ y: scrollYBijouWord }}
+                className="absolute top-0 left-5 hidden sm:block "
                 height="400%"
                 width="60px"
                 xmlns="http://www.w3.org/2000/svg"
+                style={{
+                  y: useTransform(
+                    scrollImageBijouSection,
+                    [1, 0],
+                    ["0vh", "-50vh"]
+                  ),
+                }}
               >
                 <text
                   x="30"
@@ -301,30 +333,39 @@ export default function LandingPage() {
               </motion.svg>
             </motion.div>
           </div>
-          <div className="relative basis-2/3 flex flex-col items-center justify-start">
-            <p className="text-md md:text-lg lg:text-xl leading-6 p-4 text-left max-w-[500px]">
+          <motion.div
+            className="relative basis-1/2 flex flex-col items-center justify-start blurOutScreen"
+            ref={textRefBijouSection}
+            style={{
+              y: useTransform(scrollTextBijouSection, [0, 1], ["0vh", "-10vh"]),
+              opacity: useTransform(
+                scrollTextBijouSection,
+                [0.2, 0.4, 0.6, 0.7],
+                [0, 1, 1, 0]
+              ),
+            }}
+            viewport={{ amount: "all", once: true }}
+            transition={{ duration: 0.3, ease: "easeIn" }}
+          >
+            <p className="text-md md:text-lg lg:text-xl leading-6 p-4 text-left max-w-[500px] ">
               Entrez dans notre écrin où <b>les fleurs deviennent bijoux</b>.
               Nos <b>créations uniques</b> allient la délicatesse naturelle à
               l&apos;art de la bijouterie. Découvrez des pièces exquises faites
               de <b>véritables fleurs préservées</b>, capturant la beauté
-              éphémère de la nature dans des parures intemporelles. Offrez-vous
-              <b>un morceau de poésie florale à porter</b>. Bien souvent les
-              modèles proposés sont des modèles uniques. Les bijoux peuvent
-              présenter quelques variations minimes par rapport aux photos, car
-              les fleurs ne sont pas naturellement strictement identiques entre
-              elles.
+              éphémère de la nature dans des parures intemporelles.
             </p>
             <Link href="/boutique-bijou">
               <Button
                 variant="ctainverse"
-                className="mt-4 text-lg md:text-3xl h-21 w-52"
+                className="mt-4 text-lg md:text-3xl h-21 w-52 "
               >
                 Bijoux
               </Button>
             </Link>
-          </div>
+          </motion.div>
         </div>
       </section>
+      {/* Contact Section */}
       <section className="h-[70vh] flex flex-col items-center justify-between overflow-hidden">
         <motion.div
           initial={{ y: "100%", opacity: 0 }}
