@@ -95,7 +95,7 @@ export default function LandingPage() {
         <div className="w-full h-[60vh] flex justify-center items-center">
           <Image src="/medaillon.png" alt="Logo" width={500} height={500} />
         </div>
-        <motion.div className="sticky top-[60%] overflow-hidden text-primary text-7xl font-bold">
+        <motion.div className="sticky top-[60%] overflow-hidden text-primary text-7xl">
           Créations
           <motion.div
             style={{ scaleX: scaleXBorderCreation }}
