@@ -265,7 +265,7 @@ export default function LandingPage() {
               <motion.svg
                 // style={{ y: scrollYAmigurumiWord }}
                 className="absolute top-0 left-5 hidden sm:block "
-                height="400%"
+                height="200%"
                 width="60px"
                 xmlns="http://www.w3.org/2000/svg"
                 style={{
@@ -321,7 +321,7 @@ export default function LandingPage() {
               <motion.svg
                 // style={{ y: scrollYBijouWord }}
                 className="absolute top-0 left-5 hidden sm:block "
-                height="400%"
+                height="200%"
                 width="60px"
                 xmlns="http://www.w3.org/2000/svg"
                 style={{
