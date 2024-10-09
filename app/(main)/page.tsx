@@ -149,7 +149,7 @@ export default function LandingPage() {
           initial={{ y: 200, opacity: 0, scale: 0.8 }}
           whileInView={{ y: 0, opacity: 1, scale: 1 }}
           viewport={{ margin: "-300px", once: true }}
-          className="relative z-10 w-[100%] md:w-[75%] lg:w-[50%] p-10 flex flex-col justify-center items-center gap-2 text-xl lg:text-2xl "
+          className="relative z-10 w-[100%] md:w-[75%] lg:w-[50%] p-10 flex flex-col justify-center items-center gap-2 text-lg lg:text-xl "
         >
           {/* Top Left Corner */}
           <div className="absolute top-0 left-0 w-10 h-10 bg-primary z-[-1] rounded-br-full" />
@@ -167,18 +167,30 @@ export default function LandingPage() {
           </motion.span>
           <motion.span>
             Mon univers se déploie à travers deux spécialités :
-            <ul className="list-disc ml-5">
-              <li className="m-2">
-                d&apos;une part, des amigurumi faits main, ces petites créations
+            <ul className="list-decimal ml-5">
+              <li className="m-4">
+                D&apos;une part, des amigurumi faits main, ces petites créations
                 en crochet qui apportent douceur et charme ;
               </li>
-              <li className="m-2">
-                d&apos;autre part, des bijoux raffinés réalisés avec des fleurs
+              <li className="m-4">
+                D&apos;autre part, des bijoux raffinés réalisés avec des fleurs
                 naturelles séchées, encapsulées dans de la résine pour préserver
                 leur beauté délicate.
               </li>
             </ul>
           </motion.span>
+          <motion.span className="font-bold">
+            Pour des créations personnalisées, n&apos;hésitez pas à me contacter
+            pour étudier ensemble vos attentes.
+          </motion.span>
+          <Link href="/contact">
+            <Button
+              variant="ctainverse"
+              className="mt-4 text-lg md:text-3xl h-21 w-52 "
+            >
+              Me contacter
+            </Button>
+          </Link>
         </motion.div>
       </section>
 
@@ -248,7 +260,7 @@ export default function LandingPage() {
                 alt="Totoro dans la nature"
                 width={500}
                 height={500}
-                className="rounded-xl shadow-2xl saturate-150 max-w-[60vw] w-[80vw] md:w-[35vw] lg:w-[30vw] relative"
+                className="rounded-xl shadow-2xl saturate-150 max-w-[60vw] w-[60vw] md:w-[35vw] lg:w-[30vw] relative"
               />
               <motion.svg
                 // style={{ y: scrollYAmigurumiWord }}
