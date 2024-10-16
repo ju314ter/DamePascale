@@ -7,6 +7,8 @@ interface ProductDescriptionProps {
 
 const ProductDescription: React.FC<ProductDescriptionProps> = ({ content }) => {
   const renderText = (textBlock: ContentChild) => {
+    console.log(textBlock);
+
     let result: React.ReactNode = textBlock.text;
     if (typeof result === "string" && result.trim() === "") {
       return <br key={textBlock._key} />;
@@ -17,6 +19,9 @@ const ProductDescription: React.FC<ProductDescriptionProps> = ({ content }) => {
     if (textBlock.marks.includes("em")) {
       result = <em key={textBlock._key}>{result}</em>;
     }
+    // if(textBlock.marks.includes("a")){
+    //   result = <a key={textBlock._key}>{result}</a>;
+    // }
     return result;
   };
 

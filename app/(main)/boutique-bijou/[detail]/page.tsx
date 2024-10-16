@@ -12,6 +12,7 @@ import { useToast } from "@/components/ui/use-toast";
 import { ToastAction } from "@/components/ui/toast";
 import { CarouselProduct } from "@/components/carousel/carouselProduct";
 import ProductDescription from "@/components/product-description/productDescription";
+import { PortableText } from "@portabletext/react";
 
 interface Params {
   [key: string]: string | string[];
@@ -102,7 +103,7 @@ const ProductDetailBijouPage = () => {
             {bijou.description &&
               // Legacy behaviour: description used to be a text string before being an array of blocks
               (Array.isArray(bijou.description) ? (
-                <ProductDescription content={bijou.description} />
+                <PortableText value={bijou.description} />
               ) : (
                 <p>{bijou.description}</p>
               ))}

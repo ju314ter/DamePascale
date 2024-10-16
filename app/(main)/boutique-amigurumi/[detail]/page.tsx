@@ -89,7 +89,8 @@ const ProductDetailAmigurumiPage = () => {
             {amigurumi.description &&
               // Legacy behaviour: description used to be a text string before being an array of blocks
               (Array.isArray(amigurumi.description) ? (
-                <ProductDescription content={amigurumi.description} />
+                // <ProductDescription content={amigurumi.description} />
+                <PortableText value={amigurumi.description} />
               ) : (
                 <p>{amigurumi.description}</p>
               ))}
