@@ -60,6 +60,7 @@ const PanierWrapper = () => {
     {
       title: string;
       code: string;
+      type: "absolute" | "percent";
       reductionPercent: number;
     }[]
   >();
@@ -90,6 +91,7 @@ const PanierWrapper = () => {
   useEffect(() => {
     const fetchCodePromo = async () => {
       const codes = await getCodePromo();
+      console.log(codes);
       if (codes.length > 0) {
         setExistingCodePromo(codes);
       }
@@ -115,7 +117,7 @@ const PanierWrapper = () => {
         (code) => code.code.toLowerCase() === codePromo?.toLowerCase()
       );
       setPromotionMessage(
-        `Code promo "${validCode?.code}" appliqué (${validCode?.reductionPercent}% de réduction)`
+        `Code promo "${validCode?.code}" appliqué (${validCode?.reductionPercent}${validCode?.type === "absolute" ? "€" : "%"} de réduction)`
       );
       clearErrors("codepromo");
     } else {

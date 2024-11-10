@@ -23,5 +23,18 @@ export const codePromoSchema: SchemaTypeDefinition = {
       type: "number",
       validation: (Rule) => Rule.required(),
     },
+    {
+      name: "type",
+      title: "Type reduc",
+      type: "string",
+      options: {
+        list: [
+          { title: "Absolute", value: "absolute" },
+          { title: "Percentage", value: "percent" },
+        ],
+        layout: "radio", // This makes it a radio button
+      },
+      validation: (Rule) => Rule.required(),
+    },
   ],
 };

@@ -6,13 +6,7 @@ import Footer from "@/components/footer/footer";
 import { Button } from "@/components/ui/button";
 import { Amigurumi, getLastNAmigurumis } from "@/sanity/lib/amigurumis/calls";
 import { Bijou, getLastNBijoux } from "@/sanity/lib/bijoux/calls";
-import {
-  motion,
-  useMotionValue,
-  useMotionValueEvent,
-  useScroll,
-  useTransform,
-} from "framer-motion";
+import { motion, useScroll, useTransform } from "framer-motion";
 import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
@@ -80,7 +74,7 @@ export default function LandingPage() {
       ref={containerRef}
     >
       {/* Home section */}
-      <div className="relative flex flex-col w-full h-[100vh] justify-start items-center mt-16">
+      <div className="relative flex flex-col w-full h-[100vh] justify-start items-center mt-28">
         <div className="w-full h-[130px] flex justify-center items-center">
           <svg
             className="font-serif text-6xl md:text-9xl"

@@ -6,12 +6,14 @@ export const getCodePromo = async () => {
       _id,
       title,
       reductionPercent,
-      code
+      code,
+      type
     }`;
   const codePromos: {
     title: string;
     code: string;
     reductionPercent: number;
+    type: "absolute" | "percent";
   }[] = await client.fetch(groq`${query}`);
 
   return codePromos;
