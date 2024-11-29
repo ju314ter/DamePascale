@@ -127,9 +127,9 @@ const ProductDetailBijouPage = () => {
             onClick={async (e) => {
               e.preventDefault();
               try {
-                await addToPanier(bijou);
+                const message = await addToPanier(bijou);
                 toast({
-                  title: `${bijou.name} ajouté au panier`,
+                  title: message,
                   action: (
                     <ToastAction
                       altText="Retirer du panier"
@@ -143,10 +143,8 @@ const ProductDetailBijouPage = () => {
                 });
               } catch (error) {
                 if (error instanceof Error) {
-                  // Handle the error (e.g., show a toast notification)
-                  console.error(error.message);
                   toast({
-                    title: `${bijou.name} plus de stock disponible!`,
+                    title: error.message,
                   });
                 }
               }

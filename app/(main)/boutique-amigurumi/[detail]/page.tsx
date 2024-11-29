@@ -114,9 +114,9 @@ const ProductDetailAmigurumiPage = () => {
             onClick={async (e) => {
               e.preventDefault();
               try {
-                await addToPanier(amigurumi);
+                const message = await addToPanier(amigurumi);
                 toast({
-                  title: `${amigurumi.name} ajouté au panier`,
+                  title: message,
                   action: (
                     <ToastAction
                       altText="Retirer du panier"
@@ -130,10 +130,8 @@ const ProductDetailAmigurumiPage = () => {
                 });
               } catch (error) {
                 if (error instanceof Error) {
-                  // Handle the error (e.g., show a toast notification)
-                  console.error(error.message);
                   toast({
-                    title: `${amigurumi.name} plus de stock disponible!`,
+                    title: error.message,
                   });
                 }
               }

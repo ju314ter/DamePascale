@@ -2,6 +2,7 @@ import { createClient } from "next-sanity";
 import imageUrlBuilder from "@sanity/image-url";
 
 import { apiVersion, dataset, projectId, useCdn, viewtoken } from "../env";
+import { getBoutiqueStatus } from "./general/calls";
 
 export const client = createClient({
   projectId,
@@ -44,4 +45,12 @@ export async function verifyStock(items: { id: string; quantity: number }[]) {
   const allAvailable = stockStatus.every((item: any) => item.isAvailable);
 
   return { allAvailable, stockStatus };
+}
+
+export async function checkBoutiqueStatus() {
+  const boutiqueStatus = await getBoutiqueStatus();
+  if (boutiqueStatus === "closed" || boutiqueStatus === "maintenance") {
+    return false;
+  }
+  return true;
 }

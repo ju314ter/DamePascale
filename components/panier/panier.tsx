@@ -91,7 +91,6 @@ const PanierWrapper = () => {
   useEffect(() => {
     const fetchCodePromo = async () => {
       const codes = await getCodePromo();
-      console.log(codes);
       if (codes.length > 0) {
         setExistingCodePromo(codes);
       }

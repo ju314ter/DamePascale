@@ -59,6 +59,7 @@
     "react-spring-carousel": "^2.0.19",
     "sanity": "^3.45.0",
     "sanity-plugin-hotspot-array": "^2.0.0",
+    "sanity-plugin-singleton-tools": "^1.1.0",
     "stripe": "^16.10.0",
     "styled-components": "^6.1.11",
     "tailwind-merge": "^2.3.0",

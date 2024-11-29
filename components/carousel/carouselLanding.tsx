@@ -65,9 +65,9 @@ export function CarouselLanding({
                   onClick={async (e) => {
                     e.preventDefault();
                     try {
-                      await addToPanier(item);
+                      const message = await addToPanier(item);
                       toast({
-                        title: `${item.name} ajouté au panier`,
+                        title: message,
                         action: (
                           <ToastAction
                             altText="Retirer du panier"
@@ -81,10 +81,8 @@ export function CarouselLanding({
                       });
                     } catch (error) {
                       if (error instanceof Error) {
-                        // Handle the error (e.g., show a toast notification)
-                        console.error(error.message);
                         toast({
-                          title: `${item.name} plus de stock disponible!`,
+                          title: error.message,
                         });
                       }
                     }

@@ -18,3 +18,14 @@ export const getCodePromo = async () => {
 
   return codePromos;
 };
+
+export const getBoutiqueStatus = async () => {
+  const query = `*[_type == "uniqueConfigBoutique"][0]{
+      _id,
+      boutiqueStatus
+    }`;
+  const config: {
+    boutiqueStatus: string;
+  } = await client.fetch(groq`${query}`);
+  return config.boutiqueStatus;
+};
