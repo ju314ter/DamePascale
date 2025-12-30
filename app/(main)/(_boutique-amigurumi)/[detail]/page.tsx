@@ -2,14 +2,14 @@
 
 import React, { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
+import { Amigurumi, getAmigurumiById } from "@/sanity/lib/amigurumis/calls";
 import Image from "next/image";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { ArrowRight } from "lucide-react";
-import { Bijou, getBijouById } from "@/sanity/lib/bijoux/calls";
+import { ArrowRight, Loader } from "lucide-react";
 import { usePanier } from "@/store/panier-store";
-import { useToast } from "@/components/ui/use-toast";
 import { ToastAction } from "@/components/ui/toast";
+import { useToast } from "@/components/ui/use-toast";
 import { CarouselProduct } from "@/components/carousel/carouselProduct";
 import ProductDescription from "@/components/product-description/productDescription";
 import { PortableText } from "@portabletext/react";
@@ -18,34 +18,31 @@ interface Params {
   [key: string]: string | string[];
 }
 
-const ProductDetailBijouPage = () => {
+const ProductDetailAmigurumiPage = () => {
   const params: Params = useParams();
-  const [bijou, setBijou] = useState<Bijou | null>(null);
+  const [amigurumi, setAmigurumi] = useState<Amigurumi | null>(null);
   const { addToPanier, removeFromPanier } = usePanier();
   const { toast } = useToast();
 
   useEffect(() => {
-    async function fetchBijou() {
+    async function fetchAmigurumi() {
       if (typeof params.detail === "string") {
-        const data = await getBijouById(params.detail);
-        setBijou(data);
+        const data = await getAmigurumiById(params.detail);
+        setAmigurumi(data);
       } else {
         console.error("Invalid ID format");
       }
     }
-    fetchBijou();
+    fetchAmigurumi();
   }, [params]);
 
-  if (!bijou) {
-    return (
-      <div className="w-[100vw] h-[100vh] flex justify-center items-center">
-        Loading...
-      </div>
-    );
+  if (!amigurumi) {
+    return <div>Loading...</div>;
   }
+
   return (
     <div className="relative w-full max-w-[1200px] min-h-[100vh] mx-auto pt-[10vh] p-5 overflow-hidden">
-      <div className="absolute top-0 left-0 w-full h-full z-10 pointer-events-none">
+      <div className="absolute top-0 left-0 w-full h-full z-10">
         <Image
           src="/transparentknittingtexture.png"
           alt="Transparent texture"
@@ -57,14 +54,14 @@ const ProductDetailBijouPage = () => {
 
       <div className="product-header relative z-20 flex flex-col md:flex-row gap-8">
         <div className="product-image w-full md:w-1/2">
-          <CarouselProduct slides={bijou.imageGallery} />
+          <CarouselProduct slides={amigurumi.imageGallery} />
         </div>
         <div className="product-info w-full md:w-1/2 flex flex-col gap-4">
-          <h1 className="text-3xl font-bold text-primary">{bijou.name}</h1>
+          <h1 className="text-3xl font-bold text-primary">{amigurumi.name}</h1>
           <div className="product-tags flex gap-2">
             <div className="flex flex-wrap gap-1 justify-center">
-              {bijou.categories && bijou.categories.length > 0 ? (
-                bijou.categories.map((cat) => (
+              {amigurumi.categories && amigurumi.categories.length > 0 ? (
+                amigurumi.categories.map((cat) => (
                   <Badge variant={"outline"} key={cat._id}>
                     {cat.title}
                   </Badge>
@@ -74,51 +71,41 @@ const ProductDetailBijouPage = () => {
               )}
             </div>
             <div className="flex flex-wrap gap-1 justify-center">
-              {bijou.matieres && bijou.matieres.length > 0 ? (
-                bijou.matieres.map((mat) => (
-                  <Badge variant={"default"} key={mat._id}>
-                    {mat.title}
+              {amigurumi.universes && amigurumi.universes.length > 0 ? (
+                amigurumi.universes.map((uni) => (
+                  <Badge variant={"default"} key={uni._id}>
+                    {uni.title}
                   </Badge>
                 ))
               ) : (
                 <Badge variant="default">No universes</Badge>
               )}
             </div>
-            <div className="flex flex-wrap gap-1 justify-center">
-              {bijou.fleurs && bijou.fleurs.length > 0 ? (
-                bijou.fleurs.map((fleur) => (
-                  <Badge variant={"default"} key={fleur._id}>
-                    {fleur.title}
-                  </Badge>
-                ))
-              ) : (
-                <Badge variant="default">No universes</Badge>
-              )}
-            </div>
-            {bijou.promotionDiscount && (
+            {amigurumi.promotionDiscount && (
               <Badge variant={"destructive"}>Promo</Badge>
             )}
           </div>
           <div>
-            {bijou.description &&
+            {amigurumi.description &&
               // Legacy behaviour: description used to be a text string before being an array of blocks
-              (Array.isArray(bijou.description) ? (
-                <PortableText value={bijou.description} />
+              (Array.isArray(amigurumi.description) ? (
+                // <ProductDescription content={amigurumi.description} />
+                <PortableText value={amigurumi.description} />
               ) : (
-                <p>{bijou.description}</p>
+                <p>{amigurumi.description}</p>
               ))}
           </div>
           <div className="product-price flex items-center gap-2 text-lg font-bold text-primary">
-            {bijou.promotionDiscount ? (
+            {amigurumi.promotionDiscount ? (
               <>
-                <span className="line-through">€{bijou.price}</span>
+                <span className="line-through">€{amigurumi.price}</span>
                 <ArrowRight strokeWidth={4} />
                 <span className="text-black">
-                  €{bijou.price * (1 - bijou.promotionDiscount / 100)}
+                  €{amigurumi.price * (1 - amigurumi.promotionDiscount / 100)}
                 </span>
               </>
             ) : (
-              <span>€{bijou.price}</span>
+              <span>€{amigurumi.price}</span>
             )}
           </div>
           <Button
@@ -127,14 +114,14 @@ const ProductDetailBijouPage = () => {
             onClick={async (e) => {
               e.preventDefault();
               try {
-                const message = await addToPanier(bijou);
+                const message = await addToPanier(amigurumi);
                 toast({
                   title: message,
                   action: (
                     <ToastAction
                       altText="Retirer du panier"
                       onClick={() => {
-                        removeFromPanier(bijou);
+                        removeFromPanier(amigurumi);
                       }}
                     >
                       Annuler
@@ -158,4 +145,4 @@ const ProductDetailBijouPage = () => {
   );
 };
 
-export default ProductDetailBijouPage;
+export default ProductDetailAmigurumiPage;

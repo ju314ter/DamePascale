@@ -1,36 +1,23 @@
-import { getExtension, getImageDimensions } from "@sanity/asset-utils";
 import { SchemaTypeDefinition, Rule } from "sanity";
+import { getExtension, getImageDimensions } from "@sanity/asset-utils";
 
-export const bijouCategorySchema: SchemaTypeDefinition = {
-  name: "bijouCategory",
-  title: "Bijou Category",
+export const amigurumiCategorySchema: SchemaTypeDefinition = {
+  name: "amigurumiCategory",
+  title: "Amigurumi Category",
   type: "document",
   fields: [
     {
       name: "title",
-      title: "Nom de la catégorie",
+      title: "Title",
       type: "string",
-      validation: (Rule) => Rule.required(),
-    },
-  ],
-};
-export const bijouFleurSchema: SchemaTypeDefinition = {
-  name: "bijouFleur",
-  title: "Bijou Fleur",
-  type: "document",
-  fields: [
-    {
-      name: "title",
-      title: "Fleur utilisée",
-      type: "string",
-      validation: (Rule) => Rule.required(),
+      validation: (Rule: Rule) => Rule.required(),
     },
   ],
 };
 
-export const bijouMenuSchema: SchemaTypeDefinition = {
-  name: "bijouLienMenu",
-  title: "Lien menu bijou",
+export const amigurumiMenuSchema: SchemaTypeDefinition = {
+  name: "amigurumiNavlink",
+  title: "Lien menu amigurumi",
   type: "document",
   fields: [
     {
@@ -41,37 +28,37 @@ export const bijouMenuSchema: SchemaTypeDefinition = {
     },
     {
       name: "href",
-      title: "Destination (boutique-bijou?....)",
+      title: "Destination (boutique-amigurumi?....)",
       type: "string",
       validation: (Rule: Rule) => Rule.required(),
     },
   ],
 };
 
-export const bijouMatiereSchema: SchemaTypeDefinition = {
-  name: "bijouMatiere",
-  title: "Bijou Matiere",
+export const amigurumiUniversSchema: SchemaTypeDefinition = {
+  name: "amigurumiUnivers",
+  title: "Amigurumi Univers",
   type: "document",
   fields: [
     {
       name: "title",
-      title: "Matière utilisée",
+      title: "Title",
       type: "string",
-      validation: (Rule) => Rule.required(),
+      validation: (Rule: Rule) => Rule.required(),
     },
   ],
 };
 
-export const bijouProductSchema: SchemaTypeDefinition = {
-  name: "bijoux",
-  title: "Bijoux",
+export const amigurumiProductSchema: SchemaTypeDefinition = {
+  name: "amigurumis",
+  title: "Amigurumis",
   type: "document",
   fields: [
     {
       name: "name",
-      title: "Nom du produit",
+      title: "Name",
       type: "string",
-      validation: (Rule) => Rule.required().min(3).max(100),
+      validation: (Rule: Rule) => Rule.required().min(3).max(100),
     },
     {
       name: "description",
@@ -82,9 +69,9 @@ export const bijouProductSchema: SchemaTypeDefinition = {
     },
     {
       name: "price",
-      title: "Prix",
+      title: "Price",
       type: "number",
-      validation: (Rule) => Rule.required().min(0),
+      validation: (Rule: Rule) => Rule.required().min(0),
     },
     {
       name: "highlightedImg",
@@ -93,59 +80,47 @@ export const bijouProductSchema: SchemaTypeDefinition = {
       options: {
         hotspot: true,
       },
-      validation: (Rule) => Rule.required(),
+      validation: (Rule: Rule) => Rule.required(),
     },
     {
       name: "imageGallery",
-      title: "Galerie d'images",
+      title: "Image Gallery",
       type: "array",
       of: [{ type: "image" }],
       options: {
         layout: "grid",
       },
-      validation: (Rule) => Rule.required().min(1),
+      validation: (Rule: Rule) => Rule.required().min(1),
     },
     {
       name: "categories",
-      title: "Catégories",
+      title: "Categories",
       type: "array",
       of: [
         {
           type: "reference",
-          to: [{ type: "bijouCategory" }],
+          to: [{ type: "amigurumiCategory" }],
         },
       ],
-      validation: (Rule) => Rule.required().min(1),
+      validation: (Rule: Rule) => Rule.required().min(1),
     },
     {
-      name: "fleurs",
-      title: "Fleurs",
+      name: "universes",
+      title: "Universes",
       type: "array",
       of: [
         {
           type: "reference",
-          to: [{ type: "bijouFleur" }],
+          to: [{ type: "amigurumiUnivers" }],
         },
       ],
-      validation: (Rule) => Rule.required().min(1),
-    },
-    {
-      name: "matieres",
-      title: "Matières",
-      type: "array",
-      of: [
-        {
-          type: "reference",
-          to: [{ type: "bijouMatiere" }],
-        },
-      ],
-      validation: (Rule) => Rule.required().min(1),
+      validation: (Rule: Rule) => Rule.required().min(1),
     },
     {
       name: "stock",
       title: "Stock",
       type: "number",
-      validation: (Rule) => Rule.required().min(0),
+      validation: (Rule: Rule) => Rule.required().min(0),
     },
     {
       name: "promotionDiscount",
@@ -157,9 +132,9 @@ export const bijouProductSchema: SchemaTypeDefinition = {
   ],
 };
 
-export const heroBannerBijouSchema: SchemaTypeDefinition = {
-  name: "heroBannerBijou",
-  title: "Bijoux Hero Banner",
+export const heroBannerAmigurumiSchema: SchemaTypeDefinition = {
+  name: "heroBannerAmigurumi",
+  title: "Amigurumi Hero Banner",
   type: "document",
   fields: [
     {

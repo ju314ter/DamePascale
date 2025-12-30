@@ -1,12 +1,5 @@
 import { type SchemaTypeDefinition } from "sanity";
 import {
-  amigurumiCategorySchema,
-  amigurumiMenuSchema,
-  amigurumiProductSchema,
-  amigurumiUniversSchema,
-  heroBannerAmigurumiSchema,
-} from "./amigurumis/schema";
-import {
   bijouCategorySchema,
   bijouFleurSchema,
   bijouMatiereSchema,
@@ -22,11 +15,11 @@ const schema: { types: SchemaTypeDefinition[] } = {
   types: [],
 };
 
-schema.types.push(amigurumiMenuSchema);
-schema.types.push(amigurumiCategorySchema);
-schema.types.push(amigurumiUniversSchema);
-schema.types.push(amigurumiProductSchema);
-schema.types.push(heroBannerAmigurumiSchema);
+// schema.types.push(amigurumiMenuSchema);
+// schema.types.push(amigurumiCategorySchema);
+// schema.types.push(amigurumiUniversSchema);
+// schema.types.push(amigurumiProductSchema);
+// schema.types.push(heroBannerAmigurumiSchema);
 
 schema.types.push(bijouMenuSchema);
 schema.types.push(bijouCategorySchema);

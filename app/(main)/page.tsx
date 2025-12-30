@@ -4,7 +4,6 @@ import { CarouselLanding } from "@/components/carousel/carouselLanding";
 import { ContactForm } from "@/components/contact/contact-form";
 import Footer from "@/components/footer/footer";
 import { Button } from "@/components/ui/button";
-import { Amigurumi, getLastNAmigurumis } from "@/sanity/lib/amigurumis/calls";
 import { Bijou, getLastNBijoux } from "@/sanity/lib/bijoux/calls";
 import { motion, useScroll, useTransform } from "framer-motion";
 import Image from "next/image";
@@ -12,13 +11,13 @@ import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 
 export default function LandingPage() {
-  const [carouselAmigurumisItem, setCarouselAmigurumisItem] = useState<
-    Amigurumi[]
-  >([]);
+  // const [carouselAmigurumisItem, setCarouselAmigurumisItem] = useState<
+  //   Amigurumi[]
+  // >([]);
   const [carouselBijouxItem, setCarouselBijouxItem] = useState<Bijou[]>([]);
   const containerRef = useRef(null);
-  const refSectionAmigurumi = useRef(null);
-  const textRefAmigurumiSection = useRef(null);
+  // const refSectionAmigurumi = useRef(null);
+  // const textRefAmigurumiSection = useRef(null);
   const refSectionBijou = useRef(null);
   const textRefBijouSection = useRef(null);
 
@@ -26,22 +25,22 @@ export default function LandingPage() {
     container: containerRef,
   });
 
-  const { scrollYProgress: scrollImageAmigurumiSection } = useScroll({
-    container: containerRef,
-    target: refSectionAmigurumi,
-    offset: ["start start", "end end"],
-  });
+  // const { scrollYProgress: scrollImageAmigurumiSection } = useScroll({
+  //   container: containerRef,
+  //   target: refSectionAmigurumi,
+  //   offset: ["start start", "end end"],
+  // });
   const { scrollYProgress: scrollImageBijouSection } = useScroll({
     container: containerRef,
     target: refSectionBijou,
     offset: ["start start", "end end"],
   });
 
-  const { scrollYProgress: scrollTextAmigurumiSection } = useScroll({
-    container: containerRef,
-    target: textRefAmigurumiSection,
-    offset: ["start end", "end start"],
-  });
+  // const { scrollYProgress: scrollTextAmigurumiSection } = useScroll({
+  //   container: containerRef,
+  //   target: textRefAmigurumiSection,
+  //   offset: ["start end", "end start"],
+  // });
 
   const { scrollYProgress: scrollTextBijouSection } = useScroll({
     container: containerRef,
@@ -55,18 +54,18 @@ export default function LandingPage() {
 
   //Fetch carousel items
   useEffect(() => {
-    const fetchCarouselAmigurumis = async () => {
-      const carouselAmigurumis = await getLastNAmigurumis(10);
-      setCarouselAmigurumisItem(carouselAmigurumis);
-    };
+    // const fetchCarouselAmigurumis = async () => {
+    //   const carouselAmigurumis = await getLastNAmigurumis(10);
+    //   setCarouselAmigurumisItem(carouselAmigurumis);
+    // };
     const fetchCarouselBijoux = async () => {
       const carouselBijoux = await getLastNBijoux(10);
       setCarouselBijouxItem(carouselBijoux);
     };
 
-    fetchCarouselAmigurumis();
+    // fetchCarouselAmigurumis();
     fetchCarouselBijoux();
-  }, [setCarouselAmigurumisItem, setCarouselBijouxItem]);
+  }, [setCarouselBijouxItem]);
 
   return (
     <div
@@ -122,13 +121,13 @@ export default function LandingPage() {
       </div>
       {/* Carousel section */}
       <section className="relative flex flex-col items-center my-20 w-full pb-20 overflow-hidden">
-        <div className="w-full pt-16 mb-2">
+        {/* <div className="w-full pt-16 mb-2">
           <CarouselLanding
             boutiqueUrl="boutique-amigurumi"
             direction="backward"
             items={carouselAmigurumisItem}
           />
-        </div>
+        </div> */}
         <div className="w-full mt-2">
           <CarouselLanding
             boutiqueUrl="boutique-bijou"
@@ -156,22 +155,13 @@ export default function LandingPage() {
           // whileInView={{ x: 0, opacity: 1, scale: 1 }}
           // transition={{ duration: 0.3, ease: "easeIn" }}
           >
-            <b>Bonjour</b> ! Je suis Dame Pascale, créatrice passionnée
-            d&apos;amigurumi et de bijoux uniques.
+            <b>Bonjour</b> ! Je suis Dame Pascale, créatrice passionnée de
+            bijoux uniques.
           </motion.span>
           <motion.span>
-            Mon univers se déploie à travers deux spécialités :
-            <ul className="list-decimal ml-5">
-              <li className="m-4">
-                D&apos;une part, des amigurumi faits main, ces petites créations
-                en crochet qui apportent douceur et charme ;
-              </li>
-              <li className="m-4">
-                D&apos;autre part, des bijoux raffinés réalisés avec des fleurs
-                naturelles séchées, encapsulées dans de la résine pour préserver
-                leur beauté délicate.
-              </li>
-            </ul>
+            Je réalise des bijoux raffinés réalisés avec des fleurs naturelles
+            séchées, encapsulées dans de la résine pour préserver leur beauté
+            délicate.
           </motion.span>
           <motion.span className="font-bold">
             Pour des créations personnalisées, n&apos;hésitez pas à me contacter
@@ -189,7 +179,7 @@ export default function LandingPage() {
       </section>
 
       {/* Amigurumi section */}
-      <section className="relative">
+      {/* <section className="relative">
         <div className="h-[90vh] flex flex-col-reverse md:flex-row justify-around items-center relative">
           <motion.div
             ref={textRefAmigurumiSection}
@@ -284,7 +274,7 @@ export default function LandingPage() {
             </motion.div>
           </div>
         </div>
-      </section>
+      </section> */}
       {/* Bijou section */}
       <section className="relative">
         <div className="flex flex-col h-[90vh] md:flex-row-reverse justify-around items-center relative">
