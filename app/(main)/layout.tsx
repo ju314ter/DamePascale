@@ -26,9 +26,9 @@ const italianaFont = Italiana({
 });
 
 export const metadata: Metadata = {
-  title: "Pascale FEGER - Amigurumi & Bijoux",
+  title: "Pascale FEGER - Bijoux floraux",
   description:
-    "Retrouvez les productions de Dame Pascale, de magnifiques bijoux et amigurumis réalisés de manière artisanales et originales.",
+    "Retrouvez les productions de Dame Pascale, de magnifiques bijoux réalisés de manière artisanales et originales.",
 };
 
 export default function RootLayout({
