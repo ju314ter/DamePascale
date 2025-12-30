@@ -32,7 +32,6 @@ import {
   AccordionTrigger,
 } from "../ui/accordion";
 import { getBijouNavlinks } from "@/sanity/lib/bijoux/calls";
-import { getAmigurumiNavlinks } from "@/sanity/lib/amigurumis/calls";
 import { getBlogPostsCategories } from "@/sanity/lib/blog/calls";
 
 export function NavMenu() {
@@ -53,11 +52,11 @@ export function NavMenu() {
     }
     fetchBijouxNavlinks();
 
-    async function fetchAmigurumisNavlinks() {
-      const data = await getAmigurumiNavlinks();
-      setAmigurumisNavlink(data);
-    }
-    fetchAmigurumisNavlinks();
+    // async function fetchAmigurumisNavlinks() {
+    //   const data = await getAmigurumiNavlinks();
+    //   setAmigurumisNavlink(data);
+    // }
+    // fetchAmigurumisNavlinks();
 
     async function fetchBlogNavlinks() {
       const data = await getBlogPostsCategories();
@@ -70,7 +69,7 @@ export function NavMenu() {
     <>
       <NavigationMenu className="hidden lg:block">
         <NavigationMenuList>
-          <NavigationMenuItem>
+          {/* <NavigationMenuItem>
             <NavigationMenuTrigger className="text-xl">
               Amigurumis
             </NavigationMenuTrigger>
@@ -110,7 +109,7 @@ export function NavMenu() {
                 </div>
               </div>
             </NavigationMenuContent>
-          </NavigationMenuItem>
+          </NavigationMenuItem> */}
           <NavigationMenuItem>
             <NavigationMenuTrigger className="text-xl">
               Bijoux
