@@ -30,7 +30,7 @@ import { getCodePromo } from "@/sanity/lib/general/calls";
 
 const deliverySchema = z.object({
   fullName: z.string().min(2, "Nom complet requis"),
-  addressLine1: z.string().min(5, "Address requise"),
+  addressLine1: z.string().min(5, "Addresse requise"),
   addressLine2: z.string().optional(),
   city: z.string().min(2, "Ville requise"),
   country: z.string().min(2, "Pays requis"),
@@ -68,14 +68,14 @@ const PanierWrapper = () => {
 
   useEffect(() => {
     const totalPanier = panier
-      .reduce(
-        (total, item) =>
+      .reduce((total, item) => {
+        return (
           total +
           (item.type.promotionDiscount
             ? ((100 - item.type.promotionDiscount) / 100) * item.type.price
-            : item.type.price),
-        0
-      )
+            : item.type.price * item.qty)
+        );
+      }, 0)
       .toFixed(2);
 
     setTotalPanier(Number(totalPanier));
@@ -104,6 +104,7 @@ const PanierWrapper = () => {
 
     if (!codePromo || codePromo.length === 0 || codePromo === "") {
       setPromotionMessage(null);
+      clearErrors("codepromo");
       return;
     }
 
@@ -143,10 +144,21 @@ const PanierWrapper = () => {
       });
       return;
     }
-    const result = await createCheckoutSession(panier, formData, deliveryCost);
+    const itemsForCheckout = panier.map((item) => ({
+      id: item.type._id,
+      qty: item.qty,
+    }));
+    const result = await createCheckoutSession(itemsForCheckout, formData);
     if (!result.url) {
       toast({
         title: "Impossible de passer en mode de paiement",
+      });
+      return;
+    }
+    if (result.error) {
+      toast({
+        title: "Impossible de passer en mode de paiement",
+        description: result.error,
       });
       return;
     }
@@ -174,7 +186,9 @@ const PanierWrapper = () => {
             </svg>
             {panier && panier.length > 0 && (
               <div className="absolute rounded-full bg-secondary w-4 h-4 right-[50%] bottom-0 flex justify-center items-end animate-scale origin-center">
-                <span className="text-xs">{panier.length}</span>
+                <span className="text-xs">
+                  {panier.reduce((total, item) => total + item.qty, 0)}
+                </span>
               </div>
             )}
           </Button>

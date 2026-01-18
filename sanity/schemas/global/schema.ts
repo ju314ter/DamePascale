@@ -1,13 +1,13 @@
 import { SchemaTypeDefinition } from "sanity";
 
-export const mySingleton = {
-  name: "mySingleton",
-  title: "My Singleton",
-  type: "document",
-  options: {
-    singleton: true, // Identify this document as a singleton
-  },
-};
+// export const mySingleton = {
+//   name: "mySingleton",
+//   title: "My Singleton",
+//   type: "document",
+//   options: {
+//     singleton: true, // Identify this document as a singleton
+//   },
+// };
 
 export const configBoutiqueSchema: SchemaTypeDefinition = {
   name: "uniqueConfigBoutique",
@@ -30,9 +30,9 @@ export const configBoutiqueSchema: SchemaTypeDefinition = {
       },
     },
   ],
-  options: {
-    singleton: true, // Identify this document as a singleton
-  },
+  // options: {
+  //   singleton: true, // Identify this document as a singleton
+  // },
 };
 
 export const codePromoSchema: SchemaTypeDefinition = {

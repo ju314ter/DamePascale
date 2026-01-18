@@ -1,7 +1,6 @@
 // app/actions/stripe.js
 "use server";
 
-import { Item } from "@/store/panier-store";
 import Stripe from "stripe";
 import { headers } from "next/headers";
 import { apiVersion, dataset, projectId, useCdn } from "@/sanity/env";
@@ -23,33 +22,72 @@ const client = createClient({
   token: process.env.SANITY_TOKEN,
 });
 
-export async function updateSanityStock(lineItems: Stripe.LineItem[]) {
-  for (const item of lineItems) {
-    const productName = item.description;
-    const quantitySold = item.quantity || 0;
+type CheckoutItemInput = {
+  id: string;
+  qty: number;
+};
 
-    // Recherchez le produit dans Sanity
-    const query = `*[name == $productName][0]`;
-    const product = await client.fetch(query, { productName });
+type SanityProduct = {
+  _id: string;
+  name: string;
+  price: number;
+  promotionDiscount?: number;
+  stock: number;
+};
 
-    if (product) {
-      // Mettez à jour le stock
-      const updatedStock = Math.max(0, product.stock - quantitySold);
-      await client.patch(product._id).set({ stock: updatedStock }).commit();
+function normalizeCheckoutItems(items: CheckoutItemInput[]) {
+  return items
+    .filter((item) => item && typeof item.id === "string")
+    .map((item) => ({
+      id: item.id,
+      qty: Math.max(0, Math.floor(Number(item.qty))),
+    }))
+    .filter((item) => item.id.length > 0 && item.qty > 0);
+}
 
-      console.log(`Stock mis à jour pour ${productName}: ${updatedStock}`);
-    } else {
-      if (productName !== "Frais de livraison")
-        console.log(`Produit non trouvé: ${productName}`);
+async function fetchProductsByIds(ids: string[]) {
+  const query = `*[_id in $ids]{
+    _id,
+    name,
+    price,
+    promotionDiscount,
+    stock
+  }`;
+  const products: SanityProduct[] = await client.fetch(query, { ids });
+  const productById = new Map(
+    products.map((product) => [product._id, product])
+  );
+  return productById;
+}
+
+export async function updateSanityStock(items: CheckoutItemInput[]) {
+  const normalizedItems = normalizeCheckoutItems(items);
+  if (normalizedItems.length === 0) {
+    console.log("Aucun produit a mettre a jour dans le stock");
+    return;
+  }
+
+  const ids = normalizedItems.map((item) => item.id);
+  const productById = await fetchProductsByIds(ids);
+
+  for (const item of normalizedItems) {
+    const product = productById.get(item.id);
+    if (!product) {
+      console.log(`Produit non trouvé: ${item.id}`);
+      continue;
     }
+
+    const updatedStock = Math.max(0, product.stock - item.qty);
+    await client.patch(product._id).set({ stock: updatedStock }).commit();
+
+    console.log(`Stock mis à jour pour ${product.name}: ${updatedStock}`);
   }
 }
 
 export async function createCheckoutSession(
-  panier: Item[],
-  formData: DeliveryFormData,
-  deliveryCost: number
-) {
+  panier: CheckoutItemInput[],
+  formData: DeliveryFormData
+): Promise<{ error?: string; url?: string }> {
   try {
     let codeDiscountPercent: Number | undefined = undefined;
 
@@ -67,41 +105,74 @@ export async function createCheckoutSession(
         )?.reductionPercent;
     }
 
+    const normalizedItems = normalizeCheckoutItems(panier);
+    if (normalizedItems.length === 0) {
+      return { error: "Panier vide ou invalide." };
+    }
+
+    const ids = normalizedItems.map((item) => item.id);
+    const productById = await fetchProductsByIds(ids);
+
+    const missingProducts = normalizedItems.filter(
+      (item) => !productById.has(item.id)
+    );
+    if (missingProducts.length > 0) {
+      return { error: "Certains produits sont introuvables." };
+    }
+
+    const insufficientStock = normalizedItems.filter((item) => {
+      const product = productById.get(item.id);
+      return product ? product.stock < item.qty : true;
+    });
+    if (insufficientStock.length > 0) {
+      return { error: "Certains produits ne sont plus en stock." };
+    }
+
+    let subtotalCents = 0;
+
+    const productLineItems = normalizedItems.map((item) => {
+      const product = productById.get(item.id) as SanityProduct;
+      const unitAmountRaw = Math.round(product.price * 100);
+      const unitAmountDiscounted = product.promotionDiscount
+        ? Math.round((unitAmountRaw * (100 - product.promotionDiscount)) / 100)
+        : unitAmountRaw;
+      const unitAmountFinal =
+        codeDiscountPercent !== undefined
+          ? Math.round(
+              unitAmountDiscounted * (1 - Number(codeDiscountPercent) / 100)
+            )
+          : unitAmountDiscounted;
+
+      subtotalCents += unitAmountDiscounted * item.qty;
+
+      return {
+        price_data: {
+          currency: "eur",
+          product_data: {
+            name: product.name,
+            metadata: {
+              productId: product._id,
+            },
+          },
+          unit_amount: unitAmountFinal,
+        },
+        quantity: item.qty,
+      };
+    });
+
+    const deliveryCostCents = subtotalCents > 5000 ? 0 : 499;
+
     const session = await stripe.checkout.sessions.create({
       payment_method_types: ["card", "link", "paypal"],
       line_items: [
-        ...panier.map((item) => {
-          //Calcul du prix unitaire
-
-          const unit_amount_raw = Number((item.type.price * 100).toFixed(0));
-
-          const unit_amount_discounted = item.type.promotionDiscount
-            ? (unit_amount_raw * (100 - item.type.promotionDiscount)) / 100
-            : unit_amount_raw;
-
-          const unit_amount_final =
-            codeDiscountPercent !== undefined
-              ? unit_amount_discounted * (1 - Number(codeDiscountPercent) / 100)
-              : unit_amount_discounted;
-
-          return {
-            price_data: {
-              currency: "eur",
-              product_data: {
-                name: item.type.name,
-              },
-              unit_amount: unit_amount_final, // Stripe utilise les centimes
-            },
-            quantity: item.qty,
-          };
-        }),
+        ...productLineItems,
         {
           price_data: {
             currency: "eur",
             product_data: {
               name: "Frais de livraison",
             },
-            unit_amount: deliveryCost * 100, // Stripe utilise les centimes
+            unit_amount: deliveryCostCents,
           },
           quantity: 1,
         },
@@ -117,10 +188,13 @@ export async function createCheckoutSession(
         city: formData.city,
         country: formData.country,
         postalCode: formData.postalCode,
+        items: JSON.stringify(normalizedItems),
       },
     } as Stripe.Checkout.SessionCreateParams);
-
-    return { url: session.url };
+    if (session.url) {
+      return { url: session.url };
+    }
+    return { error: "Impossible de créer la session de paiement." };
   } catch (error) {
     console.error("Erreur lors de la création de la session:", error);
     return { error: "Impossible de créer la session de paiement." };
@@ -149,12 +223,34 @@ export async function handleStripeWebhook(formData: FormData) {
           "Erreur lors de la création de la session de paiement. Metadata manquante.",
       };
     }
+
+    const itemsRaw = session.metadata.items;
+    if (!itemsRaw) {
+      return {
+        error: "Erreur lors de la création de la session. Produits manquants.",
+      };
+    }
+
+    let parsedItems: CheckoutItemInput[] = [];
+    try {
+      const parsed = JSON.parse(itemsRaw);
+      if (Array.isArray(parsed)) {
+        parsedItems = parsed;
+      }
+    } catch (error) {
+      console.error("Erreur lors du parsing des items de commande:", error);
+      return { error: "Erreur lors de la récupération des produits." };
+    }
+    if (parsedItems.length === 0) {
+      return { error: "Erreur lors de la récupération des produits." };
+    }
+
     // Récupérez les informations de la commande
     const lineItems = await stripe.checkout.sessions.listLineItems(session.id);
 
     // Mettez à jour le stock dans Sanity
     try {
-      await updateSanityStock(lineItems.data);
+      await updateSanityStock(parsedItems);
       console.log("Stock mis à jour dans Sanity");
     } catch (error) {
       console.error(
