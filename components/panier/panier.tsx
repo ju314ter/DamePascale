@@ -1,18 +1,16 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import { Button } from "../ui/button";
 import {
   Sheet,
   SheetClose,
   SheetContent,
-  SheetDescription,
   SheetFooter,
   SheetHeader,
   SheetTitle,
   SheetTrigger,
 } from "../ui/sheet";
-import { Edit, MinusCircle } from "lucide-react";
+import { Edit, MinusCircle, ShoppingBag } from "lucide-react";
 import { usePanier, Item } from "@/store/panier-store";
 import { verifyStock } from "@/sanity/lib/client";
 import { Textarea } from "../ui/textarea";
@@ -167,145 +165,222 @@ const PanierWrapper = () => {
     }
   };
 
+  const itemCount = panier.reduce((total, item) => total + item.qty, 0);
+
   return (
     <Sheet key={"right"}>
-      <SheetTrigger
-        className="relative flex justify-center items-center h-[50px] w-[40%]"
-        asChild
-      >
-        <div className="panier h-full flex justify-center items-center">
-          <Button className="relative">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="32"
-              height="32"
-              viewBox="0 0 24 24"
-              className="hover:fill-secondary"
-            >
-              <path d="M16 6v-2c0-2.209-1.791-4-4-4s-4 1.791-4 4v2h-5v18h18v-18h-5zm-7-2c0-1.654 1.346-3 3-3s3 1.346 3 3v2h-6v-2zm10 18h-14v-14h3v1.5c0 .276.224.5.5.5s.5-.224.5-.5v-1.5h6v1.5c0 .276.224.5.5.5s.5-.224.5-.5v-1.5h3v14z" />
-            </svg>
-            {panier && panier.length > 0 && (
-              <div className="absolute rounded-full bg-secondary w-4 h-4 right-[50%] bottom-0 flex justify-center items-end animate-scale origin-center">
-                <span className="text-xs">
-                  {panier.reduce((total, item) => total + item.qty, 0)}
-                </span>
-              </div>
-            )}
-          </Button>
-        </div>
+      <SheetTrigger asChild>
+        <button
+          className="relative bg-transparent border-none cursor-pointer p-2 group"
+          aria-label="Panier"
+        >
+          <ShoppingBag
+            className="w-6 h-6 text-olive-600 group-hover:text-bronze-500 transition-colors"
+            strokeWidth={1.5}
+          />
+          {itemCount > 0 && (
+            <span className="absolute -top-0.5 -right-0.5 w-5 h-5 rounded-full bg-bronze-500 text-cream-50 text-[0.65rem] font-medium flex items-center justify-center animate-scale origin-center">
+              {itemCount}
+            </span>
+          )}
+        </button>
       </SheetTrigger>
-      <SheetContent side="right" className="overflow-x-hidden">
+      <SheetContent
+        side="right"
+        className="overflow-y-auto overflow-x-hidden border-l-olive-200/30"
+        style={{ backgroundColor: "#fefcf7" }}
+      >
         <SheetHeader>
-          <SheetTitle className="text-xl">Panier</SheetTitle>
-          <SheetDescription>Retrouvez tout votre sélection.</SheetDescription>
+          <SheetTitle className="font-hand text-2xl text-olive-700">
+            Votre panier
+          </SheetTitle>
+          <p className="font-editorial text-sm text-olive-600/70">
+            Retrouvez toute votre sélection.
+          </p>
         </SheetHeader>
+
         {panier.length <= 0 && (
           <motion.div
-            initial={{ y: -300, opacity: 0 }}
+            initial={{ y: -20, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
-            className="p-4"
+            className="p-6 text-center"
           >
-            Vous n&apos;avez aucun objet dans le panier
+            <ShoppingBag
+              className="w-12 h-12 text-olive-300/50 mx-auto mb-4"
+              strokeWidth={1}
+            />
+            <p className="font-editorial text-sm text-olive-600/70">
+              Votre panier est vide
+            </p>
           </motion.div>
         )}
+
         {panier.length > 0 && (
           <>
-            <AnimatePresence>
-              {panier.map((item) => (
-                <PanierCard key={item.type._id} {...item} />
-              ))}
-            </AnimatePresence>
-            <SheetFooter className="flex flex-col justify-center items-center pt-10 gap-10">
+            <div className="px-2 py-4 space-y-3">
+              <AnimatePresence>
+                {panier.map((item) => (
+                  <PanierCard key={item.type._id} {...item} />
+                ))}
+              </AnimatePresence>
+            </div>
+
+            <SheetFooter className="flex flex-col justify-center items-center pt-6 gap-6 border-t border-olive-200/30">
               <form onSubmit={handleSubmit(onSubmit)} className="w-full">
                 <div className="flex flex-col items-start justify-end w-full gap-3">
+                  {/* Totals */}
                   <div className="flex justify-between items-center w-full">
-                    <span className="underline">Total</span>
-                    <span className="text-xl">
+                    <span className="font-editorial text-sm font-medium uppercase tracking-wider text-olive-800">
+                      Total
+                    </span>
+                    <span className="font-hand text-xl text-olive-800">
                       {(totalPanier + deliveryCost).toFixed(2)} €
                     </span>
                   </div>
                   <div className="flex justify-between items-center w-full">
-                    <span>Panier</span>
-                    <span>{totalPanier} €</span>
-                  </div>
-                  <div className="flex justify-between items-center w-full">
-                    <span>Livraison</span>
-                    <span>{deliveryCost ? `${deliveryCost}€` : "Offert"}</span>
-                  </div>
-                  {deliveryCost ? (
-                    <div className="flex justify-between items-center w-full italic">
-                      <span className="text-sm text-accent">
-                        Frais de port offerts au dessus de 50€
-                      </span>
-                    </div>
-                  ) : null}
-                  {/* Adresse de livraison */}
-                  <div className="flex justify-between items-center w-full">
-                    <span>Adresse de livraison</span>
-                    <span className="hover:text-accent">
-                      <Edit onClick={() => setEditAdress(!editAdress)} />
+                    <span className="font-editorial text-sm text-olive-600">
+                      Panier
+                    </span>
+                    <span className="font-editorial text-sm text-olive-700">
+                      {totalPanier} €
                     </span>
                   </div>
+                  <div className="flex justify-between items-center w-full">
+                    <span className="font-editorial text-sm text-olive-600">
+                      Livraison
+                    </span>
+                    <span className="font-editorial text-sm text-olive-700">
+                      {deliveryCost ? `${deliveryCost}€` : "Offert"}
+                    </span>
+                  </div>
+                  {deliveryCost ? (
+                    <p className="font-editorial text-xs text-bronze-500 italic w-full">
+                      Frais de port offerts au dessus de 50€
+                    </p>
+                  ) : null}
+
+                  {/* Delivery address */}
+                  <div className="flex justify-between items-center w-full pt-4 border-t border-olive-200/20">
+                    <span className="font-editorial text-sm font-medium uppercase tracking-wider text-olive-800">
+                      Adresse de livraison
+                    </span>
+                    <button
+                      type="button"
+                      className="bg-transparent border-none cursor-pointer p-1"
+                      onClick={() => setEditAdress(!editAdress)}
+                    >
+                      <Edit className="w-4 h-4 text-olive-600 hover:text-bronze-500 transition-colors" />
+                    </button>
+                  </div>
+
                   <AnimatePresence>
                     {editAdress && (
                       <motion.div
-                        className="flex flex-col gap-2 w-full"
+                        className="flex flex-col gap-3 w-full"
                         initial={{ y: 10, opacity: 0 }}
                         animate={{ y: 0, opacity: 1 }}
                         exit={{ y: 10, opacity: 0 }}
                         layout
                       >
                         <div>
-                          <Label htmlFor="fullName">Nom complet</Label>
-                          <Input {...register("fullName")} id="fullName" />
+                          <Label
+                            htmlFor="fullName"
+                            className="font-editorial text-xs uppercase tracking-wider text-olive-700"
+                          >
+                            Nom complet
+                          </Label>
+                          <Input
+                            {...register("fullName")}
+                            id="fullName"
+                            className="bg-transparent border-olive-300/40 font-editorial text-sm text-olive-700 focus:border-olive-500"
+                          />
                           {errors.fullName && (
-                            <span className="text-destructive">
+                            <span className="font-editorial text-xs text-red-600">
                               {errors.fullName.message}
                             </span>
                           )}
                         </div>
                         <div>
-                          <Label htmlFor="addressLine1">Adresse ligne 1</Label>
+                          <Label
+                            htmlFor="addressLine1"
+                            className="font-editorial text-xs uppercase tracking-wider text-olive-700"
+                          >
+                            Adresse ligne 1
+                          </Label>
                           <Input
                             {...register("addressLine1")}
                             id="addressLine1"
+                            className="bg-transparent border-olive-300/40 font-editorial text-sm text-olive-700 focus:border-olive-500"
                           />
                           {errors.addressLine1 && (
-                            <span className="text-destructive">
+                            <span className="font-editorial text-xs text-red-600">
                               {errors.addressLine1.message}
                             </span>
                           )}
                         </div>
                         <div>
-                          <Label htmlFor="addressLine2">Addresse ligne 2</Label>
+                          <Label
+                            htmlFor="addressLine2"
+                            className="font-editorial text-xs uppercase tracking-wider text-olive-700"
+                          >
+                            Adresse ligne 2
+                          </Label>
                           <Input
                             {...register("addressLine2")}
                             id="addressLine2"
+                            className="bg-transparent border-olive-300/40 font-editorial text-sm text-olive-700 focus:border-olive-500"
                           />
                         </div>
                         <div>
-                          <Label htmlFor="city">Ville</Label>
-                          <Input {...register("city")} id="city" />
+                          <Label
+                            htmlFor="city"
+                            className="font-editorial text-xs uppercase tracking-wider text-olive-700"
+                          >
+                            Ville
+                          </Label>
+                          <Input
+                            {...register("city")}
+                            id="city"
+                            className="bg-transparent border-olive-300/40 font-editorial text-sm text-olive-700 focus:border-olive-500"
+                          />
                           {errors.city && (
-                            <span className="text-destructive">
+                            <span className="font-editorial text-xs text-red-600">
                               {errors.city.message}
                             </span>
                           )}
                         </div>
                         <div>
-                          <Label htmlFor="postalCode">Code postal</Label>
-                          <Input {...register("postalCode")} id="postalCode" />
+                          <Label
+                            htmlFor="postalCode"
+                            className="font-editorial text-xs uppercase tracking-wider text-olive-700"
+                          >
+                            Code postal
+                          </Label>
+                          <Input
+                            {...register("postalCode")}
+                            id="postalCode"
+                            className="bg-transparent border-olive-300/40 font-editorial text-sm text-olive-700 focus:border-olive-500"
+                          />
                           {errors.postalCode && (
-                            <span className="text-destructive">
+                            <span className="font-editorial text-xs text-red-600">
                               {errors.postalCode.message}
                             </span>
                           )}
                         </div>
                         <div>
-                          <Label htmlFor="country">Pays</Label>
-                          <Input {...register("country")} id="country" />
+                          <Label
+                            htmlFor="country"
+                            className="font-editorial text-xs uppercase tracking-wider text-olive-700"
+                          >
+                            Pays
+                          </Label>
+                          <Input
+                            {...register("country")}
+                            id="country"
+                            className="bg-transparent border-olive-300/40 font-editorial text-sm text-olive-700 focus:border-olive-500"
+                          />
                           {errors.country && (
-                            <span className="text-destructive">
+                            <span className="font-editorial text-xs text-red-600">
                               {errors.country.message}
                             </span>
                           )}
@@ -313,32 +388,39 @@ const PanierWrapper = () => {
                       </motion.div>
                     )}
                   </AnimatePresence>
-                  <motion.div layout className="flex flex-col gap-2 w-full">
+
+                  <motion.div layout className="flex flex-col gap-2 w-full pt-2">
                     <Textarea
                       {...register("message")}
                       placeholder="Un message, une précision sur la commande ?"
-                      className="p-4 my-2 w-full"
+                      className="bg-transparent border-olive-300/40 font-editorial text-sm text-olive-700 focus:border-olive-500 placeholder:text-olive-300/60 resize-none"
                     />
                   </motion.div>
+
                   <motion.div layout className="flex flex-col gap-2 w-full">
                     <Input
                       {...register("codepromo")}
                       placeholder="Code promo ?"
-                      className="p-4 my-2 w-full"
+                      className="bg-transparent border-olive-300/40 font-editorial text-sm text-olive-700 focus:border-olive-500 placeholder:text-olive-300/60"
                       onBlur={checkCodePromo}
                     />
                   </motion.div>
+
                   {promotionMessage && (
-                    <span className="text-accent">{promotionMessage}</span>
+                    <span className="font-editorial text-xs text-bronze-500">
+                      {promotionMessage}
+                    </span>
                   )}
+
                   {Object.keys(errors).length > 0 && (
-                    <span className="text-destructive">
+                    <span className="font-editorial text-xs text-red-600">
                       Merci de compléter les champs obligatoires
                     </span>
                   )}
+
                   <SheetClose
                     asChild
-                    className="flex justify-center items-center w-[75%]"
+                    className="w-full pt-2"
                     onClick={(e) => {
                       if (Object.keys(errors).length > 0 || !isDirty) {
                         setEditAdress(true);
@@ -350,13 +432,12 @@ const PanierWrapper = () => {
                       }
                     }}
                   >
-                    <Button
+                    <button
                       type="submit"
-                      variant={"cta"}
-                      className="w-full py-4"
+                      className="w-full py-3 bg-olive-700 text-cream-50 font-editorial text-sm tracking-[0.15em] uppercase cursor-pointer border-none hover:bg-olive-800 transition-colors"
                     >
-                      Confirmer
-                    </Button>
+                      Confirmer la commande
+                    </button>
                   </SheetClose>
                 </div>
               </form>
@@ -374,46 +455,44 @@ const PanierCard = (item: Item) => {
   return (
     <motion.div
       key={item.type._id}
-      className="w-full flex items-center justify-between gap-5 my-2"
+      className="w-full flex items-center gap-4 p-3 rounded-sm bg-white/60 border border-olive-200/20"
       layout
       animate={{ x: 0, opacity: 1 }}
       exit={{ x: "100%", opacity: 0 }}
     >
-      <div>
+      <div className="flex-shrink-0">
         <ImageWithPlaceholder
           src={urlForImage(item.type.highlightedImg)}
           alt={item.type.name}
           width={50}
           height={50}
-          className="rounded-md"
+          className="rounded-sm"
         />
       </div>
-      <div>{item.type.name}</div>
-
-      {item.type.promotionDiscount && (
-        <div>
+      <div className="flex-1 min-w-0">
+        <p className="font-hand text-base text-olive-700 truncate">
+          {item.type.name}
+        </p>
+        <p className="font-editorial text-xs text-olive-600/70">
           {item.qty} x{" "}
-          {(item.type.price * (1 - item.type.promotionDiscount / 100)).toFixed(
-            2
-          )}
+          {item.type.promotionDiscount
+            ? (
+                item.type.price *
+                (1 - item.type.promotionDiscount / 100)
+              ).toFixed(2)
+            : item.type.price}
           €
-        </div>
-      )}
-      {!item.type.promotionDiscount && (
-        <div className="flex flex-wrap">
-          {item.qty} x {item.type.price}€
-        </div>
-      )}
-      <Button
-        variant={"destructive"}
-        size="sm"
+        </p>
+      </div>
+      <button
+        className="bg-transparent border-none cursor-pointer p-1 flex-shrink-0"
         onClick={(e) => {
           e.preventDefault();
-          +removeFromPanier(item.type);
+          removeFromPanier(item.type);
         }}
       >
-        <MinusCircle />
-      </Button>
+        <MinusCircle className="w-5 h-5 text-olive-400 hover:text-red-500 transition-colors" />
+      </button>
     </motion.div>
   );
 };

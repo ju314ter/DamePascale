@@ -1,6 +1,81 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
+@config "../tailwind.config.ts";
+
+@theme {
+  --font-serif-display: "Playfair Display", Georgia, serif;
+  --font-script: "Dancing Script", cursive;
+  --font-sans-elegant: "Cormorant Garamond", Georgia, serif;
+  --font-sans-modern: "Josefin Sans", sans-serif;
+  --font-hand: "Caveat", cursive;
+  --font-luxury: "Didot", "Bodoni MT", "Noto Serif Display", serif;
+  --font-body: "Lato", "Helvetica Neue", sans-serif;
+  --font-editorial: "Libre Baskerville", Baskerville, serif;
+  --font-geometric: "Outfit", sans-serif;
+  --font-art-nouveau: "EB Garamond", Garamond, serif;
+
+  /* Shared olive/bronze palette */
+  --color-olive-50: #f7f6f0;
+  --color-olive-100: #ede9d8;
+  --color-olive-200: #ddd6b4;
+  --color-olive-300: #c9be88;
+  --color-olive-400: #b8a865;
+  --color-olive-500: #a69650;
+  --color-olive-600: #8f7a40;
+  --color-olive-700: #735f35;
+  --color-olive-800: #604e30;
+  --color-olive-900: #52432c;
+
+  --color-bronze-50: #fdf6ee;
+  --color-bronze-100: #f8e6cc;
+  --color-bronze-200: #f0ca94;
+  --color-bronze-300: #e8aa5c;
+  --color-bronze-400: #e2923b;
+  --color-bronze-500: #d87825;
+  --color-bronze-600: #bf5c1e;
+  --color-bronze-700: #9f431c;
+  --color-bronze-800: #81361d;
+  --color-bronze-900: #6a2e1b;
+
+  --color-sage-50: #f4f7f4;
+  --color-sage-100: #e2ebe1;
+  --color-sage-200: #c6d7c4;
+  --color-sage-300: #9dba9a;
+  --color-sage-400: #72996e;
+  --color-sage-500: #517c4d;
+  --color-sage-600: #3e633b;
+  --color-sage-700: #334f31;
+  --color-sage-800: #2b4029;
+  --color-sage-900: #233523;
+
+  --color-cream-50: #fefcf7;
+  --color-cream-100: #fdf8ed;
+  --color-cream-200: #f9eed5;
+  --color-cream-300: #f3e0b5;
+  --color-cream-400: #eccc8b;
+  --color-cream-500: #e4b462;
+
+  --color-forest-50: #f2f5f0;
+  --color-forest-100: #dfe6db;
+  --color-forest-200: #bfcdb8;
+  --color-forest-300: #96ab8c;
+  --color-forest-400: #6e8963;
+  --color-forest-500: #536e49;
+  --color-forest-600: #405738;
+  --color-forest-700: #33452d;
+  --color-forest-800: #2a3826;
+  --color-forest-900: #1e2a1c;
+
+  --color-gold-50: #fefbe8;
+  --color-gold-100: #fef5c3;
+  --color-gold-200: #fee88a;
+  --color-gold-300: #fed447;
+  --color-gold-400: #fcc015;
+  --color-gold-500: #ecaa08;
+  --color-gold-600: #cc8304;
+  --color-gold-700: #a35d07;
+  --color-gold-800: #86490e;
+  --color-gold-900: #723c12;
+}
 
 @layer base {
   :root {
@@ -97,14 +172,22 @@
     --input: 0 0% 14.9%;
     --ring: 0 0% 83.1%;
   }
-}
 
-@layer base {
   * {
     @apply border-border;
   }
+
   body {
     @apply bg-background text-foreground;
+    --font-hand: var(--font-caveat), "Caveat", cursive;
+    --font-editorial: var(--font-libre-baskerville), "Libre Baskerville", Baskerville, serif;
+    --font-serif-display: var(--font-playfair-display), "Playfair Display", Georgia, serif;
+    --font-script: var(--font-dancing-script), "Dancing Script", cursive;
+    --font-sans-elegant: var(--font-cormorant-garamond), "Cormorant Garamond", Georgia, serif;
+    --font-sans-modern: var(--font-josefin-sans), "Josefin Sans", sans-serif;
+    --font-body: var(--font-lato), "Lato", "Helvetica Neue", sans-serif;
+    --font-geometric: var(--font-outfit), "Outfit", sans-serif;
+    --font-art-nouveau: var(--font-eb-garamond), "EB Garamond", Garamond, serif;
   }
 }
 
@@ -133,4 +216,16 @@
 .perspective-top {
   perspective-origin: top;
   perspective: 1500px;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }

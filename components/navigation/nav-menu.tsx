@@ -4,27 +4,22 @@ import { cn } from "@/lib/utils";
 import {
   NavigationMenu,
   NavigationMenuContent,
-  NavigationMenuIndicator,
   NavigationMenuItem,
   NavigationMenuLink,
   NavigationMenuList,
   NavigationMenuTrigger,
-  navigationMenuTriggerStyle,
 } from "@/components/ui/navigation-menu";
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
 import Image from "next/image";
-import { Menu } from "lucide-react";
 import {
   Sheet,
   SheetClose,
   SheetContent,
-  SheetDescription,
   SheetHeader,
   SheetTitle,
   SheetTrigger,
 } from "../ui/sheet";
-import { Button } from "../ui/button";
 import {
   Accordion,
   AccordionContent,
@@ -34,11 +29,8 @@ import {
 import { getBijouNavlinks } from "@/sanity/lib/bijoux/calls";
 import { getBlogPostsCategories } from "@/sanity/lib/blog/calls";
 
-export function NavMenu() {
+export function NavMenu({ rightSlot }: { rightSlot?: React.ReactNode }) {
   const [bijouxNavlink, setBijouxNavlink] = useState<
-    { title: string; href: string }[]
-  >([]);
-  const [amigurumisNavlink, setAmigurumisNavlink] = useState<
     { title: string; href: string }[]
   >([]);
   const [blogNavlink, setBlogNavlink] = useState<
@@ -52,12 +44,6 @@ export function NavMenu() {
     }
     fetchBijouxNavlinks();
 
-    // async function fetchAmigurumisNavlinks() {
-    //   const data = await getAmigurumiNavlinks();
-    //   setAmigurumisNavlink(data);
-    // }
-    // fetchAmigurumisNavlinks();
-
     async function fetchBlogNavlinks() {
       const data = await getBlogPostsCategories();
       setBlogNavlink(data);
@@ -66,260 +52,210 @@ export function NavMenu() {
   }, []);
 
   return (
-    <>
-      <NavigationMenu className="hidden lg:block">
-        <NavigationMenuList>
-          {/* <NavigationMenuItem>
-            <NavigationMenuTrigger className="text-xl">
-              Amigurumis
-            </NavigationMenuTrigger>
-            <NavigationMenuContent>
-              <div className="p-4 min-w-[500px] w-[40vw] flex">
-                <div className="flex-auto basis-6/12 h-full transition-all">
-                  <Link href="/boutique-amigurumi" passHref>
-                    <NavigationMenuLink asChild className="hover:bg-secondary">
-                      <div className="h-full p-2 rounded-sm flex flex-col items-start">
-                        <Image
-                          src="/daruma-group-nobg.png"
-                          className="self-center"
-                          alt="Amigurumis"
-                          width={150}
-                          height={150}
-                        />
-                        <div className="mb-2 mt-4 text-lg font-medium">
-                          Amigurumis
-                        </div>
-                        <p className="text-sm leading-tight text-muted-foreground">
-                          Des magnifiques oeuvres au crochet de l&apos;artisanat
-                          japonais.
-                        </p>
-                      </div>
-                    </NavigationMenuLink>
-                  </Link>
-                </div>
-                <div className="basis-6/12 hover:basis-8/12 h-full transition-all overflow-auto">
-                  {amigurumisNavlink.map((amigurumiLink) => (
-                    <ListItem
-                      className="hover:bg-secondary"
-                      key={amigurumiLink.title}
-                      title={amigurumiLink.title}
-                      href={`/${amigurumiLink.href}`}
-                    ></ListItem>
-                  ))}
-                </div>
-              </div>
-            </NavigationMenuContent>
-          </NavigationMenuItem> */}
-          <NavigationMenuItem>
-            <NavigationMenuTrigger className="text-xl">
-              Bijoux
-            </NavigationMenuTrigger>
-            <NavigationMenuContent>
-              <div className="p-4 min-w-[500px] w-[40vw] flex bg-transparent">
-                <div className="flex-auto basis-6/12 h-full transition-all">
-                  <Link href="/boutique-bijou" passHref>
-                    <NavigationMenuLink asChild className="hover:bg-secondary">
-                      <div className="h-full p-2 rounded-sm">
-                        <Image
-                          src="/fleur-nobg.png"
-                          alt="Amigurumis"
-                          width={100}
-                          height={100}
-                          className="mx-auto"
-                        />
-                        <div className="mb-2 mt-4 text-lg font-medium">
-                          Bijoux floraux
-                        </div>
-                        <p className="text-sm leading-tight text-muted-foreground">
-                          Des bijoux artisanaux confectionnés avec des fleurs
-                          naturelles.
-                        </p>
-                      </div>
-                    </NavigationMenuLink>
-                  </Link>
-                </div>
-                <div className="basis-6/12 hover:basis-8/12 h-full transition-all overflow-auto">
-                  {bijouxNavlink.map((bijouLink: any) => (
-                    <ListItem
-                      className="hover:bg-secondary"
-                      key={bijouLink.title}
-                      title={bijouLink.title}
-                      href={`/${bijouLink.href}`}
-                    ></ListItem>
-                  ))}
-                </div>
-              </div>
-            </NavigationMenuContent>
-          </NavigationMenuItem>
+    <nav
+      className="fixed top-0 left-0 right-0 z-50 backdrop-blur-sm"
+      style={{
+        backgroundColor: "rgba(254,252,247,0.92)",
+        borderBottom: "1px solid rgba(139,119,75,0.1)",
+      }}
+    >
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="flex items-center justify-between h-14 md:h-16">
+          {/* Logo */}
+          <Link
+            href="/"
+            className="font-hand text-2xl md:text-3xl text-olive-700 no-underline"
+          >
+            Dame Pascale
+          </Link>
 
-          <NavigationMenuItem>
-            <Link href={`/blog`}>
-              <NavigationMenuLink
-                asChild
-                className={navigationMenuTriggerStyle()}
-              >
-                <p className="text-xl">Collections</p>
-              </NavigationMenuLink>
-            </Link>
-          </NavigationMenuItem>
-
-          <NavigationMenuItem>
-            <Link href={`/contact`}>
-              <NavigationMenuLink
-                asChild
-                className={navigationMenuTriggerStyle()}
-              >
-                <p className="text-xl">Contact</p>
-              </NavigationMenuLink>
-            </Link>
-          </NavigationMenuItem>
-        </NavigationMenuList>
-        <NavigationMenuIndicator />
-      </NavigationMenu>
-      <div className="cursor-pointer block lg:hidden">
-        <Sheet key={"left"}>
-          <SheetTrigger className="relative flex justify-center items-center">
-            <Menu size={36} strokeWidth={1.5} />
-          </SheetTrigger>
-          <SheetContent side="left" className="overflow-y-auto">
-            <SheetHeader>
-              <SheetTitle className="text-xl flex justify-center items-center gap-2">
-                <Image
-                  src="/logo.png"
-                  alt="Pascale FEGER Logo"
-                  width={24}
-                  height={24}
-                  priority
-                />
-                Navigation menu
-              </SheetTitle>
-              <SheetDescription>
-                Explorez nos univers colorés et populaires.
-              </SheetDescription>
-            </SheetHeader>
-            <div className="pt-4">
-              <SheetClose asChild>
-                <Link
-                  href="/"
-                  className={cn(
-                    navigationMenuTriggerStyle(),
-                    "flex gap-2 w-full justify-center"
-                  )}
-                >
-                  <Button>Accueil</Button>
+          {/* Desktop navigation */}
+          <NavigationMenu className="hidden lg:flex">
+            <NavigationMenuList className="gap-1">
+              <NavigationMenuItem>
+                <Link href="/" legacyBehavior passHref>
+                  <NavigationMenuLink className="font-editorial text-[0.8rem] tracking-[0.15em] uppercase text-olive-600 hover:text-bronze-500 transition-colors px-4 py-2 cursor-pointer no-underline">
+                    Accueil
+                  </NavigationMenuLink>
                 </Link>
-              </SheetClose>
+              </NavigationMenuItem>
 
-              <SheetClose asChild>
-                <Link
-                  href="/contact"
-                  className={cn(
-                    navigationMenuTriggerStyle(),
-                    "flex gap-2 w-full justify-center"
-                  )}
-                >
-                  <Button>Contact</Button>
+              <NavigationMenuItem>
+                <NavigationMenuTrigger className="font-editorial text-[0.8rem] tracking-[0.15em] uppercase text-olive-600 hover:text-bronze-500 bg-transparent hover:bg-olive-100/40 data-[state=open]:bg-olive-100/40">
+                  Bijoux
+                </NavigationMenuTrigger>
+                <NavigationMenuContent>
+                  <div className="p-6 min-w-[480px] w-[40vw] flex gap-4">
+                    <div className="basis-5/12">
+                      <Link href="/boutique-bijou" passHref>
+                        <NavigationMenuLink asChild>
+                          <div className="p-3 rounded-sm hover:bg-olive-100/40 transition-colors cursor-pointer">
+                            <Image
+                              src="/fleur-nobg.png"
+                              alt="Bijoux floraux"
+                              width={80}
+                              height={80}
+                              className="mx-auto mb-3"
+                            />
+                            <div className="font-hand text-lg text-olive-700 mb-1">
+                              Bijoux floraux
+                            </div>
+                            <p className="font-editorial text-xs text-olive-600/80 leading-relaxed">
+                              Des bijoux artisanaux confectionnés avec des
+                              fleurs naturelles.
+                            </p>
+                          </div>
+                        </NavigationMenuLink>
+                      </Link>
+                    </div>
+                    <div className="basis-7/12 flex flex-col gap-0.5 border-l border-olive-200/30 pl-4">
+                      {bijouxNavlink.map((bijouLink) => (
+                        <Link
+                          key={bijouLink.title}
+                          href={`/${bijouLink.href}`}
+                          className="block px-3 py-2 font-editorial text-sm text-olive-600 hover:text-bronze-500 hover:bg-olive-100/30 rounded-sm transition-colors no-underline"
+                        >
+                          {bijouLink.title}
+                        </Link>
+                      ))}
+                    </div>
+                  </div>
+                </NavigationMenuContent>
+              </NavigationMenuItem>
+
+              <NavigationMenuItem>
+                <Link href="/blog" legacyBehavior passHref>
+                  <NavigationMenuLink className="font-editorial text-[0.8rem] tracking-[0.15em] uppercase text-olive-600 hover:text-bronze-500 transition-colors px-4 py-2 cursor-pointer no-underline">
+                    Collections
+                  </NavigationMenuLink>
                 </Link>
-              </SheetClose>
+              </NavigationMenuItem>
 
-              <Accordion type="single" collapsible className="w-full">
-                <AccordionItem value="item-1">
-                  <AccordionTrigger>
-                    <p>Amigurumis</p>
-                  </AccordionTrigger>
-                  <AccordionContent>
+              <NavigationMenuItem>
+                <Link href="/contact" legacyBehavior passHref>
+                  <NavigationMenuLink className="font-editorial text-[0.8rem] tracking-[0.15em] uppercase text-olive-600 hover:text-bronze-500 transition-colors px-4 py-2 cursor-pointer no-underline">
+                    Contact
+                  </NavigationMenuLink>
+                </Link>
+              </NavigationMenuItem>
+            </NavigationMenuList>
+          </NavigationMenu>
+
+          {/* Right side: optional slot (e.g. cart) + mobile burger */}
+          <div className="flex items-center gap-3">
+            {rightSlot}
+
+            {/* Mobile menu */}
+            <div className="lg:hidden">
+              <Sheet>
+                <SheetTrigger asChild>
+                  <button
+                    className="bg-transparent border-none cursor-pointer p-2"
+                    aria-label="Menu"
+                  >
+                    <div className="w-6 flex flex-col gap-1.5">
+                      <span className="block h-[1.5px] w-full bg-olive-600" />
+                      <span className="block h-[1.5px] w-full bg-olive-600" />
+                      <span className="block h-[1.5px] w-full bg-olive-600" />
+                    </div>
+                  </button>
+                </SheetTrigger>
+                <SheetContent
+                  side="left"
+                  className="overflow-y-auto border-r-olive-200/30"
+                  style={{ backgroundColor: "#fefcf7" }}
+                >
+                  <SheetHeader>
+                    <SheetTitle className="font-hand text-2xl text-olive-700 text-center">
+                      Dame Pascale
+                    </SheetTitle>
+                  </SheetHeader>
+
+                  <div className="pt-6 flex flex-col gap-1">
                     <SheetClose asChild>
-                      <Button
-                        asChild
-                        className="flex gap-2 justify-start w-full"
+                      <Link
+                        href="/"
+                        className="block py-3 px-4 font-editorial text-sm tracking-[0.12em] uppercase text-olive-600 hover:text-bronze-500 hover:bg-olive-100/30 transition-colors no-underline rounded-sm"
                       >
-                        <Link href="/boutique-amigurumi">Tous</Link>
-                      </Button>
+                        Accueil
+                      </Link>
                     </SheetClose>
-                    {amigurumisNavlink.map((link) => (
-                      <SheetClose asChild key={link.title}>
-                        <Button asChild className="flex gap-2 justify-start">
-                          <Link href={`/${link.href}`}>{link.title}</Link>
-                        </Button>
-                      </SheetClose>
-                    ))}
-                  </AccordionContent>
-                </AccordionItem>
-                <AccordionItem value="item-2">
-                  <AccordionTrigger>
-                    <p>Bijoux</p>
-                  </AccordionTrigger>
-                  <AccordionContent>
+
+                    <Accordion type="single" collapsible className="w-full">
+                      <AccordionItem
+                        value="bijoux"
+                        className="border-b-olive-200/20"
+                      >
+                        <AccordionTrigger className="font-editorial text-sm tracking-[0.12em] uppercase text-olive-600 hover:text-bronze-500 px-4 hover:no-underline">
+                          Bijoux
+                        </AccordionTrigger>
+                        <AccordionContent className="pl-4">
+                          <SheetClose asChild>
+                            <Link
+                              href="/boutique-bijou"
+                              className="block py-2.5 px-4 font-editorial text-sm text-olive-600 hover:text-bronze-500 transition-colors no-underline"
+                            >
+                              Tous les bijoux
+                            </Link>
+                          </SheetClose>
+                          {bijouxNavlink.map((link) => (
+                            <SheetClose asChild key={link.title}>
+                              <Link
+                                href={`/${link.href}`}
+                                className="block py-2.5 px-4 font-editorial text-sm text-olive-600 hover:text-bronze-500 transition-colors no-underline"
+                              >
+                                {link.title}
+                              </Link>
+                            </SheetClose>
+                          ))}
+                        </AccordionContent>
+                      </AccordionItem>
+
+                      <AccordionItem
+                        value="collections"
+                        className="border-b-olive-200/20"
+                      >
+                        <AccordionTrigger className="font-editorial text-sm tracking-[0.12em] uppercase text-olive-600 hover:text-bronze-500 px-4 hover:no-underline">
+                          Collections
+                        </AccordionTrigger>
+                        <AccordionContent className="pl-4">
+                          <SheetClose asChild>
+                            <Link
+                              href="/blog"
+                              className="block py-2.5 px-4 font-editorial text-sm text-olive-600 hover:text-bronze-500 transition-colors no-underline"
+                            >
+                              Toutes les collections
+                            </Link>
+                          </SheetClose>
+                          {blogNavlink.map((link) => (
+                            <SheetClose asChild key={link._id}>
+                              <Link
+                                href="/blog"
+                                className="block py-2.5 px-4 font-editorial text-sm text-olive-600 hover:text-bronze-500 transition-colors no-underline"
+                              >
+                                {link.title}
+                              </Link>
+                            </SheetClose>
+                          ))}
+                        </AccordionContent>
+                      </AccordionItem>
+                    </Accordion>
+
                     <SheetClose asChild>
-                      <Button
-                        asChild
-                        className="flex gap-2 justify-start w-full"
+                      <Link
+                        href="/contact"
+                        className="block py-3 px-4 font-editorial text-sm tracking-[0.12em] uppercase text-olive-600 hover:text-bronze-500 hover:bg-olive-100/30 transition-colors no-underline rounded-sm"
                       >
-                        <Link href="/boutique-bijou">Tous</Link>
-                      </Button>
+                        Contact
+                      </Link>
                     </SheetClose>
-                    {bijouxNavlink.map((link: any) => (
-                      <SheetClose asChild key={link.title}>
-                        <Button asChild className="flex gap-2 justify-start">
-                          <Link href={`/${link.href}`}>{link.title}</Link>
-                        </Button>
-                      </SheetClose>
-                    ))}
-                  </AccordionContent>
-                </AccordionItem>
-                <AccordionItem value="item-3">
-                  <AccordionTrigger>
-                    <p>Collections</p>
-                  </AccordionTrigger>
-                  <AccordionContent>
-                    <SheetClose asChild>
-                      <Button
-                        asChild
-                        className="flex gap-2 justify-start w-full"
-                      >
-                        <Link href="/blog">Tous</Link>
-                      </Button>
-                    </SheetClose>
-                    {blogNavlink.map((link) => (
-                      <SheetClose asChild key={link.title}>
-                        <Button asChild className="flex gap-2 justify-start">
-                          <Link href={`/blog`}>{link.title}</Link>
-                        </Button>
-                      </SheetClose>
-                    ))}
-                  </AccordionContent>
-                </AccordionItem>
-              </Accordion>
+                  </div>
+                </SheetContent>
+              </Sheet>
             </div>
-          </SheetContent>
-        </Sheet>
+          </div>
+        </div>
       </div>
-    </>
+    </nav>
   );
 }
-
-const ListItem = React.forwardRef<
-  React.ElementRef<"a">,
-  React.ComponentPropsWithoutRef<"a">
->(({ className, title, children, ...props }, ref) => {
-  return (
-    <div>
-      <NavigationMenuLink asChild>
-        <a
-          ref={ref}
-          className={cn(
-            "flex flex-col justify-center items-center select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground",
-            className
-          )}
-          {...props}
-        >
-          <div className="text-sm font-medium leading-none">{title}</div>
-          <p className="line-clamp-2 text-sm leading-snug text-muted-foreground">
-            {children}
-          </p>
-        </a>
-      </NavigationMenuLink>
-    </div>
-  );
-});
-ListItem.displayName = "ListItem";

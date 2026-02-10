@@ -1,28 +1,63 @@
 import type { Metadata } from "next";
 import "../globals.css";
 import { cn } from "@/lib/utils";
-import Image from "next/image";
 import { NavMenu } from "@/components/navigation/nav-menu";
-import Link from "next/link";
-import { Jacques_Francois, Italiana } from "next/font/google";
+import {
+  Caveat,
+  Cormorant_Garamond,
+  Dancing_Script,
+  EB_Garamond,
+  Josefin_Sans,
+  Lato,
+  Libre_Baskerville,
+  Outfit,
+  Playfair_Display,
+} from "next/font/google";
 import PanierWrapper from "@/components/panier/panier";
 import { Toaster } from "@/components/ui/toaster";
 import { Suspense } from "react";
 import { Loader } from "lucide-react";
-import { navigationMenuTriggerStyle } from "@/components/ui/navigation-menu";
-import { Button } from "@/components/ui/button";
 import RecaptchaProvider from "@/components/contact/recaptcha";
 import { Analytics } from "@vercel/analytics/react";
 
-const jaquesFrancoisFont = Jacques_Francois({
-  weight: "400",
+const caveatFont = Caveat({
   subsets: ["latin"],
-  variable: "--font-sans",
+  variable: "--font-caveat",
 });
-const italianaFont = Italiana({
-  weight: "400",
+const libreBaskervilleFont = Libre_Baskerville({
+  weight: ["400", "700"],
   subsets: ["latin"],
-  variable: "--font-serif",
+  variable: "--font-libre-baskerville",
+});
+const playfairDisplayFont = Playfair_Display({
+  subsets: ["latin"],
+  variable: "--font-playfair-display",
+});
+const dancingScriptFont = Dancing_Script({
+  subsets: ["latin"],
+  variable: "--font-dancing-script",
+});
+const cormorantGaramondFont = Cormorant_Garamond({
+  weight: ["300", "400", "500", "600", "700"],
+  subsets: ["latin"],
+  variable: "--font-cormorant-garamond",
+});
+const josefinSansFont = Josefin_Sans({
+  subsets: ["latin"],
+  variable: "--font-josefin-sans",
+});
+const latoFont = Lato({
+  weight: ["100", "300", "400", "700", "900"],
+  subsets: ["latin"],
+  variable: "--font-lato",
+});
+const outfitFont = Outfit({
+  subsets: ["latin"],
+  variable: "--font-outfit",
+});
+const ebGaramondFont = EB_Garamond({
+  subsets: ["latin"],
+  variable: "--font-eb-garamond",
 });
 
 export const metadata: Metadata = {
@@ -41,36 +76,19 @@ export default function RootLayout({
       <body
         className={cn(
           "bg-white font-sans",
-          jaquesFrancoisFont.variable,
-          italianaFont.variable
+          caveatFont.variable,
+          libreBaskervilleFont.variable,
+          playfairDisplayFont.variable,
+          dancingScriptFont.variable,
+          cormorantGaramondFont.variable,
+          josefinSansFont.variable,
+          latoFont.variable,
+          outfitFont.variable,
+          ebGaramondFont.variable,
         )}
       >
         <RecaptchaProvider>
-          <div className="fixed z-50 header flex w-full h-[50px] justify-center items-center bg-opacity-20 bg-white backdrop-blur-xl shadow-sm">
-            <div className="logo ml-2 absolute left-0">
-              <Link href="/" className="flex gap-2">
-                <Image
-                  src="/logo.png"
-                  alt="Pascale FEGER Logo"
-                  width={40}
-                  height={40}
-                  priority
-                />
-                <Button
-                  className={cn(
-                    navigationMenuTriggerStyle(),
-                    "text-xl hidden md:block"
-                  )}
-                >
-                  Accueil
-                </Button>
-              </Link>
-            </div>
-            <NavMenu />
-            <div className="options mr-2 flex justify-center items-center absolute right-0">
-              <PanierWrapper />
-            </div>
-          </div>
+          <NavMenu rightSlot={<PanierWrapper />} />
           <Suspense
             fallback={
               <div className="w-full h-full flex justify-center items-center">

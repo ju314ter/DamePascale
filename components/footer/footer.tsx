@@ -8,28 +8,33 @@ import Image from "next/image";
 
 const Footer: React.FC = () => {
   return (
-    <footer className="bg-[#ffe7c3] py-8 w-full flex flex-col md:flex-row justify-around items-center">
-      <div className="mx-auto md:w-full px-4 flex flex-col md:flex-row gap-4 justify-around items-start">
-        <div className="flex flex-col gap-2">
-          <span className="font-bold uppercase text-xl">Dame Pascale</span>
-          {/* <CustomHoveredLink
-            label="Livraison & paiements"
-            url="/infoCommande"
-            internalLink={true}
-          /> */}
+    <footer
+      className="py-10 md:py-14 w-full border-t border-olive-200/30"
+      style={{
+        backgroundImage:
+          "radial-gradient(ellipse at 20% 50%, rgba(227,207,165,0.15) 0%, transparent 60%), radial-gradient(ellipse at 80% 20%, rgba(200,180,140,0.1) 0%, transparent 50%), linear-gradient(175deg, #fefcf7 0%, #fdf8ed 50%, #fefcf7 100%)",
+      }}
+    >
+      <div className="max-w-6xl mx-auto px-6 flex flex-col md:flex-row gap-10 md:gap-4 justify-between items-start">
+        <div className="flex flex-col gap-3">
+          <span className="font-hand text-2xl text-olive-700">
+            Dame Pascale
+          </span>
           <CustomHoveredLink
             label="Conditions de vente"
             url="/cgv"
             internalLink={true}
           />
           <CustomHoveredLink
-            label="Mention légales"
+            label="Mentions légales"
             url="/legals"
             internalLink={true}
           />
         </div>
-        <div className="flex flex-col gap-2">
-          <span className="font-bold uppercase text-xl">Informations</span>
+        <div className="flex flex-col gap-3">
+          <span className="font-editorial text-sm font-medium uppercase tracking-[0.15em] text-olive-800">
+            Informations
+          </span>
           <CustomHoveredLink
             label="Contactez moi"
             url="/contact"
@@ -51,10 +56,12 @@ const Footer: React.FC = () => {
             internalLink={false}
           />
         </div>
-        <div className="flex flex-col gap-2">
+        <div className="flex flex-col gap-6">
           <div>
-            <span className="font-bold uppercase text-xl">Paiement</span>
-            <div className="flex gap-2 p-4">
+            <span className="font-editorial text-sm font-medium uppercase tracking-[0.15em] text-olive-800">
+              Paiement
+            </span>
+            <div className="flex gap-3 pt-3">
               <Image src="/paypal.png" alt="paypal" width={50} height={30} />
               <Image src="/visa.png" alt="visa" width={50} height={30} />
               <Image
@@ -66,17 +73,19 @@ const Footer: React.FC = () => {
             </div>
           </div>
           <div>
-            <span className="font-bold uppercase text-xl">Réseaux sociaux</span>
-            <div className="flex gap-2 p-4 cursor-pointer">
+            <span className="font-editorial text-sm font-medium uppercase tracking-[0.15em] text-olive-800">
+              Réseaux sociaux
+            </span>
+            <div className="flex gap-3 pt-3">
               <Link
                 href="https://www.facebook.com/p/Mes-petites-cr%C3%A9a-ch%C3%A9ries-100057342554163/"
                 target="_blank"
                 rel="noreferrer"
               >
                 <Facebook
-                  className="hover:text-primary"
-                  width={50}
-                  height={30}
+                  className="text-olive-600 hover:text-bronze-500 transition-colors"
+                  width={24}
+                  height={24}
                 />
               </Link>
               <Link
@@ -85,14 +94,19 @@ const Footer: React.FC = () => {
                 rel="noreferrer"
               >
                 <Instagram
-                  className="hover:text-primary"
-                  width={50}
-                  height={30}
+                  className="text-olive-600 hover:text-bronze-500 transition-colors"
+                  width={24}
+                  height={24}
                 />
               </Link>
             </div>
           </div>
         </div>
+      </div>
+      <div className="max-w-6xl mx-auto px-6 mt-10 pt-6 border-t border-olive-200/20">
+        <p className="font-editorial text-xs text-olive-600/70 text-center">
+          &copy; 2026 Dame Pascale — Tous droits réservés
+        </p>
       </div>
     </footer>
   );
@@ -115,9 +129,19 @@ const CustomHoveredLink = ({
       onMouseLeave={() => setHover(false)}
     >
       {internalLink ? (
-        <Link href={url}>{label}</Link>
+        <Link
+          href={url}
+          className="font-editorial text-sm text-olive-600 hover:text-bronze-500 transition-colors no-underline"
+        >
+          {label}
+        </Link>
       ) : (
-        <a href={url} target="_blank" rel="noreferrer">
+        <a
+          href={url}
+          target="_blank"
+          rel="noreferrer"
+          className="font-editorial text-sm text-olive-600 hover:text-bronze-500 transition-colors no-underline"
+        >
           {label}
         </a>
       )}
@@ -125,7 +149,7 @@ const CustomHoveredLink = ({
         initial={{ scaleX: 0 }}
         animate={{ scaleX: hover ? 1 : 0 }}
         transition={{ duration: 0.3 }}
-        className="absolute bg-primary bottom-0 left-0 w-full h-0.5 z-10 pointer-events-none origin-left"
+        className="absolute bg-bronze-400 bottom-0 left-0 w-full h-[1px] z-10 pointer-events-none origin-left"
       />
     </span>
   );
