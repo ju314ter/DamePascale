@@ -1,7 +1,7 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
-import { motion } from "framer-motion";
+import { useEffect, useMemo, useRef, useState } from "react";
+import { motion, useScroll, useTransform } from "framer-motion";
 import { usePathname, useSearchParams } from "next/navigation";
 import { Bijou, BijouFilters, getBijoux } from "@/sanity/lib/bijoux/calls";
 import FiltresBijouWrapper from "@/components/filtres/filtres-bijou-wrapper";
@@ -16,6 +16,71 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
+
+/* ──────────────────────────── SVG Decorations ──────────────────────────── */
+
+function PressedLeaf({ className = "" }: { className?: string }) {
+  return (
+    <svg viewBox="0 0 80 120" fill="none" className={className} xmlns="http://www.w3.org/2000/svg">
+      <path d="M40 10 C20 30, 10 60, 40 110 C70 60, 60 30, 40 10Z" stroke="currentColor" strokeWidth="1.2" fill="none" />
+      <path d="M40 10 L40 110" stroke="currentColor" strokeWidth="0.8" />
+      <path d="M40 35 L25 25" stroke="currentColor" strokeWidth="0.6" />
+      <path d="M40 50 L22 42" stroke="currentColor" strokeWidth="0.6" />
+      <path d="M40 65 L24 60" stroke="currentColor" strokeWidth="0.6" />
+      <path d="M40 35 L55 25" stroke="currentColor" strokeWidth="0.6" />
+      <path d="M40 50 L58 42" stroke="currentColor" strokeWidth="0.6" />
+      <path d="M40 65 L56 60" stroke="currentColor" strokeWidth="0.6" />
+    </svg>
+  );
+}
+
+function BranchSprig({ className = "" }: { className?: string }) {
+  return (
+    <svg viewBox="0 0 120 60" fill="none" className={className} xmlns="http://www.w3.org/2000/svg">
+      <path d="M10 50 Q40 45, 60 30 Q80 15, 110 10" stroke="currentColor" strokeWidth="1" />
+      <path d="M30 47 C25 38, 28 30, 35 28" stroke="currentColor" strokeWidth="0.7" />
+      <path d="M50 36 C43 28, 46 20, 54 18" stroke="currentColor" strokeWidth="0.7" />
+      <path d="M70 24 C64 18, 68 10, 76 9" stroke="currentColor" strokeWidth="0.7" />
+      <path d="M90 15 C86 10, 90 4, 96 5" stroke="currentColor" strokeWidth="0.7" />
+    </svg>
+  );
+}
+
+function PressedFlower({ className = "" }: { className?: string }) {
+  return (
+    <svg viewBox="0 0 100 100" fill="none" className={className} xmlns="http://www.w3.org/2000/svg">
+      <circle cx="50" cy="50" r="6" stroke="currentColor" strokeWidth="1" />
+      <ellipse cx="50" cy="30" rx="8" ry="16" stroke="currentColor" strokeWidth="0.8" transform="rotate(0 50 50)" />
+      <ellipse cx="50" cy="30" rx="8" ry="16" stroke="currentColor" strokeWidth="0.8" transform="rotate(72 50 50)" />
+      <ellipse cx="50" cy="30" rx="8" ry="16" stroke="currentColor" strokeWidth="0.8" transform="rotate(144 50 50)" />
+      <ellipse cx="50" cy="30" rx="8" ry="16" stroke="currentColor" strokeWidth="0.8" transform="rotate(216 50 50)" />
+      <ellipse cx="50" cy="30" rx="8" ry="16" stroke="currentColor" strokeWidth="0.8" transform="rotate(288 50 50)" />
+    </svg>
+  );
+}
+
+function SmallBlossom({ className = "" }: { className?: string }) {
+  return (
+    <svg viewBox="0 0 60 60" fill="none" className={className} xmlns="http://www.w3.org/2000/svg">
+      <circle cx="30" cy="30" r="4" stroke="currentColor" strokeWidth="1" />
+      <ellipse cx="30" cy="18" rx="5" ry="10" stroke="currentColor" strokeWidth="0.7" />
+      <ellipse cx="30" cy="18" rx="5" ry="10" stroke="currentColor" strokeWidth="0.7" transform="rotate(90 30 30)" />
+      <ellipse cx="30" cy="18" rx="5" ry="10" stroke="currentColor" strokeWidth="0.7" transform="rotate(180 30 30)" />
+      <ellipse cx="30" cy="18" rx="5" ry="10" stroke="currentColor" strokeWidth="0.7" transform="rotate(270 30 30)" />
+    </svg>
+  );
+}
+
+const pageBackground = {
+  backgroundImage: `
+    radial-gradient(ellipse at 30% 70%, rgba(226,146,59,0.06) 0%, transparent 50%),
+    radial-gradient(ellipse at 75% 25%, rgba(157,186,154,0.08) 0%, transparent 50%),
+    repeating-conic-gradient(rgba(139,119,75,0.015) 0% 25%, transparent 0% 50%) 0 0 / 3px 3px,
+    linear-gradient(170deg, #fefcf7 0%, #fdf8ed 30%, #f9eed5 70%, #fefcf7 100%)
+  `,
+};
+
+/* ─────────────────────────────────────────────────────────────────────────── */
 
 const cardVariants = {
   hidden: { opacity: 0, y: 14 },
@@ -36,6 +101,12 @@ export default function BoutiqueBijouPage() {
   const [itemsPerPage, setItemsPerPage] = useState(20);
   const [currentPage, setCurrentPage] = useState(1);
   const [mobileFilterOpen, setMobileFilterOpen] = useState(false);
+  const mainContentRef = useRef<HTMLDivElement>(null);
+
+  const { scrollYProgress } = useScroll();
+  const ySlow = useTransform(scrollYProgress, [0, 1], [0, -55]);
+  const yMed  = useTransform(scrollYProgress, [0, 1], [0, -100]);
+  const yFast = useTransform(scrollYProgress, [0, 1], [0, -150]);
 
   async function fetchBijoux(filters?: BijouFilters) {
     const data = filters ? await getBijoux(filters) : await getBijoux();
@@ -114,7 +185,31 @@ export default function BoutiqueBijouPage() {
   }
 
   return (
-    <div className="min-h-screen" style={{ backgroundColor: "#fafaf8" }}>
+    <div className="min-h-screen relative" style={pageBackground}>
+      {/* ── Botanical parallax decorations (fixed layer, no overflow needed) ── */}
+      <div className="fixed inset-0 pointer-events-none" aria-hidden style={{ zIndex: 0 }}>
+        <motion.div style={{ y: ySlow }} className="absolute top-[8%] right-0 w-32 md:w-48">
+          <PressedLeaf className="w-full text-olive-400/[0.12] rotate-[18deg]" />
+        </motion.div>
+        <motion.div style={{ y: yFast }} className="absolute top-[22%] left-0 w-36 md:w-52">
+          <BranchSprig className="w-full text-sage-400/[0.10] -rotate-[6deg]" />
+        </motion.div>
+        <motion.div style={{ y: yMed }} className="absolute top-[40%] right-[2%] w-16 md:w-22">
+          <PressedFlower className="w-full text-bronze-400/[0.09] rotate-[12deg]" />
+        </motion.div>
+        <motion.div style={{ y: ySlow }} className="absolute top-[52%] left-[1%] w-14 md:w-20">
+          <SmallBlossom className="w-full text-olive-300/[0.10] -rotate-[15deg]" />
+        </motion.div>
+        <motion.div style={{ y: yFast }} className="absolute top-[64%] right-0 w-28 md:w-40">
+          <PressedLeaf className="w-full text-sage-300/[0.09] -rotate-[25deg]" />
+        </motion.div>
+        <motion.div style={{ y: yMed }} className="absolute top-[76%] left-0 w-40 md:w-56">
+          <BranchSprig className="w-full text-olive-400/[0.10] rotate-[5deg]" />
+        </motion.div>
+        <motion.div style={{ y: ySlow }} className="absolute top-[88%] right-[5%] w-12 md:w-16">
+          <SmallBlossom className="w-full text-bronze-300/[0.08] rotate-[30deg]" />
+        </motion.div>
+      </div>
 
       {/* ──────────────────────────────────────────────────────────────────── */}
       {/* Hero Banner                                                          */}
@@ -185,15 +280,16 @@ export default function BoutiqueBijouPage() {
       {/* ──────────────────────────────────────────────────────────────────── */}
       {/* Main Content                                                         */}
       {/* ──────────────────────────────────────────────────────────────────── */}
-      <div className="max-w-7xl mx-auto px-2 sm:px-3 py-10">
+      <div ref={mainContentRef} className="max-w-7xl mx-auto px-2 sm:px-3 py-10">
         <div className="flex gap-8 items-start">
 
           {/* ── Desktop Sidebar ──────────────────────────────────────────── */}
-          <aside className="hidden lg:block w-[320px] flex-shrink-0">
+          <aside className="hidden lg:block w-[320px] flex-shrink-0 self-stretch">
             <div className="sticky top-[88px]">
               <FiltresBijouWrapper
                 urlParamsArray={urlParamsArray}
                 handleFiltersChange={handleFiltersChanged}
+                scrollTarget={mainContentRef}
                 variant="card"
               />
             </div>
@@ -229,7 +325,7 @@ export default function BoutiqueBijouPage() {
                   </SheetTrigger>
                   <SheetContent
                     side="left"
-                    className="w-[85vw] sm:w-[360px] p-4 overflow-y-auto [&>button:last-child]:hidden"
+                    className="w-[85vw] sm:w-[360px] p-0 flex flex-col overflow-hidden [&>button:last-child]:hidden"
                   >
                     <SheetHeader className="sr-only">
                       <SheetTitle>Filtres</SheetTitle>
@@ -238,7 +334,8 @@ export default function BoutiqueBijouPage() {
                       urlParamsArray={urlParamsArray}
                       handleFiltersChange={handleFiltersChanged}
                       onClose={() => setMobileFilterOpen(false)}
-                      variant="card"
+                      scrollTarget={mainContentRef}
+                      variant="flush"
                     />
                   </SheetContent>
                 </Sheet>

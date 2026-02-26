@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { Slider } from "../ui/slider";
 import {
   SubmitHandler,
@@ -9,7 +9,13 @@ import {
   useWatch,
 } from "react-hook-form";
 import { CheckboxFilters } from "../ui/checkbox";
-import { X, ChevronDown } from "lucide-react";
+import { X } from "lucide-react";
+import {
+  Accordion,
+  AccordionItem,
+  AccordionTrigger,
+  AccordionContent,
+} from "@/components/ui/accordion";
 import {
   BijouFilters,
   getBijouxCategories,
@@ -21,6 +27,7 @@ interface FiltresBijouProps {
   handleFiltersChange: (filters: BijouFilters) => void;
   onClose?: () => void;
   variant?: "card" | "flush";
+  scrollTarget?: React.RefObject<HTMLElement | null>;
   urlParamsArray: {
     categories: string[];
     fleurs: string[];
@@ -40,6 +47,7 @@ const FiltresBijouxWrapper = ({
   handleFiltersChange,
   onClose,
   variant = "card",
+  scrollTarget,
   urlParamsArray,
 }: FiltresBijouProps) => {
   const { register, handleSubmit, setValue, control, watch, getValues } =
@@ -127,7 +135,7 @@ const FiltresBijouxWrapper = ({
     };
     handleFiltersChange(newFilters);
     onClose?.();
-    window.scrollTo({ top: 0, behavior: "smooth" });
+    scrollTarget?.current?.scrollIntoView({ behavior: "smooth" });
   };
 
   const { fields: fieldCategory } = useFieldArray({ name: "categories", control });
@@ -154,20 +162,10 @@ const FiltresBijouxWrapper = ({
     );
   }
 
-  const [openSections, setOpenSections] = useState({
-    categories: false,
-    matieres: false,
-    fleurs: false,
-    prix: true,
-  });
-
-  function toggleSection(key: keyof typeof openSections) {
-    setOpenSections((prev) => ({ ...prev, [key]: !prev[key] }));
-  }
 
   const outerClass =
     variant === "card"
-      ? "bg-white rounded-xl border border-olive-100/70 shadow-sm overflow-hidden"
+      ? "bg-white rounded-xl border border-olive-100/70 shadow-sm overflow-hidden flex flex-col max-h-[calc(100vh-88px)]"
       : "bg-white overflow-hidden h-full flex flex-col";
 
   return (
@@ -212,168 +210,124 @@ const FiltresBijouxWrapper = ({
       {/* ── Form ────────────────────────────────────────────────────────── */}
       <form
         onSubmit={handleSubmit(onSubmit)}
-        className={variant === "flush" ? "flex flex-col flex-1 overflow-y-auto" : ""}
+        className="flex flex-col flex-1 min-h-0"
       >
-        <div className="px-3 py-2.5 space-y-2.5">
+        <div className="flex-1 min-h-0 overflow-y-auto filter-scrollbar">
+          <Accordion type="single" collapsible>
 
-          {/* Catégories */}
-          {fieldCategory.length > 0 && (
-            <div className="border-b border-olive-100/60 pb-4">
-              <button
-                type="button"
-                onClick={() => toggleSection("categories")}
-                className="w-full flex items-center justify-between group/toggle"
-              >
-                <span className="font-editorial text-[0.62rem] font-bold tracking-[0.18em] uppercase text-olive-700">
+            {/* Catégories */}
+            {fieldCategory.length > 0 && (
+              <AccordionItem value="categories" className="border-b border-olive-100/60 px-3">
+                <AccordionTrigger className="py-2.5 cursor-pointer font-editorial text-[0.62rem] font-bold tracking-[0.18em] uppercase text-olive-700 hover:no-underline [&>svg]:h-3 [&>svg]:w-3 [&>svg]:text-olive-400">
                   Catégories
-                </span>
-                <ChevronDown
-                  size={13}
-                  className={`text-olive-400 transition-transform duration-200 ${openSections.categories ? "rotate-180" : ""}`}
-                />
-              </button>
-              {openSections.categories && (
-                <div className="space-y-1 mt-2">
-                  {fieldCategory.map((category: any, i) => (
-                    <div key={category._id} className="flex items-center gap-2">
+                </AccordionTrigger>
+                <AccordionContent className="pb-3 pt-0">
+                  <div className="grid grid-cols-2 gap-x-2 gap-y-1">
+                    {fieldCategory.map((category: any, i) => (
                       <CheckboxFilters
+                        key={category._id}
                         id={`cat-${category._id}`}
                         checked={watchedFields.categories?.[i]?.checked ?? false}
                         {...register(`categories.${i}._id`)}
                         onCheckedChange={(checked: boolean) => {
-                          setValue(`categories.${i}.checked`, checked, {
-                            shouldDirty: true,
-                          });
+                          setValue(`categories.${i}.checked`, checked, { shouldDirty: true });
                         }}
                       >
                         <span className="font-editorial text-[0.75rem] text-olive-600">
                           {category.title}
                         </span>
                       </CheckboxFilters>
-                    </div>
-                  ))}
-                </div>
-              )}
-            </div>
-          )}
+                    ))}
+                  </div>
+                </AccordionContent>
+              </AccordionItem>
+            )}
 
-          {/* Matières */}
-          {fieldMatiere.length > 0 && (
-            <div className="border-b border-olive-100/60 pb-4">
-              <button
-                type="button"
-                onClick={() => toggleSection("matieres")}
-                className="w-full flex items-center justify-between"
-              >
-                <span className="font-editorial text-[0.62rem] font-bold tracking-[0.18em] uppercase text-olive-700">
+            {/* Matières */}
+            {fieldMatiere.length > 0 && (
+              <AccordionItem value="matieres" className="border-b border-olive-100/60 px-3">
+                <AccordionTrigger className="py-2.5 cursor-pointer cursor-pointer font-editorial text-[0.62rem] font-bold tracking-[0.18em] uppercase text-olive-700 hover:no-underline [&>svg]:h-3 [&>svg]:w-3 [&>svg]:text-olive-400">
                   Matières
-                </span>
-                <ChevronDown
-                  size={13}
-                  className={`text-olive-400 transition-transform duration-200 ${openSections.matieres ? "rotate-180" : ""}`}
-                />
-              </button>
-              {openSections.matieres && (
-                <div className="space-y-1 mt-2">
-                  {fieldMatiere.map((matiere: any, i) => (
-                    <div key={matiere._id} className="flex items-center gap-2">
+                </AccordionTrigger>
+                <AccordionContent className="pb-3 pt-0">
+                  <div className="grid grid-cols-2 gap-x-2 gap-y-1">
+                    {fieldMatiere.map((matiere: any, i) => (
                       <CheckboxFilters
+                        key={matiere._id}
                         id={`mat-${matiere._id}`}
                         checked={watchedFields.matieres?.[i]?.checked ?? false}
                         {...register(`matieres.${i}._id`)}
                         onCheckedChange={(checked: boolean) => {
-                          setValue(`matieres.${i}.checked`, checked, {
-                            shouldDirty: true,
-                          });
+                          setValue(`matieres.${i}.checked`, checked, { shouldDirty: true });
                         }}
                       >
                         <span className="font-editorial text-[0.75rem] text-olive-600">
                           {matiere.title}
                         </span>
                       </CheckboxFilters>
-                    </div>
-                  ))}
-                </div>
-              )}
-            </div>
-          )}
+                    ))}
+                  </div>
+                </AccordionContent>
+              </AccordionItem>
+            )}
 
-          {/* Fleurs */}
-          {fieldFleur.length > 0 && (
-            <div className="border-b border-olive-100/60 pb-4">
-              <button
-                type="button"
-                onClick={() => toggleSection("fleurs")}
-                className="w-full flex items-center justify-between"
-              >
-                <span className="font-editorial text-[0.62rem] font-bold tracking-[0.18em] uppercase text-olive-700">
+            {/* Fleurs */}
+            {fieldFleur.length > 0 && (
+              <AccordionItem value="fleurs" className="border-b border-olive-100/60 px-3">
+                <AccordionTrigger className="py-2.5 cursor-pointer font-editorial text-[0.62rem] font-bold tracking-[0.18em] uppercase text-olive-700 hover:no-underline [&>svg]:h-3 [&>svg]:w-3 [&>svg]:text-olive-400">
                   Fleurs
-                </span>
-                <ChevronDown
-                  size={13}
-                  className={`text-olive-400 transition-transform duration-200 ${openSections.fleurs ? "rotate-180" : ""}`}
-                />
-              </button>
-              {openSections.fleurs && (
-                <div className="space-y-1 mt-2">
-                  {fieldFleur.map((fleur: any, i) => (
-                    <div key={fleur._id} className="flex items-center gap-2">
+                </AccordionTrigger>
+                <AccordionContent className="pb-3 pt-0">
+                  <div className="grid grid-cols-2 gap-x-2 gap-y-1">
+                    {fieldFleur.map((fleur: any, i) => (
                       <CheckboxFilters
+                        key={fleur._id}
                         id={`fleur-${fleur._id}`}
                         checked={watchedFields.fleurs?.[i]?.checked ?? false}
                         {...register(`fleurs.${i}._id`)}
                         onCheckedChange={(checked: boolean) => {
-                          setValue(`fleurs.${i}.checked`, checked, {
-                            shouldDirty: true,
-                          });
+                          setValue(`fleurs.${i}.checked`, checked, { shouldDirty: true });
                         }}
                       >
                         <span className="font-editorial text-[0.75rem] text-olive-600">
                           {fleur.title}
                         </span>
                       </CheckboxFilters>
-                    </div>
-                  ))}
-                </div>
-              )}
-            </div>
-          )}
-
-          {/* Prix */}
-          <div>
-            <button
-              type="button"
-              className="w-full flex items-center justify-between"
-            >
-              <span className="font-editorial text-[0.62rem] font-bold tracking-[0.18em] uppercase text-olive-700">
-                Prix
-              </span>
-            </button>
-            {openSections.prix && (
-              <div className="px-1 mt-4">
-                <Slider
-                  min={0}
-                  max={100}
-                  step={1}
-                  defaultValue={[getValues("price")[0], getValues("price")[1]]}
-                  onValueChange={handleSliderChange}
-                />
-                <div className="flex justify-between mt-2.5">
-                  <span className="font-editorial text-[0.7rem] text-olive-500">
-                    {watch("price")[0]}€
-                  </span>
-                  <span className="font-editorial text-[0.7rem] text-olive-500">
-                    {watch("price")[1]}€
-                  </span>
-                </div>
-              </div>
+                    ))}
+                  </div>
+                </AccordionContent>
+              </AccordionItem>
             )}
-          </div>
 
+          </Accordion>
+
+          {/* Prix — always visible */}
+          <div className="px-3 py-2.5 border-t border-olive-100/60">
+            <span className="font-editorial text-[0.62rem] font-bold tracking-[0.18em] uppercase text-olive-700">
+              Prix
+            </span>
+            <div className="px-1 mt-4">
+              <Slider
+                min={0}
+                max={100}
+                step={1}
+                defaultValue={[getValues("price")[0], getValues("price")[1]]}
+                onValueChange={handleSliderChange}
+              />
+              <div className="flex justify-between mt-2.5">
+                <span className="font-editorial text-[0.7rem] text-olive-500">
+                  {watch("price")[0]}€
+                </span>
+                <span className="font-editorial text-[0.7rem] text-olive-500">
+                  {watch("price")[1]}€
+                </span>
+              </div>
+            </div>
+          </div>
         </div>
 
         {/* Apply button */}
-        <div className="px-3 pb-3">
+        <div className="px-3 pb-3 flex-shrink-0">
           <button
             type="submit"
             className="w-full py-2.5 bg-olive-700 text-white font-editorial text-[0.62rem] tracking-[0.2em] uppercase rounded-lg hover:bg-olive-800 active:scale-[0.99] transition-all"

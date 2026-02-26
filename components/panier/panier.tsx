@@ -10,7 +10,7 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "../ui/sheet";
-import { Edit, MinusCircle, ShoppingBag } from "lucide-react";
+import { Edit, MinusCircle, ShoppingCart } from "lucide-react";
 import { usePanier, Item } from "@/store/panier-store";
 import { verifyStock } from "@/sanity/lib/client";
 import { Textarea } from "../ui/textarea";
@@ -174,7 +174,7 @@ const PanierWrapper = () => {
           className="relative bg-transparent border-none cursor-pointer p-2 group"
           aria-label="Panier"
         >
-          <ShoppingBag
+          <ShoppingCart
             className="w-6 h-6 text-olive-600 group-hover:text-bronze-500 transition-colors"
             strokeWidth={1.5}
           />
@@ -205,7 +205,7 @@ const PanierWrapper = () => {
             animate={{ y: 0, opacity: 1 }}
             className="p-6 text-center"
           >
-            <ShoppingBag
+            <ShoppingCart
               className="w-12 h-12 text-olive-300/50 mx-auto mb-4"
               strokeWidth={1}
             />

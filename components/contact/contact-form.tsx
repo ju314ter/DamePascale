@@ -1,13 +1,8 @@
 "use client";
 
 import { useForm } from "react-hook-form";
-import { Button } from "../ui/button";
-import { Textarea } from "../ui/textarea";
-import { Input } from "../ui/input";
-import { Label } from "../ui/label";
 import { sendEmailContact } from "@/app/(main)/contact/action";
 import { useState } from "react";
-import Recaptcha from "./recaptcha";
 import { useGoogleReCaptcha } from "react-google-recaptcha-v3";
 
 export type ContactFormData = {
@@ -17,69 +12,67 @@ export type ContactFormData = {
   recaptchaToken: string;
 };
 
+function EnvelopeIcon({ className = "" }: { className?: string }) {
+  return (
+    <svg viewBox="0 0 32 32" fill="none" className={className} xmlns="http://www.w3.org/2000/svg">
+      <rect x="3" y="7" width="26" height="18" rx="2" stroke="currentColor" strokeWidth="1.5" />
+      <path d="M3 9 L16 18 L29 9" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+    </svg>
+  );
+}
+
 export function ContactForm() {
   const {
     register,
     handleSubmit,
-    formState: { errors },
+    formState: { errors, isSubmitting },
+    reset,
   } = useForm<ContactFormData>();
   const [submissionStatus, setSubmissionStatus] = useState<string | null>(null);
   const { executeRecaptcha } = useGoogleReCaptcha();
 
   const onSubmit = async (data: ContactFormData) => {
-    if (!executeRecaptcha) {
-      console.log("Execute recaptcha not yet available");
-      return;
-    }
-
+    if (!executeRecaptcha) return;
     try {
       const recaptchaToken = await executeRecaptcha("form_submit");
       const result = await sendEmailContact({ ...data, recaptchaToken });
-      if (result.success) {
-        setSubmissionStatus(result.message);
-      } else {
-        setSubmissionStatus(result.message || "Echec de l'envoi du mail");
-      }
-    } catch (error) {
+      setSubmissionStatus(result.message);
+      if (result.success) reset();
+    } catch {
       setSubmissionStatus("Une erreur est survenue");
     }
   };
 
   return (
-    <form
-      onSubmit={handleSubmit(onSubmit)}
-      className="w-full md:max-w-[500px] xl:max-w-[700px]"
-    >
-      <div className="mb-5">
-        <Label
-          htmlFor="name"
-          className="mb-3 block text-base font-medium text-black"
-        >
+    <form onSubmit={handleSubmit(onSubmit)} className="space-y-7">
+
+      {/* Nom */}
+      <div>
+        <label className="font-editorial text-sm text-olive-700 uppercase tracking-wider block mb-2 font-medium">
           Votre nom
-        </Label>
-        <Input
+        </label>
+        <input
           type="text"
-          id="name"
-          placeholder="Votre nom"
-          className="w-full mb-4 rounded-md border border-secondary bg-white py-3 px-6 text-base font-medium text-gray-700 outline-none focus:shadow-md"
-          {...register("name", { required: true })}
+          placeholder="Marie Dupont"
+          className="w-full bg-transparent border-0 border-b border-olive-300/40 py-2 font-hand text-lg text-olive-700 focus:outline-none focus:border-olive-500 transition-colors placeholder:text-olive-300/50"
+          {...register("name", { required: "Nom requis" })}
         />
         {errors.name && (
-          <span className="text-primary">{errors.name.message}</span>
+          <p className="font-editorial text-[0.65rem] tracking-[0.1em] text-red-500/80 mt-1.5">
+            {errors.name.message}
+          </p>
         )}
       </div>
-      <div className="mb-5">
-        <Label
-          htmlFor="email"
-          className="mb-3 block text-base font-medium text-black"
-        >
-          Adresse mail
-        </Label>
-        <Input
+
+      {/* Email */}
+      <div>
+        <label className="font-editorial text-sm text-olive-700 uppercase tracking-wider block mb-2 font-medium">
+          Votre email
+        </label>
+        <input
           type="email"
-          id="email"
-          placeholder="example@domain.com"
-          className="w-full mb-4 rounded-md border border-secondary bg-white py-3 px-6 text-base font-medium text-gray-700 outline-none focus:shadow-md"
+          placeholder="marie@exemple.fr"
+          className="w-full bg-transparent border-0 border-b border-olive-300/40 py-2 font-hand text-lg text-olive-700 focus:outline-none focus:border-olive-500 transition-colors placeholder:text-olive-300/50"
           {...register("email", {
             required: "Email requis",
             pattern: {
@@ -89,40 +82,51 @@ export function ContactForm() {
           })}
         />
         {errors.email && (
-          <span className="text-primary">{errors.email.message}</span>
+          <p className="font-editorial text-[0.65rem] tracking-[0.1em] text-red-500/80 mt-1.5">
+            {errors.email.message}
+          </p>
         )}
       </div>
-      <div className="mb-5">
-        <Label
-          htmlFor="message"
-          className="mb-3 block text-base font-medium text-black"
-        >
-          Message
-        </Label>
-        <Textarea
-          id="message"
-          placeholder="Votre message"
-          className="w-full mb-4 rounded-md border border-secondary bg-white py-3 px-6 text-base font-medium text-gray-700 focus:shadow-md"
+
+      {/* Message */}
+      <div>
+        <label className="font-editorial text-sm text-olive-700 uppercase tracking-wider block mb-2 font-medium">
+          Votre message
+        </label>
+        <textarea
+          rows={4}
+          placeholder="Bonjour, j'aimerais…"
+          className="w-full bg-transparent border-0 border-b border-olive-300/40 py-2 font-hand text-lg text-olive-700 focus:outline-none focus:border-olive-500 transition-colors resize-none placeholder:text-olive-300/50"
           {...register("message", {
-            required: true,
+            required: "Message requis",
             minLength: {
               value: 50,
-              message: "Message trop court, 50 caractères minimum",
+              message: "Message trop court (50 caractères minimum)",
             },
           })}
         />
         {errors.message && (
-          <span className="text-primary">{errors.message.message}</span>
+          <p className="font-editorial text-[0.65rem] tracking-[0.1em] text-red-500/80 mt-1.5">
+            {errors.message.message}
+          </p>
         )}
       </div>
-      <div>
-        <Button type="submit" variant={"cta"}>
-          Envoyer
-        </Button>
+
+      {/* Submit */}
+      <div className="flex justify-end pt-4">
+        <button
+          type="submit"
+          disabled={isSubmitting}
+          className="flex items-center gap-3 px-8 py-3.5 bg-olive-700 text-cream-50 font-editorial text-sm tracking-[0.15em] uppercase hover:bg-olive-800 active:scale-[0.98] transition-all disabled:opacity-60 disabled:cursor-not-allowed"
+        >
+          <span>{isSubmitting ? "Envoi…" : "Envoyer"}</span>
+          <EnvelopeIcon className="w-5 h-5 text-cream-50/90" />
+        </button>
       </div>
 
+      {/* Status */}
       {submissionStatus && (
-        <p className="text-primary mt-8">{submissionStatus}</p>
+        <p className="font-hand text-olive-700 text-base mt-2">{submissionStatus}</p>
       )}
     </form>
   );
