@@ -2,16 +2,9 @@
 @config "../tailwind.config.ts";
 
 @theme {
-  --font-serif-display: "Playfair Display", Georgia, serif;
-  --font-script: "Dancing Script", cursive;
-  --font-sans-elegant: "Cormorant Garamond", Georgia, serif;
-  --font-sans-modern: "Josefin Sans", sans-serif;
-  --font-hand: "Caveat", cursive;
-  --font-luxury: "Didot", "Bodoni MT", "Noto Serif Display", serif;
-  --font-body: "Lato", "Helvetica Neue", sans-serif;
+  --font-serif-display: "Playfair Display Variable", Georgia, serif;
+  --font-hand: "Caveat Variable", cursive;
   --font-editorial: "Libre Baskerville", Baskerville, serif;
-  --font-geometric: "Outfit", sans-serif;
-  --font-art-nouveau: "EB Garamond", Garamond, serif;
 
   /* Shared olive/bronze palette */
   --color-olive-50: #f7f6f0;
@@ -179,15 +172,6 @@
 
   body {
     @apply bg-background text-foreground;
-    --font-hand: var(--font-caveat), "Caveat", cursive;
-    --font-editorial: var(--font-libre-baskerville), "Libre Baskerville", Baskerville, serif;
-    --font-serif-display: var(--font-playfair-display), "Playfair Display", Georgia, serif;
-    --font-script: var(--font-dancing-script), "Dancing Script", cursive;
-    --font-sans-elegant: var(--font-cormorant-garamond), "Cormorant Garamond", Georgia, serif;
-    --font-sans-modern: var(--font-josefin-sans), "Josefin Sans", sans-serif;
-    --font-body: var(--font-lato), "Lato", "Helvetica Neue", sans-serif;
-    --font-geometric: var(--font-outfit), "Outfit", sans-serif;
-    --font-art-nouveau: var(--font-eb-garamond), "EB Garamond", Garamond, serif;
   }
 }
 
