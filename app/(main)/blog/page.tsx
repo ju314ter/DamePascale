@@ -114,7 +114,7 @@ const BlogPage = () => {
               className="font-editorial italic text-olive-600/70 mt-5 leading-relaxed"
               style={{ fontSize: "clamp(0.8rem, 1.5vw, 0.9rem)" }}
             >
-              Coulisses de l'atelier, inspirations botaniques<br className="hidden sm:block" />
+              Coulisses de l&apos;atelier, inspirations botaniques<br className="hidden sm:block" />
               et conseils de création.
             </p>
           </div>
@@ -191,7 +191,7 @@ const BlogPage = () => {
                       {post.title}
                     </h2>
                     <span className="inline-flex items-center gap-1.5 mt-4 font-editorial text-[0.58rem] tracking-[0.22em] uppercase text-olive-400 group-hover:text-olive-600 transition-colors duration-300">
-                      Lire l'article
+                      Lire l&apos;article
                       <span className="transition-transform duration-300 group-hover:translate-x-1">→</span>
                     </span>
                   </div>
