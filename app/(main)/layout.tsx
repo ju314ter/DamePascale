@@ -32,8 +32,10 @@ export default function RootLayout({
           <NavMenu rightSlot={
             <>
               <div>
-                <ShoppingBag             className="w-6 h-6 text-olive-600 group-hover:text-bronze-500 transition-colors"
-            strokeWidth={1.5}/>
+                <ShoppingBag 
+                  className="w-6 h-6 cursor-pointer text-olive-600 hover:text-bronze-500 transition-colors"
+                  strokeWidth={1.5}
+                />
               </div>
               <PanierWrapper />
             </>

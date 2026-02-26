@@ -225,7 +225,7 @@ const ProductDetailBijouPage = () => {
                   });
                 } catch (error) {
                   if (error instanceof Error) {
-                    toast({ title: error.message });
+                    toast({ variant: "destructive", title: error.message });
                   }
                 }
               }}

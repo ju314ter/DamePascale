@@ -81,7 +81,7 @@ export function NavMenu({ rightSlot }: { rightSlot?: React.ReactNode }) {
               </NavigationMenuItem>
 
               <NavigationMenuItem>
-                <NavigationMenuTrigger className="font-editorial text-[0.8rem] tracking-[0.15em] uppercase text-olive-600 hover:text-bronze-500 bg-transparent hover:bg-olive-100/40 data-[state=open]:bg-olive-100/40">
+                <NavigationMenuTrigger className="font-editorial text-[0.8rem] tracking-[0.15em] uppercase text-olive-600 hover:text-bronze-500 bg-transparent hover:bg-olive-100/40 data-[state=open]:bg-olive-100/40 h-auto">
                   Bijoux
                 </NavigationMenuTrigger>
                 <NavigationMenuContent>
@@ -89,7 +89,7 @@ export function NavMenu({ rightSlot }: { rightSlot?: React.ReactNode }) {
                     <div className="basis-5/12">
                       <Link href="/boutique-bijou" passHref>
                         <NavigationMenuLink asChild>
-                          <div className="p-3 rounded-sm hover:bg-olive-100/40 transition-colors cursor-pointer">
+                          <div className="p-3 rounded-sm hover:bg-olive-100/40 transition-colors cursor-pointer h-full">
                             <Image
                               src="/fleur-nobg.png"
                               alt="Bijoux floraux"

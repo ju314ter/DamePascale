@@ -5,30 +5,23 @@ import {
   Sheet,
   SheetClose,
   SheetContent,
-  SheetFooter,
   SheetHeader,
   SheetTitle,
   SheetTrigger,
 } from "../ui/sheet";
-import { Edit, MinusCircle, ShoppingCart } from "lucide-react";
+import { ShoppingCart, MinusCircle, ArrowRight } from "lucide-react";
 import { usePanier, Item } from "@/store/panier-store";
-import { verifyStock } from "@/sanity/lib/client";
-import { Textarea } from "../ui/textarea";
-import { useForm } from "react-hook-form";
-import { createCheckoutSession } from "@/app/(main)/(context)/actions";
 import ImageWithPlaceholder from "../ui/imageWithPlaceholder";
 import { urlForImage } from "@/sanity/lib/image";
-import { useToast } from "../ui/use-toast";
 import { AnimatePresence, motion } from "framer-motion";
 import { z } from "zod";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { Input } from "../ui/input";
-import { Label } from "../ui/label";
-import { getCodePromo } from "@/sanity/lib/general/calls";
+import Link from "next/link";
 
-const deliverySchema = z.object({
+/* ── Delivery schema & type — exported for use in actions.ts & commande page ── */
+
+export const deliverySchema = z.object({
   fullName: z.string().min(2, "Nom complet requis"),
-  addressLine1: z.string().min(5, "Addresse requise"),
+  addressLine1: z.string().min(5, "Adresse requise"),
   addressLine2: z.string().optional(),
   city: z.string().min(2, "Ville requise"),
   country: z.string().min(2, "Pays requis"),
@@ -38,137 +31,31 @@ const deliverySchema = z.object({
 });
 export type DeliveryFormData = z.infer<typeof deliverySchema>;
 
+/* ─────────────────────────────────────────────────────────────────────────── */
+
 const PanierWrapper = () => {
   const { panier } = usePanier();
-  const {
-    register,
-    handleSubmit,
-    formState: { errors, isDirty },
-    getValues,
-    setError,
-    clearErrors,
-  } = useForm<DeliveryFormData>({
-    resolver: zodResolver(deliverySchema),
-  });
-  const { toast } = useToast();
   const [totalPanier, setTotalPanier] = useState(0);
   const [deliveryCost, setDeliveryCost] = useState(0);
-  const [editAdress, setEditAdress] = useState(false);
-  const [existingCodePromo, setExistingCodePromo] = useState<
-    {
-      title: string;
-      code: string;
-      type: "absolute" | "percent";
-      reductionPercent: number;
-    }[]
-  >();
-  const [promotionMessage, setPromotionMessage] = useState<string | null>("");
 
   useEffect(() => {
-    const totalPanier = panier
-      .reduce((total, item) => {
-        return (
-          total +
-          (item.type.promotionDiscount
-            ? ((100 - item.type.promotionDiscount) / 100) * item.type.price
-            : item.type.price * item.qty)
-        );
-      }, 0)
-      .toFixed(2);
-
-    setTotalPanier(Number(totalPanier));
-
-    if (Number(totalPanier) > 50) {
-      setDeliveryCost(0);
-    } else {
-      setDeliveryCost(4.99);
-    }
+    const total = panier.reduce((acc, item) => {
+      return (
+        acc +
+        (item.type.promotionDiscount
+          ? ((100 - item.type.promotionDiscount) / 100) * item.type.price
+          : item.type.price * item.qty)
+      );
+    }, 0);
+    const fixed = Number(total.toFixed(2));
+    setTotalPanier(fixed);
+    setDeliveryCost(fixed > 50 ? 0 : 4.99);
   }, [panier]);
-
-  // Get current code promo at init
-  useEffect(() => {
-    const fetchCodePromo = async () => {
-      const codes = await getCodePromo();
-      if (codes.length > 0) {
-        setExistingCodePromo(codes);
-      }
-    };
-
-    fetchCodePromo();
-  }, []);
-
-  const checkCodePromo = async () => {
-    const codePromo = getValues("codepromo");
-
-    if (!codePromo || codePromo.length === 0 || codePromo === "") {
-      setPromotionMessage(null);
-      clearErrors("codepromo");
-      return;
-    }
-
-    const isCodeValid = existingCodePromo?.some(
-      (code) => code.code.toLowerCase() === codePromo?.toLowerCase()
-    );
-
-    if (isCodeValid) {
-      const validCode = existingCodePromo?.find(
-        (code) => code.code.toLowerCase() === codePromo?.toLowerCase()
-      );
-      setPromotionMessage(
-        `Code promo "${validCode?.code}" appliqué (${validCode?.reductionPercent}${validCode?.type === "absolute" ? "€" : "%"} de réduction)`
-      );
-      clearErrors("codepromo");
-    } else {
-      setPromotionMessage("Code promo invalide");
-      setError("codepromo", { type: "custom", message: "Code promo invalide" });
-    }
-  };
-
-  const onSubmit = async (formData: DeliveryFormData) => {
-    const itemsToVerify = panier.map((item) => ({
-      id: item.type._id,
-      quantity: item.qty,
-    }));
-    const { allAvailable, stockStatus } = await verifyStock(itemsToVerify);
-
-    if (!allAvailable) {
-      console.error(
-        "Some items are out of stock:",
-        stockStatus.filter((item: any) => !item.isAvailable)
-      );
-      toast({
-        title: "Impossible de passer en mode de paiement",
-        description: "Certains produits ne sont plus en stock",
-      });
-      return;
-    }
-    const itemsForCheckout = panier.map((item) => ({
-      id: item.type._id,
-      qty: item.qty,
-    }));
-    const result = await createCheckoutSession(itemsForCheckout, formData);
-    if (!result.url) {
-      toast({
-        title: "Impossible de passer en mode de paiement",
-      });
-      return;
-    }
-    if (result.error) {
-      toast({
-        title: "Impossible de passer en mode de paiement",
-        description: result.error,
-      });
-      return;
-    }
-    if (result.url) {
-      window.location.href = result.url;
-    }
-  };
 
   const itemCount = panier.reduce((total, item) => total + item.qty, 0);
 
   return (
-    <Sheet key={"right"}>
+    <Sheet key="right">
       <SheetTrigger asChild>
         <button
           className="relative bg-transparent border-none cursor-pointer p-2 group"
@@ -185,12 +72,13 @@ const PanierWrapper = () => {
           )}
         </button>
       </SheetTrigger>
+
       <SheetContent
         side="right"
-        className="overflow-y-auto overflow-x-hidden border-l-olive-200/30"
+        className="flex flex-col overflow-hidden border-l border-l-olive-200/30 p-0"
         style={{ backgroundColor: "#fefcf7" }}
       >
-        <SheetHeader>
+        <SheetHeader className="px-6 pt-6 pb-4 border-b border-olive-200/20">
           <SheetTitle className="font-hand text-2xl text-olive-700">
             Votre panier
           </SheetTitle>
@@ -199,11 +87,12 @@ const PanierWrapper = () => {
           </p>
         </SheetHeader>
 
-        {panier.length <= 0 && (
+        {/* Empty state */}
+        {panier.length === 0 && (
           <motion.div
             initial={{ y: -20, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
-            className="p-6 text-center"
+            className="flex-1 flex flex-col items-center justify-center p-8 text-center"
           >
             <ShoppingCart
               className="w-12 h-12 text-olive-300/50 mx-auto mb-4"
@@ -215,9 +104,10 @@ const PanierWrapper = () => {
           </motion.div>
         )}
 
+        {/* Items */}
         {panier.length > 0 && (
           <>
-            <div className="px-2 py-4 space-y-3">
+            <div className="flex-1 overflow-y-auto px-4 py-4 space-y-3">
               <AnimatePresence>
                 {panier.map((item) => (
                   <PanierCard key={item.type._id} {...item} />
@@ -225,223 +115,49 @@ const PanierWrapper = () => {
               </AnimatePresence>
             </div>
 
-            <SheetFooter className="flex flex-col justify-center items-center pt-6 gap-6 border-t border-olive-200/30">
-              <form onSubmit={handleSubmit(onSubmit)} className="w-full">
-                <div className="flex flex-col items-start justify-end w-full gap-3">
-                  {/* Totals */}
-                  <div className="flex justify-between items-center w-full">
-                    <span className="font-editorial text-sm font-medium uppercase tracking-wider text-olive-800">
-                      Total
-                    </span>
-                    <span className="font-hand text-xl text-olive-800">
-                      {(totalPanier + deliveryCost).toFixed(2)} €
-                    </span>
-                  </div>
-                  <div className="flex justify-between items-center w-full">
-                    <span className="font-editorial text-sm text-olive-600">
-                      Panier
-                    </span>
-                    <span className="font-editorial text-sm text-olive-700">
-                      {totalPanier} €
-                    </span>
-                  </div>
-                  <div className="flex justify-between items-center w-full">
-                    <span className="font-editorial text-sm text-olive-600">
-                      Livraison
-                    </span>
-                    <span className="font-editorial text-sm text-olive-700">
-                      {deliveryCost ? `${deliveryCost}€` : "Offert"}
-                    </span>
-                  </div>
-                  {deliveryCost ? (
-                    <p className="font-editorial text-xs text-bronze-500 italic w-full">
-                      Frais de port offerts au dessus de 50€
-                    </p>
-                  ) : null}
+            {/* Footer: totals + CTA */}
+            <div className="px-6 pt-4 pb-6 border-t border-olive-200/30 flex flex-col gap-2.5">
+              <div className="flex justify-between items-center">
+                <span className="font-editorial text-sm text-olive-600">
+                  Sous-total
+                </span>
+                <span className="font-editorial text-sm text-olive-700">
+                  {totalPanier.toFixed(2)} €
+                </span>
+              </div>
+              <div className="flex justify-between items-center">
+                <span className="font-editorial text-sm text-olive-600">
+                  Livraison estimée
+                </span>
+                <span className="font-editorial text-sm text-olive-700">
+                  {deliveryCost > 0 ? `${deliveryCost.toFixed(2)} €` : "Offert"}
+                </span>
+              </div>
+              {deliveryCost > 0 && (
+                <p className="font-editorial text-xs text-bronze-500 italic">
+                  Livraison offerte au dessus de 50 €
+                </p>
+              )}
 
-                  {/* Delivery address */}
-                  <div className="flex justify-between items-center w-full pt-4 border-t border-olive-200/20">
-                    <span className="font-editorial text-sm font-medium uppercase tracking-wider text-olive-800">
-                      Adresse de livraison
-                    </span>
-                    <button
-                      type="button"
-                      className="bg-transparent border-none cursor-pointer p-1"
-                      onClick={() => setEditAdress(!editAdress)}
-                    >
-                      <Edit className="w-4 h-4 text-olive-600 hover:text-bronze-500 transition-colors" />
-                    </button>
-                  </div>
+              <div className="flex justify-between items-center pt-2.5 border-t border-olive-200/20">
+                <span className="font-editorial text-sm font-medium uppercase tracking-wider text-olive-800">
+                  Total estimé
+                </span>
+                <span className="font-hand text-xl text-olive-800">
+                  {(totalPanier + deliveryCost).toFixed(2)} €
+                </span>
+              </div>
 
-                  <AnimatePresence>
-                    {editAdress && (
-                      <motion.div
-                        className="flex flex-col gap-3 w-full"
-                        initial={{ y: 10, opacity: 0 }}
-                        animate={{ y: 0, opacity: 1 }}
-                        exit={{ y: 10, opacity: 0 }}
-                        layout
-                      >
-                        <div>
-                          <Label
-                            htmlFor="fullName"
-                            className="font-editorial text-xs uppercase tracking-wider text-olive-700"
-                          >
-                            Nom complet
-                          </Label>
-                          <Input
-                            {...register("fullName")}
-                            id="fullName"
-                            className="bg-transparent border-olive-300/40 font-editorial text-sm text-olive-700 focus:border-olive-500"
-                          />
-                          {errors.fullName && (
-                            <span className="font-editorial text-xs text-red-600">
-                              {errors.fullName.message}
-                            </span>
-                          )}
-                        </div>
-                        <div>
-                          <Label
-                            htmlFor="addressLine1"
-                            className="font-editorial text-xs uppercase tracking-wider text-olive-700"
-                          >
-                            Adresse ligne 1
-                          </Label>
-                          <Input
-                            {...register("addressLine1")}
-                            id="addressLine1"
-                            className="bg-transparent border-olive-300/40 font-editorial text-sm text-olive-700 focus:border-olive-500"
-                          />
-                          {errors.addressLine1 && (
-                            <span className="font-editorial text-xs text-red-600">
-                              {errors.addressLine1.message}
-                            </span>
-                          )}
-                        </div>
-                        <div>
-                          <Label
-                            htmlFor="addressLine2"
-                            className="font-editorial text-xs uppercase tracking-wider text-olive-700"
-                          >
-                            Adresse ligne 2
-                          </Label>
-                          <Input
-                            {...register("addressLine2")}
-                            id="addressLine2"
-                            className="bg-transparent border-olive-300/40 font-editorial text-sm text-olive-700 focus:border-olive-500"
-                          />
-                        </div>
-                        <div>
-                          <Label
-                            htmlFor="city"
-                            className="font-editorial text-xs uppercase tracking-wider text-olive-700"
-                          >
-                            Ville
-                          </Label>
-                          <Input
-                            {...register("city")}
-                            id="city"
-                            className="bg-transparent border-olive-300/40 font-editorial text-sm text-olive-700 focus:border-olive-500"
-                          />
-                          {errors.city && (
-                            <span className="font-editorial text-xs text-red-600">
-                              {errors.city.message}
-                            </span>
-                          )}
-                        </div>
-                        <div>
-                          <Label
-                            htmlFor="postalCode"
-                            className="font-editorial text-xs uppercase tracking-wider text-olive-700"
-                          >
-                            Code postal
-                          </Label>
-                          <Input
-                            {...register("postalCode")}
-                            id="postalCode"
-                            className="bg-transparent border-olive-300/40 font-editorial text-sm text-olive-700 focus:border-olive-500"
-                          />
-                          {errors.postalCode && (
-                            <span className="font-editorial text-xs text-red-600">
-                              {errors.postalCode.message}
-                            </span>
-                          )}
-                        </div>
-                        <div>
-                          <Label
-                            htmlFor="country"
-                            className="font-editorial text-xs uppercase tracking-wider text-olive-700"
-                          >
-                            Pays
-                          </Label>
-                          <Input
-                            {...register("country")}
-                            id="country"
-                            className="bg-transparent border-olive-300/40 font-editorial text-sm text-olive-700 focus:border-olive-500"
-                          />
-                          {errors.country && (
-                            <span className="font-editorial text-xs text-red-600">
-                              {errors.country.message}
-                            </span>
-                          )}
-                        </div>
-                      </motion.div>
-                    )}
-                  </AnimatePresence>
-
-                  <motion.div layout className="flex flex-col gap-2 w-full pt-2">
-                    <Textarea
-                      {...register("message")}
-                      placeholder="Un message, une précision sur la commande ?"
-                      className="bg-transparent border-olive-300/40 font-editorial text-sm text-olive-700 focus:border-olive-500 placeholder:text-olive-300/60 resize-none"
-                    />
-                  </motion.div>
-
-                  <motion.div layout className="flex flex-col gap-2 w-full">
-                    <Input
-                      {...register("codepromo")}
-                      placeholder="Code promo ?"
-                      className="bg-transparent border-olive-300/40 font-editorial text-sm text-olive-700 focus:border-olive-500 placeholder:text-olive-300/60"
-                      onBlur={checkCodePromo}
-                    />
-                  </motion.div>
-
-                  {promotionMessage && (
-                    <span className="font-editorial text-xs text-bronze-500">
-                      {promotionMessage}
-                    </span>
-                  )}
-
-                  {Object.keys(errors).length > 0 && (
-                    <span className="font-editorial text-xs text-red-600">
-                      Merci de compléter les champs obligatoires
-                    </span>
-                  )}
-
-                  <SheetClose
-                    asChild
-                    className="w-full pt-2"
-                    onClick={(e) => {
-                      if (Object.keys(errors).length > 0 || !isDirty) {
-                        setEditAdress(true);
-                        toast({
-                          title: "Formulaire invalide",
-                          description: "Merci de compléter les champs requis",
-                        });
-                        e.preventDefault();
-                      }
-                    }}
-                  >
-                    <button
-                      type="submit"
-                      className="w-full py-3 bg-olive-700 text-cream-50 font-editorial text-sm tracking-[0.15em] uppercase cursor-pointer border-none hover:bg-olive-800 transition-colors"
-                    >
-                      Confirmer la commande
-                    </button>
-                  </SheetClose>
-                </div>
-              </form>
-            </SheetFooter>
+              <SheetClose asChild>
+                <Link
+                  href="/commande"
+                  className="w-full mt-2 flex items-center justify-center gap-2 py-3.5 bg-olive-700 text-cream-50 font-editorial text-sm tracking-[0.15em] uppercase hover:bg-olive-800 active:scale-[0.99] transition-all"
+                >
+                  Passer la commande
+                  <ArrowRight className="w-4 h-4" />
+                </Link>
+              </SheetClose>
+            </div>
           </>
         )}
       </SheetContent>
@@ -474,18 +190,16 @@ const PanierCard = (item: Item) => {
           {item.type.name}
         </p>
         <p className="font-editorial text-xs text-olive-600/70">
-          {item.qty} x{" "}
+          {item.qty} ×{" "}
           {item.type.promotionDiscount
-            ? (
-                item.type.price *
-                (1 - item.type.promotionDiscount / 100)
-              ).toFixed(2)
-            : item.type.price}
+            ? (item.type.price * (1 - item.type.promotionDiscount / 100)).toFixed(2)
+            : item.type.price.toFixed(2)}{" "}
           €
         </p>
       </div>
       <button
         className="bg-transparent border-none cursor-pointer p-1 flex-shrink-0"
+        aria-label={`Retirer ${item.type.name}`}
         onClick={(e) => {
           e.preventDefault();
           removeFromPanier(item.type);

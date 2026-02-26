@@ -76,7 +76,7 @@ export function CarouselProduct({ slides, options }: CarouselProductProps) {
     <div className="w-full select-none">
 
       {/* ── Main image ─────────────────────────────────────────────────── */}
-      <div className="relative group/carousel">
+      <div className="relative group/carousel cursor-pointer">
         <div className="ep__viewport" ref={emblaMainRef}>
           <div className="ep__container">
             {slides.map((slide, i) => (
@@ -109,7 +109,7 @@ export function CarouselProduct({ slides, options }: CarouselProductProps) {
               onClick={scrollPrev}
               aria-label="Image précédente"
               className="
-                absolute left-3 top-1/2 -translate-y-1/2 z-10
+                absolute cursor-pointer left-3 top-1/2 -translate-y-1/2 z-10
                 w-9 h-9 flex items-center justify-center
                 rounded-full bg-white/75 backdrop-blur-sm
                 border border-olive-200/60 text-olive-600
@@ -125,7 +125,7 @@ export function CarouselProduct({ slides, options }: CarouselProductProps) {
               onClick={scrollNext}
               aria-label="Image suivante"
               className="
-                absolute right-3 top-1/2 -translate-y-1/2 z-10
+                absolute cursor-pointer right-3 top-1/2 -translate-y-1/2 z-10
                 w-9 h-9 flex items-center justify-center
                 rounded-full bg-white/75 backdrop-blur-sm
                 border border-olive-200/60 text-olive-600
@@ -170,7 +170,7 @@ export function CarouselProduct({ slides, options }: CarouselProductProps) {
                     onClick={() => onThumbClick(i)}
                     aria-label={`Vue ${i + 1}`}
                     aria-current={isSelected}
-                    className="ep-thumbs__slide relative flex-shrink-0 focus-visible:outline-none group/thumb"
+                    className="ep-thumbs__slide relative cursor-pointer flex-shrink-0 focus-visible:outline-none group/thumb"
                   >
                     {/* Selection tab — thin line at top */}
                     <div

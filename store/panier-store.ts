@@ -51,7 +51,7 @@ export const usePanier = create<PanierState>()(
         ]);
 
         if (!hasStock.allAvailable) {
-          throw new Error("Pas de stock pour " + itemType);
+          throw new Error("Pas de stock pour " + itemType.name);
         }
 
         set((s: PanierState) => {
