@@ -48,7 +48,7 @@ export default function RootLayout({
               </div>
             }
           >
-            <main>{children}</main>
+            <main className="overflow-hidden">{children}</main>
           </Suspense>
           <Analytics />
           <Toaster />
