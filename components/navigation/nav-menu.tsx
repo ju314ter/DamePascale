@@ -64,14 +64,21 @@ export function NavMenu({ rightSlot }: { rightSlot?: React.ReactNode }) {
           {/* Logo */}
           <Link
             href="/"
-            className="font-hand text-2xl md:text-3xl text-olive-700 no-underline"
+            className="flex items-center gap-2 font-hand text-2xl md:text-3xl text-olive-700 no-underline"
           >
+            <Image
+              src="/medaillon.png"
+              alt=""
+              width={36}
+              height={36}
+              className="rounded-full object-cover flex-shrink-0"
+            />
             Dame Pascale
           </Link>
 
           {/* Desktop navigation */}
           <NavigationMenu className="hidden lg:flex">
-            <NavigationMenuList className="gap-1">
+            <NavigationMenuList className="gap-1 items-baseline">
               <NavigationMenuItem>
                 <Link href="/" legacyBehavior passHref>
                   <NavigationMenuLink className="font-editorial text-[0.8rem] tracking-[0.15em] uppercase text-olive-600 hover:text-bronze-500 transition-colors px-4 py-2 cursor-pointer no-underline">
@@ -81,7 +88,7 @@ export function NavMenu({ rightSlot }: { rightSlot?: React.ReactNode }) {
               </NavigationMenuItem>
 
               <NavigationMenuItem>
-                <NavigationMenuTrigger className="font-editorial text-[0.8rem] tracking-[0.15em] uppercase text-olive-600 hover:text-bronze-500 bg-transparent hover:bg-olive-100/40 data-[state=open]:bg-olive-100/40 h-auto">
+                <NavigationMenuTrigger className="font-editorial text-[0.8rem] tracking-[0.15em] uppercase text-olive-600 hover:text-bronze-500 bg-transparent hover:bg-olive-100/40 data-[state=open]:bg-olive-100/40">
                   Bijoux
                 </NavigationMenuTrigger>
                 <NavigationMenuContent>

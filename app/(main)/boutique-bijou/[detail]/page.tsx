@@ -4,7 +4,7 @@ import React, { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
-import { ChevronLeft } from "lucide-react";
+import { ChevronLeft, Plus } from "lucide-react";
 import { Bijou, getBijouById } from "@/sanity/lib/bijoux/calls";
 import { usePanier } from "@/store/panier-store";
 import { useToast } from "@/components/ui/use-toast";
@@ -86,7 +86,7 @@ const ProductDetailBijouPage = () => {
       <div className="min-h-screen flex items-center justify-center" style={pageBackground}>
         <div className="text-center">
           <SmallBlossom className="w-10 h-10 text-olive-300 mx-auto mb-4 animate-pulse" />
-          <p className="font-editorial text-[0.65rem] tracking-[0.22em] uppercase text-olive-400">
+          <p className="font-editorial text-[0.65rem] tracking-[0.22em] uppercase text-olive-600">
             Chargement…
           </p>
         </div>
@@ -98,44 +98,87 @@ const ProductDetailBijouPage = () => {
     ? bijou.price * (1 - bijou.promotionDiscount / 100)
     : null;
 
+  const handleAddToPanier = async () => {
+    try {
+      const message = await addToPanier(bijou);
+      toast({
+        title: message,
+        action: (
+          <ToastAction altText="Retirer du panier" onClick={() => removeFromPanier(bijou)}>
+            Annuler
+          </ToastAction>
+        ),
+      });
+    } catch (error) {
+      if (error instanceof Error) {
+        toast({ variant: "destructive", title: error.message });
+      }
+    }
+  };
+
   return (
-    <div className="min-h-screen relative" style={pageBackground}>
+    <div className="min-h-screen relative" style={{ ...pageBackground, overflowX: "clip" }}>
 
       {/* ── Botanical decorations ──────────────────────────────────────────── */}
       <PressedLeaf aria-hidden className="pointer-events-none select-none absolute top-[18%] right-0 w-32 md:w-44 text-olive-400/[0.11] rotate-[20deg]" />
       <BranchSprig aria-hidden className="pointer-events-none select-none absolute bottom-[22%] left-0 w-40 md:w-56 text-sage-400/[0.10] -rotate-[7deg]" />
       <SmallBlossom aria-hidden className="pointer-events-none select-none absolute top-[62%] right-[4%] w-14 text-bronze-400/[0.09] rotate-[18deg]" />
 
+      {/* ── Mobile FAB — fixed bottom-left, hidden on desktop ─────────────── */}
+      <button
+        onClick={handleAddToPanier}
+        aria-label="Ajouter au panier"
+        className="lg:hidden fixed bottom-6 right-6 z-50 w-14 h-14 rounded-full bg-olive-700 text-white flex items-center justify-center shadow-[0_4px_20px_rgba(101,90,56,0.35)] hover:bg-olive-800 active:scale-95 transition-all"
+      >
+        <Plus className="w-6 h-6" strokeWidth={2} />
+      </button>
+
       {/* ── Page content ──────────────────────────────────────────────────── */}
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 pt-24 md:pt-28 pb-20 relative z-10">
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 pt-24 md:pt-28 pb-28 lg:pb-20 relative z-10">
 
         {/* Back link */}
         <Link
           href="/boutique-bijou"
-          className="inline-flex items-center gap-1.5 font-editorial text-[0.62rem] tracking-[0.15em] uppercase text-olive-400 hover:text-olive-700 transition-colors mb-10"
+          className="inline-flex items-center gap-1.5 font-editorial text-[0.62rem] tracking-[0.15em] uppercase text-olive-600 hover:text-olive-800 transition-colors mb-10"
         >
           <ChevronLeft size={12} strokeWidth={2.5} />
           Nos Bijoux
         </Link>
 
-        {/* Main grid */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-16 items-start">
+        {/* Main layout — flex-col on mobile, 2-col grid on desktop */}
+        <div className="flex flex-col gap-6 lg:grid lg:grid-cols-2 lg:gap-16">
+
+          {/* ── Mobile-only title block (above carousel) ───────────────────── */}
+          <div className="lg:hidden flex flex-col gap-4">
+            <span className="font-hand text-bronze-500" style={{ fontSize: "clamp(1.1rem, 2vw, 1.3rem)" }}>
+              Pièce artisanale
+            </span>
+            <div>
+              <h1
+                className="font-serif-display text-olive-900 uppercase tracking-wide leading-[0.9]"
+                style={{ fontSize: "clamp(2rem, 5vw, 3rem)" }}
+              >
+                {bijou.name}
+              </h1>
+              <div className="mt-4 w-10 h-px bg-olive-200" />
+            </div>
+          </div>
 
           {/* ── Carousel ──────────────────────────────────────────────────── */}
-          <div className="rounded-2xl overflow-hidden border border-olive-100/70 shadow-[0_8px_40px_rgba(139,119,75,0.09)] bg-white/50">
+          <div className="rounded-2xl overflow-hidden border border-olive-100/70 shadow-[0_8px_40px_rgba(139,119,75,0.09)] bg-white/50 lg:sticky lg:top-[88px] lg:self-start">
             <CarouselProduct slides={bijou.imageGallery} />
           </div>
 
           {/* ── Product info ───────────────────────────────────────────────── */}
           <div className="flex flex-col gap-5 lg:pt-2">
 
-            {/* Decorative label */}
-            <span className="font-hand text-bronze-500" style={{ fontSize: "clamp(1.1rem, 2vw, 1.3rem)" }}>
+            {/* Decorative label — desktop only */}
+            <span className="hidden lg:block font-hand text-bronze-500" style={{ fontSize: "clamp(1.1rem, 2vw, 1.3rem)" }}>
               Pièce artisanale
             </span>
 
-            {/* Name */}
-            <div>
+            {/* Name — desktop only */}
+            <div className="hidden lg:block">
               <h1
                 className="font-serif-display text-olive-900 uppercase tracking-wide leading-[0.9]"
                 style={{ fontSize: "clamp(2rem, 5vw, 3rem)" }}
@@ -181,7 +224,7 @@ const ProductDetailBijouPage = () => {
 
             {/* Description */}
             {bijou.description && (
-              <div className="font-editorial text-[0.85rem] text-olive-600/80 leading-relaxed border-t border-olive-100/60 pt-5">
+              <div className="font-editorial text-[0.85rem] text-olive-700 leading-relaxed border-t border-olive-100/60 pt-5">
                 {Array.isArray(bijou.description) ? (
                   <PortableText value={bijou.description} />
                 ) : (
@@ -208,33 +251,16 @@ const ProductDetailBijouPage = () => {
               )}
             </div>
 
-            {/* CTA */}
+            {/* CTA — desktop only (mobile uses FAB) */}
             <button
-              className="w-full py-3.5 bg-olive-700 text-white font-editorial text-[0.68rem] tracking-[0.22em] uppercase rounded-lg hover:bg-olive-800 active:scale-[0.99] transition-all shadow-sm mt-1"
-              onClick={async (e) => {
-                e.preventDefault();
-                try {
-                  const message = await addToPanier(bijou);
-                  toast({
-                    title: message,
-                    action: (
-                      <ToastAction altText="Retirer du panier" onClick={() => removeFromPanier(bijou)}>
-                        Annuler
-                      </ToastAction>
-                    ),
-                  });
-                } catch (error) {
-                  if (error instanceof Error) {
-                    toast({ variant: "destructive", title: error.message });
-                  }
-                }
-              }}
+              className="hidden lg:block w-full py-3.5 bg-olive-700 text-white font-editorial text-[0.68rem] tracking-[0.22em] uppercase rounded-lg hover:bg-olive-800 active:scale-[0.99] transition-all shadow-sm mt-1"
+              onClick={handleAddToPanier}
             >
               Ajouter au panier
             </button>
 
-            {/* Handmade note */}
-            <p className="font-editorial text-[0.58rem] tracking-[0.12em] text-olive-400/60 text-center uppercase pt-1">
+            {/* Handmade note — desktop only */}
+            <p className="hidden lg:block font-editorial text-[0.58rem] tracking-[0.12em] text-olive-500 text-center uppercase pt-1">
               Pièce unique · Façonnée à la main · Fleurs naturelles
             </p>
 

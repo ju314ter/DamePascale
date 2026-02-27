@@ -221,13 +221,13 @@ export default function BoutiqueBijouPage() {
             "linear-gradient(135deg, #f0ede3 0%, #f7f3e8 45%, #f5e8d0 100%)",
         }}
       >
-        <div className="max-w-7xl mx-auto px-2 sm:px-3">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6">
           <div
             className="relative flex items-center"
             style={{ minHeight: "clamp(220px, 28vw, 310px)" }}
           >
             {/* Left — Text content */}
-            <div className="relative z-10 py-10 lg:py-14 max-w-md">
+            <div className="relative left-12 z-10 py-10 lg:py-14 max-w-md">
               <span
                 className="font-hand text-bronze-500 block mb-1"
                 style={{ fontSize: "clamp(1.1rem, 2.5vw, 1.4rem)" }}
@@ -242,7 +242,7 @@ export default function BoutiqueBijouPage() {
                 <br />
                 Floraux
               </h1>
-              <p className="font-editorial italic text-olive-600/70 leading-relaxed"
+              <p className="font-editorial italic text-olive-700 leading-relaxed"
                 style={{ fontSize: "clamp(0.78rem, 1.5vw, 0.875rem)" }}
               >
                 Chaque pièce est unique, façonnée à la main
@@ -280,7 +280,7 @@ export default function BoutiqueBijouPage() {
       {/* ──────────────────────────────────────────────────────────────────── */}
       {/* Main Content                                                         */}
       {/* ──────────────────────────────────────────────────────────────────── */}
-      <div ref={mainContentRef} className="max-w-7xl mx-auto px-2 sm:px-3 py-10">
+      <div ref={mainContentRef} className="max-w-7xl mx-auto px-4 sm:px-6 py-12">
         <div className="flex gap-8 items-start">
 
           {/* ── Desktop Sidebar ──────────────────────────────────────────── */}
@@ -307,7 +307,7 @@ export default function BoutiqueBijouPage() {
                 >
                   Nos Bijoux
                 </h2>
-                <p className="font-editorial text-[0.7rem] text-olive-500/80 mt-1 tracking-wide">
+                <p className="font-editorial text-[0.7rem] text-olive-700 mt-1 tracking-wide">
                   {sortedBijoux.length}{" "}
                   {sortedBijoux.length === 1 ? "pièce" : "pièces"} disponible
                   {sortedBijoux.length !== 1 ? "s" : ""}
@@ -384,7 +384,7 @@ export default function BoutiqueBijouPage() {
 
             {/* Product Grid */}
             {paginatedBijoux.length > 0 ? (
-              <div className="grid grid-cols-2 md:grid-cols-3 gap-4 sm:gap-5">
+              <div className="grid grid-cols-2 md:grid-cols-3 gap-5 sm:gap-6">
                 {paginatedBijoux.map((bijou, i) => (
                   <motion.div
                     key={bijou._id}
@@ -411,7 +411,7 @@ export default function BoutiqueBijouPage() {
             {/* Pagination */}
             {totalPages > 1 && (
               <div className="flex items-center justify-between mt-12 pt-6 border-t border-olive-100/60">
-                <p className="font-editorial text-[0.7rem] text-olive-500 tracking-wide">
+                <p className="font-editorial text-[0.7rem] text-olive-700 tracking-wide">
                   Page {currentPage} sur {totalPages}
                 </p>
                 <div className="flex items-center gap-1.5">

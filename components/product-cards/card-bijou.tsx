@@ -50,7 +50,7 @@ const CardBijou = ({ item }: CardBijouProps) => {
       </Link>
 
       {/* Text + actions area */}
-      <div className="flex flex-col items-center px-3.5 pt-3 pb-3 gap-1.5 flex-1">
+      <div className="flex flex-col items-center px-4 pt-4 pb-4 gap-3 flex-1">
         <Link
           href={`/boutique-bijou/${item._id}`}
           className="block w-full text-center"

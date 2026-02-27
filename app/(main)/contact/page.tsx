@@ -1,6 +1,7 @@
 "use client";
 
 import React from "react";
+import Image from "next/image";
 import { ContactForm } from "@/components/contact/contact-form";
 import Footer from "@/components/footer/footer";
 
@@ -124,12 +125,21 @@ const ContactPage = () => {
           <span className="font-hand text-lg md:text-xl text-[#c4897a] block mb-3">
             Une question, une envie ?
           </span>
-          <h1
-            className="font-serif-display text-olive-800 uppercase tracking-wide"
-            style={{ fontSize: "clamp(2.2rem, 6vw, 3.6rem)" }}
-          >
-            Écrivez-nous
-          </h1>
+          <div className="inline-flex items-center gap-4 justify-center">
+            <Image
+              src="/medaillon.png"
+              alt="Dame Pascale"
+              width={72}
+              height={72}
+              className="rounded-full object-cover flex-shrink-0 shadow-sm"
+            />
+            <h1
+              className="font-serif-display text-olive-800 uppercase tracking-wide"
+              style={{ fontSize: "clamp(2.2rem, 6vw, 3.6rem)" }}
+            >
+              Écrivez-nous
+            </h1>
+          </div>
           <div className="mt-4 mx-auto w-12 h-px bg-olive-200/80" />
         </div>
 

@@ -97,7 +97,7 @@ const BlogPage = () => {
         style={{ background: "linear-gradient(135deg, #f0ede3 0%, #f7f3e8 45%, #f5e8d0 100%)" }}
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="relative py-14 md:py-20 max-w-xl">
+          <div className="relative left-12 py-14 md:py-20 max-w-xl">
             <span
               className="font-hand text-bronze-500 block mb-2"
               style={{ fontSize: "clamp(1rem, 2vw, 1.3rem)" }}
@@ -111,7 +111,7 @@ const BlogPage = () => {
               Le Journal
             </h1>
             <p
-              className="font-editorial italic text-olive-600/70 mt-5 leading-relaxed"
+              className="font-editorial italic text-olive-700 mt-5 leading-relaxed"
               style={{ fontSize: "clamp(0.8rem, 1.5vw, 0.9rem)" }}
             >
               Coulisses de l&apos;atelier, inspirations botaniques<br className="hidden sm:block" />
@@ -141,7 +141,7 @@ const BlogPage = () => {
         ) : blogPosts.length === 0 ? (
           <div className="text-center py-24">
             <SmallBlossom className="w-10 h-10 text-olive-200 mx-auto mb-4" />
-            <p className="font-editorial text-[0.7rem] tracking-[0.2em] uppercase text-olive-400">
+            <p className="font-editorial text-[0.7rem] tracking-[0.2em] uppercase text-olive-600">
               Aucun article pour le moment
             </p>
           </div>
@@ -190,7 +190,7 @@ const BlogPage = () => {
                     >
                       {post.title}
                     </h2>
-                    <span className="inline-flex items-center gap-1.5 mt-4 font-editorial text-[0.58rem] tracking-[0.22em] uppercase text-olive-400 group-hover:text-olive-600 transition-colors duration-300">
+                    <span className="inline-flex items-center gap-1.5 mt-4 font-editorial text-[0.58rem] tracking-[0.22em] uppercase text-olive-600 group-hover:text-olive-800 transition-colors duration-300">
                       Lire l&apos;article
                       <span className="transition-transform duration-300 group-hover:translate-x-1">→</span>
                     </span>

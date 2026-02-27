@@ -171,7 +171,7 @@ const FiltresBijouxWrapper = ({
   return (
     <div className={outerClass}>
       {/* ── Header ──────────────────────────────────────────────────────── */}
-      <div className="flex items-center justify-between px-3 py-2.5 border-b border-olive-100/80">
+      <div className="flex items-center justify-between px-4 py-3.5 border-b border-olive-100/80">
         <span className="font-editorial text-[0.62rem] tracking-[0.22em] uppercase font-bold text-olive-800">
           Filtrer
         </span>
@@ -217,12 +217,12 @@ const FiltresBijouxWrapper = ({
 
             {/* Catégories */}
             {fieldCategory.length > 0 && (
-              <AccordionItem value="categories" className="border-b border-olive-100/60 px-3">
-                <AccordionTrigger className="py-2.5 cursor-pointer font-editorial text-[0.62rem] font-bold tracking-[0.18em] uppercase text-olive-700 hover:no-underline [&>svg]:h-3 [&>svg]:w-3 [&>svg]:text-olive-400">
+              <AccordionItem value="categories" className="border-b border-olive-100/60 px-4">
+                <AccordionTrigger className="py-3.5 cursor-pointer font-editorial text-[0.62rem] font-bold tracking-[0.18em] uppercase text-olive-700 hover:no-underline [&>svg]:h-3 [&>svg]:w-3 [&>svg]:text-olive-400">
                   Catégories
                 </AccordionTrigger>
-                <AccordionContent className="pb-3 pt-0">
-                  <div className="grid grid-cols-2 gap-x-2 gap-y-1">
+                <AccordionContent className="pb-4 pt-0">
+                  <div className="grid grid-cols-2 gap-x-2 gap-y-2.5">
                     {fieldCategory.map((category: any, i) => (
                       <CheckboxFilters
                         key={category._id}
@@ -245,12 +245,12 @@ const FiltresBijouxWrapper = ({
 
             {/* Matières */}
             {fieldMatiere.length > 0 && (
-              <AccordionItem value="matieres" className="border-b border-olive-100/60 px-3">
-                <AccordionTrigger className="py-2.5 cursor-pointer cursor-pointer font-editorial text-[0.62rem] font-bold tracking-[0.18em] uppercase text-olive-700 hover:no-underline [&>svg]:h-3 [&>svg]:w-3 [&>svg]:text-olive-400">
+              <AccordionItem value="matieres" className="border-b border-olive-100/60 px-4">
+                <AccordionTrigger className="py-3.5 cursor-pointer font-editorial text-[0.62rem] font-bold tracking-[0.18em] uppercase text-olive-700 hover:no-underline [&>svg]:h-3 [&>svg]:w-3 [&>svg]:text-olive-400">
                   Matières
                 </AccordionTrigger>
-                <AccordionContent className="pb-3 pt-0">
-                  <div className="grid grid-cols-2 gap-x-2 gap-y-1">
+                <AccordionContent className="pb-4 pt-0">
+                  <div className="grid grid-cols-2 gap-x-2 gap-y-2.5">
                     {fieldMatiere.map((matiere: any, i) => (
                       <CheckboxFilters
                         key={matiere._id}
@@ -273,12 +273,12 @@ const FiltresBijouxWrapper = ({
 
             {/* Fleurs */}
             {fieldFleur.length > 0 && (
-              <AccordionItem value="fleurs" className="border-b border-olive-100/60 px-3">
-                <AccordionTrigger className="py-2.5 cursor-pointer font-editorial text-[0.62rem] font-bold tracking-[0.18em] uppercase text-olive-700 hover:no-underline [&>svg]:h-3 [&>svg]:w-3 [&>svg]:text-olive-400">
+              <AccordionItem value="fleurs" className="border-b border-olive-100/60 px-4">
+                <AccordionTrigger className="py-3.5 cursor-pointer font-editorial text-[0.62rem] font-bold tracking-[0.18em] uppercase text-olive-700 hover:no-underline [&>svg]:h-3 [&>svg]:w-3 [&>svg]:text-olive-400">
                   Fleurs
                 </AccordionTrigger>
-                <AccordionContent className="pb-3 pt-0">
-                  <div className="grid grid-cols-2 gap-x-2 gap-y-1">
+                <AccordionContent className="pb-4 pt-0">
+                  <div className="grid grid-cols-2 gap-x-2 gap-y-2.5">
                     {fieldFleur.map((fleur: any, i) => (
                       <CheckboxFilters
                         key={fleur._id}
@@ -302,7 +302,7 @@ const FiltresBijouxWrapper = ({
           </Accordion>
 
           {/* Prix — always visible */}
-          <div className="px-3 py-2.5 border-t border-olive-100/60">
+          <div className="px-4 py-4 border-t border-olive-100/60">
             <span className="font-editorial text-[0.62rem] font-bold tracking-[0.18em] uppercase text-olive-700">
               Prix
             </span>
@@ -327,7 +327,7 @@ const FiltresBijouxWrapper = ({
         </div>
 
         {/* Apply button */}
-        <div className="px-3 pb-3 flex-shrink-0">
+        <div className="px-4 pb-4 pt-3 flex-shrink-0">
           <button
             type="submit"
             className="w-full py-2.5 bg-olive-700 text-white font-editorial text-[0.62rem] tracking-[0.2em] uppercase rounded-lg hover:bg-olive-800 active:scale-[0.99] transition-all"

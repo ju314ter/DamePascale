@@ -594,12 +594,12 @@ export default function LandingPage() {
           initial={{ opacity: 0, y: 20, rotate: -7 }}
           animate={{ opacity: 1, y: 0, rotate: -7 }}
           transition={{ duration: 1, delay: 0.8 }}
-          className="absolute top-[18%] left-[12%] lg:left-[16%] hidden md:block z-[2]"
+          className="absolute top-[12%] left-[1%] md:left-[12%] lg:left-[16%] z-[2]"
         >
           <motion.div
             animate={{ y: [0, -6, 0], rotate: [-7, -5.5, -7] }}
             transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
-            className="bg-white p-2 pb-7 shadow-[0_4px_20px_rgba(0,0,0,0.08)] w-28 lg:w-34 opacity-65"
+            className="bg-white p-2 pb-7 shadow-[0_4px_20px_rgba(0,0,0,0.08)] w-20 md:w-28 lg:w-34 opacity-55 md:opacity-65"
           >
             <div className="aspect-[4/3] bg-gradient-to-br from-sage-200/60 via-cream-200 to-olive-200/40 relative overflow-hidden">
               <PressedFlower className="absolute inset-0 m-auto w-12 h-12 text-olive-500/20" />
@@ -621,7 +621,7 @@ export default function LandingPage() {
           initial={{ opacity: 0, y: 20, rotate: 5 }}
           animate={{ opacity: 1, y: 0, rotate: 5 }}
           transition={{ duration: 1, delay: 1.1 }}
-          className="absolute top-[16%] right-[12%] lg:right-[15%] hidden md:block z-[2]"
+          className="absolute top-[18%] right-[1%] md:right-[12%] lg:right-[15%] z-[2]"
         >
           <motion.div
             animate={{ y: [0, -8, 0], rotate: [5, 7, 5] }}
@@ -631,7 +631,7 @@ export default function LandingPage() {
               ease: "easeInOut",
               delay: 1,
             }}
-            className="bg-white p-2 pb-7 shadow-[0_4px_20px_rgba(0,0,0,0.08)] w-30 lg:w-36 opacity-60"
+            className="bg-white p-2 pb-7 shadow-[0_4px_20px_rgba(0,0,0,0.08)] w-20 md:w-30 lg:w-36 opacity-50 md:opacity-60"
           >
             <div className="aspect-[4/3] bg-gradient-to-br from-bronze-200/50 via-cream-100 to-[#c4897a]/20 relative overflow-hidden">
               <WildRose className="absolute inset-0 m-auto w-14 h-14 text-[#c4897a]/20" />
@@ -717,7 +717,7 @@ export default function LandingPage() {
           initial={{ opacity: 0, y: 20, rotate: -6 }}
           animate={{ opacity: 1, y: 0, rotate: -6 }}
           transition={{ duration: 1, delay: 2 }}
-          className="absolute bottom-[14%] left-[18%] lg:left-[22%] hidden md:block z-[2]"
+          className="absolute bottom-[10%] left-[1%] md:left-[18%] lg:left-[22%] z-[2]"
         >
           <motion.div
             animate={{ y: [0, -5, 0], rotate: [-6, -4, -6] }}
@@ -727,7 +727,7 @@ export default function LandingPage() {
               ease: "easeInOut",
               delay: 3,
             }}
-            className="bg-white p-1.5 pb-6 shadow-[0_4px_16px_rgba(0,0,0,0.06)] w-24 lg:w-28 opacity-50"
+            className="bg-white p-1.5 pb-6 shadow-[0_4px_16px_rgba(0,0,0,0.06)] w-20 md:w-24 lg:w-28 opacity-45 md:opacity-50"
           >
             <div className="aspect-square bg-gradient-to-br from-[#c4897a]/20 via-cream-100 to-bronze-200/30 relative overflow-hidden">
               <PressedLeaf className="absolute inset-0 m-auto w-8 h-12 text-olive-500/15" />

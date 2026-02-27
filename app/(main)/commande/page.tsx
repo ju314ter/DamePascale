@@ -74,7 +74,7 @@ const RecapCard = (item: Item) => (
     </div>
     <div className="flex-1 min-w-0">
       <p className="font-hand text-sm text-olive-700 truncate">{item.type.name}</p>
-      <p className="font-editorial text-xs text-olive-500/80">
+      <p className="font-editorial text-xs text-olive-700">
         {item.qty} ×{" "}
         {item.type.promotionDiscount
           ? (item.type.price * (1 - item.type.promotionDiscount / 100)).toFixed(2)
@@ -232,7 +232,7 @@ export default function CommandePage() {
         {/* Back link */}
         <Link
           href="/boutique-bijou"
-          className="inline-flex items-center gap-1.5 font-editorial text-[0.62rem] tracking-[0.15em] uppercase text-olive-400 hover:text-olive-700 transition-colors mb-10"
+          className="inline-flex items-center gap-1.5 font-editorial text-[0.62rem] tracking-[0.15em] uppercase text-olive-600 hover:text-olive-800 transition-colors mb-10"
         >
           <ChevronLeft size={12} strokeWidth={2.5} />
           Continuer mes achats
@@ -261,7 +261,7 @@ export default function CommandePage() {
 
               {/* Section: Identité */}
               <div>
-                <p className="font-editorial text-[0.6rem] tracking-[0.2em] uppercase text-olive-500 mb-5">
+                <p className="font-editorial text-[0.6rem] tracking-[0.2em] uppercase text-olive-700 mb-5">
                   Destinataire
                 </p>
                 <div className="space-y-6">
@@ -278,7 +278,7 @@ export default function CommandePage() {
 
               {/* Section: Adresse */}
               <div>
-                <p className="font-editorial text-[0.6rem] tracking-[0.2em] uppercase text-olive-500 mb-5">
+                <p className="font-editorial text-[0.6rem] tracking-[0.2em] uppercase text-olive-700 mb-5">
                   Adresse de livraison
                 </p>
                 <div className="space-y-6">
@@ -329,7 +329,7 @@ export default function CommandePage() {
 
               {/* Section: Message */}
               <div>
-                <p className="font-editorial text-[0.6rem] tracking-[0.2em] uppercase text-olive-500 mb-5">
+                <p className="font-editorial text-[0.6rem] tracking-[0.2em] uppercase text-olive-700 mb-5">
                   Note de commande (optionnel)
                 </p>
                 <textarea
@@ -349,7 +349,7 @@ export default function CommandePage() {
                 >
                   {isSubmitting ? "Redirection…" : "Confirmer & payer"}
                 </button>
-                <p className="font-editorial text-[0.58rem] tracking-[0.12em] text-olive-400/60 text-center uppercase mt-3">
+                <p className="font-editorial text-[0.58rem] tracking-[0.12em] text-olive-500 text-center uppercase mt-3">
                   Paiement sécurisé · Stripe · Visa · Mastercard · PayPal
                 </p>
               </div>
@@ -387,7 +387,7 @@ export default function CommandePage() {
               <div className="px-5 pb-4 border-t border-olive-100/60">
                 <div className="mt-4 flex items-end gap-2">
                   <div className="flex-1">
-                    <label className="font-editorial text-[0.6rem] tracking-[0.18em] uppercase text-olive-500 block mb-1.5">
+                    <label className="font-editorial text-[0.6rem] tracking-[0.18em] uppercase text-olive-700 block mb-1.5">
                       Code promo
                     </label>
                     <input
@@ -477,7 +477,7 @@ function FormField({
 }) {
   return (
     <div>
-      <label className="font-editorial text-[0.68rem] tracking-[0.16em] uppercase text-olive-600 block mb-1.5">
+      <label className="font-editorial text-[0.68rem] tracking-[0.16em] uppercase text-olive-700 block mb-1.5">
         {label}
       </label>
       {children}

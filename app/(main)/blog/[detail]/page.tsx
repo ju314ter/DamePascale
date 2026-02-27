@@ -68,7 +68,7 @@ const pageBackground = {
 const portableTextComponents: Partial<PortableTextReactComponents> = {
   block: {
     normal: ({ children }) => (
-      <p className="font-editorial text-olive-700/80 leading-[1.85] text-[0.95rem] mb-5">{children}</p>
+      <p className="font-editorial text-olive-800 leading-[1.85] text-[0.95rem] mb-5">{children}</p>
     ),
     h2: ({ children }) => (
       <h2
@@ -87,7 +87,7 @@ const portableTextComponents: Partial<PortableTextReactComponents> = {
       </h3>
     ),
     blockquote: ({ children }) => (
-      <blockquote className="border-l-2 border-bronze-300 pl-5 my-7 font-editorial italic text-olive-600/70 text-[1rem]">
+      <blockquote className="border-l-2 border-bronze-300 pl-5 my-7 font-editorial italic text-olive-700 text-[1rem]">
         {children}
       </blockquote>
     ),
@@ -164,13 +164,13 @@ const portableTextComponents: Partial<PortableTextReactComponents> = {
   },
   listItem: {
     bullet: ({ children }) => (
-      <li className="font-editorial text-olive-700/80 text-[0.95rem] flex gap-2.5 items-start">
+      <li className="font-editorial text-olive-800 text-[0.95rem] flex gap-2.5 items-start">
         <span className="mt-[0.6rem] w-1 h-1 rounded-full bg-bronze-400 flex-shrink-0" />
         <span>{children}</span>
       </li>
     ),
     number: ({ children }) => (
-      <li className="font-editorial text-olive-700/80 text-[0.95rem]">{children}</li>
+      <li className="font-editorial text-olive-800 text-[0.95rem]">{children}</li>
     ),
   },
 };
@@ -196,7 +196,7 @@ const BlogDetailCollectionPage = () => {
       <div className="min-h-screen flex items-center justify-center" style={pageBackground}>
         <div className="text-center">
           <SmallBlossom className="w-10 h-10 text-olive-300 mx-auto mb-4 animate-pulse" />
-          <p className="font-editorial text-[0.65rem] tracking-[0.22em] uppercase text-olive-400">
+          <p className="font-editorial text-[0.65rem] tracking-[0.22em] uppercase text-olive-600">
             Chargement…
           </p>
         </div>
@@ -213,12 +213,12 @@ const BlogDetailCollectionPage = () => {
       <SmallBlossom aria-hidden className="pointer-events-none select-none absolute bottom-[15%] right-[6%] w-14 text-bronze-400/[0.07] rotate-[25deg]" />
 
       {/* ── Article content ───────────────────────────────────────────────── */}
-      <div className="max-w-3xl mx-auto px-4 sm:px-6 pt-24 md:pt-28 pb-20 relative z-10">
+      <div className="max-w-4xl mx-auto px-4 sm:px-6 pt-24 md:pt-28 pb-20 relative z-10">
 
         {/* Back link */}
         <Link
           href="/blog"
-          className="inline-flex items-center gap-1.5 font-editorial text-[0.62rem] tracking-[0.15em] uppercase text-olive-400 hover:text-olive-700 transition-colors mb-12"
+          className="inline-flex items-center gap-1.5 font-editorial text-[0.62rem] tracking-[0.15em] uppercase text-olive-600 hover:text-olive-800 transition-colors mb-12"
         >
           <ChevronLeft size={12} strokeWidth={2.5} />
           Le Journal
@@ -245,7 +245,7 @@ const BlogDetailCollectionPage = () => {
         {/* Introduction */}
         {blogPost.introduction && (
           <p
-            className="font-editorial italic text-olive-600/70 leading-relaxed mb-10"
+            className="font-editorial italic text-olive-700 leading-relaxed mb-10"
             style={{ fontSize: "clamp(0.9rem, 1.8vw, 1.05rem)" }}
           >
             {blogPost.introduction}
@@ -324,7 +324,7 @@ const BlogDetailCollectionPage = () => {
         <div className="mt-8 text-center">
           <Link
             href="/blog"
-            className="inline-flex items-center gap-1.5 font-editorial text-[0.62rem] tracking-[0.18em] uppercase text-olive-400 hover:text-olive-700 transition-colors"
+            className="inline-flex items-center gap-1.5 font-editorial text-[0.62rem] tracking-[0.18em] uppercase text-olive-600 hover:text-olive-800 transition-colors"
           >
             <ChevronLeft size={11} strokeWidth={2.5} />
             Retour au Journal
