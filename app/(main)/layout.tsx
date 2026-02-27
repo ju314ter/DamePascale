@@ -13,6 +13,7 @@ import { Suspense } from "react";
 import { Loader, ShoppingBag } from "lucide-react";
 import RecaptchaProvider from "@/components/contact/recaptcha";
 import { Analytics } from "@vercel/analytics/react";
+import Link from "next/link";
 
 export const metadata: Metadata = {
   title: "Pascale FEGER - Bijoux floraux",
@@ -31,12 +32,12 @@ export default function RootLayout({
         <RecaptchaProvider>
           <NavMenu rightSlot={
             <>
-              <div>
+              <Link href="/boutique-bijou">
                 <ShoppingBag 
                   className="w-6 h-6 cursor-pointer text-olive-600 hover:text-bronze-500 transition-colors"
                   strokeWidth={1.5}
                 />
-              </div>
+              </Link>
               <PanierWrapper />
             </>
           }
