@@ -96,6 +96,25 @@ const BlogPage = () => {
         className="relative overflow-hidden pt-16 md:pt-20"
         style={{ background: "linear-gradient(135deg, #f0ede3 0%, #f7f3e8 45%, #f5e8d0 100%)" }}
       >
+        <div className="pointer-events-none absolute inset-0 overflow-hidden">
+          {/* Top Left Arabesque */}
+          <svg
+            className="absolute -top-10 -left-10 w-72 opacity-[0.08] text-olive-900"
+            viewBox="0 0 500 500"
+            fill="currentColor"
+          >
+            <path d="M480,60 C420,20 360,20 300,60 C260,90 240,140 220,190 C200,240 170,290 120,320 C80,345 40,350 10,340 C60,370 120,380 180,350 C240,320 280,270 300,210 C320,150 350,100 400,80 C430,70 455,70 480,60 Z" />
+          </svg>
+
+          {/* Bottom Right Arabesque */}
+          <svg
+            className="absolute -bottom-16 -right-16 w-96 opacity-[0.06] text-bronze-600"
+            viewBox="0 0 500 500"
+            fill="currentColor"
+          >
+            <path d="M20,440 C80,480 140,480 200,440 C240,410 260,360 280,310 C300,260 330,210 380,180 C420,155 460,150 490,160 C440,130 380,120 320,150 C260,180 220,230 200,290 C180,350 150,400 100,420 C70,430 45,430 20,440 Z" />
+          </svg>
+        </div>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="relative left-12 py-14 md:py-20 max-w-xl">
             <span
