@@ -4,7 +4,11 @@ import { useRef, useState, useEffect, type FormEvent } from "react";
 import { motion, useInView } from "motion/react";
 import Link from "next/link";
 import Footer from "@/components/footer/footer";
+import { Instagram, Facebook } from "lucide-react";
 import { getMarches, formatMarcheDate, type Marche } from "@/sanity/lib/marches/calls";
+import { getCollectionVedette, type Bijou } from "@/sanity/lib/bijoux/calls";
+import { urlFor } from "@/sanity/lib/client";
+import Image from "next/image";
 
 /* ──────────────────────────── SVG Decorations ──────────────────────────── */
 
@@ -322,23 +326,6 @@ function PenIcon({ className = "" }: { className?: string }) {
   );
 }
 
-function PhoneIcon({ className = "" }: { className?: string }) {
-  return (
-    <svg
-      viewBox="0 0 32 32"
-      fill="none"
-      className={className}
-      xmlns="http://www.w3.org/2000/svg"
-    >
-      <path
-        d="M6 4 C6 4, 10 4, 12 8 L10 12 C10 12, 14 18, 20 22 L24 20 C28 22, 28 26, 28 26 C28 28, 26 30, 22 28 C14 24, 8 18, 4 10 C2 6, 4 4, 6 4Z"
-        stroke="currentColor"
-        strokeWidth="1.5"
-        strokeLinejoin="round"
-      />
-    </svg>
-  );
-}
 
 function CraftHandIcon({ className = "" }: { className?: string }) {
   return (
@@ -553,44 +540,7 @@ const processSteps = [
   },
 ];
 
-const products = [
-  {
-    name: "Bracelet Fleur de Rose",
-    price: "42",
-    rotation: "-2deg",
-    gradient: "from-[#c4897a]/30 via-cream-200 to-sage-200/40",
-  },
-  {
-    name: "Collier Fleurs Séchées",
-    price: "48",
-    rotation: "1.5deg",
-    gradient: "from-sage-200/50 via-cream-100 to-olive-200/30",
-  },
-  {
-    name: "Bracelet Doré Floral",
-    price: "35",
-    rotation: "-1deg",
-    gradient: "from-bronze-200/40 via-cream-100 to-[#c4897a]/20",
-  },
-  {
-    name: "Pendentif Botanique",
-    price: "45",
-    rotation: "2deg",
-    gradient: "from-olive-200/30 via-cream-200 to-sage-200/40",
-  },
-  {
-    name: "Boucles Pétales d'Or",
-    price: "38",
-    rotation: "-1.5deg",
-    gradient: "from-cream-300/50 via-bronze-100/40 to-cream-100",
-  },
-  {
-    name: "Bague Résine Florale",
-    price: "32",
-    rotation: "1deg",
-    gradient: "from-[#c4897a]/25 via-cream-200 to-olive-200/20",
-  },
-];
+const CARD_ROTATIONS = ["-2deg", "1.5deg", "-1deg", "2deg", "-1.5deg", "1deg"];
 
 
 /* ──────────────────────────── MAIN COMPONENT ──────────────────────────── */
@@ -613,6 +563,16 @@ export default function LandingPage() {
     getMarches().then((data) => {
       setMarches(data);
       setMarchesLoaded(true);
+    });
+  }, []);
+
+  const [vedette, setVedette] = useState<Bijou[]>([]);
+  const [vedetteLoaded, setVedetteLoaded] = useState(false);
+
+  useEffect(() => {
+    getCollectionVedette().then((data) => {
+      setVedette(data);
+      setVedetteLoaded(true);
     });
   }, []);
 
@@ -1105,53 +1065,79 @@ export default function LandingPage() {
           </AnimatedSection>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 md:gap-10">
-            {products.map((product, i) => (
-              <AnimatedSection key={product.name} delay={i * 0.1}>
-                <motion.div
-                  whileHover={{
-                    rotate: 0,
-                    y: -12,
-                    scale: 1.02,
-                    boxShadow:
-                      "0 25px 50px rgba(0,0,0,0.1), 0 10px 20px rgba(0,0,0,0.05)",
-                  }}
-                  transition={{ type: "spring", stiffness: 300, damping: 20 }}
-                  className="cursor-pointer"
-                  style={{ transform: `rotate(${product.rotation})` }}
-                >
-                  {/* Polaroid card */}
-                  <div className="bg-white p-3 pb-6 shadow-[0_4px_24px_rgba(0,0,0,0.06)]">
-                    {/* Image placeholder with gradient */}
-                    <div
-                      className={`aspect-square bg-gradient-to-br ${product.gradient} relative overflow-hidden`}
-                    >
-                      {/* Decorative flower in product image */}
-                      <div className="absolute inset-0 flex items-center justify-center">
-                        <PressedFlower className="w-24 h-24 text-olive-500/15" />
-                      </div>
-                      <WildRose className="absolute bottom-3 right-3 w-10 h-10 text-olive-600/10" />
-                    </div>
-
-                    {/* Product name + price */}
-                    <div className="mt-4 px-1">
-                      <h3 className="font-hand text-xl md:text-2xl text-olive-700 leading-tight">
-                        {product.name}
-                      </h3>
-                      <p className="font-editorial text-sm text-bronze-500 mt-1">
-                        {product.price} &euro;
-                      </p>
+            {!vedetteLoaded
+              ? [0, 1, 2].map((i) => (
+                  <div
+                    key={i}
+                    className="bg-white p-3 pb-6 shadow-[0_4px_24px_rgba(0,0,0,0.06)] animate-pulse"
+                    style={{ transform: `rotate(${CARD_ROTATIONS[i]})` }}
+                  >
+                    <div className="aspect-square bg-cream-200/60" />
+                    <div className="mt-4 px-1 space-y-2">
+                      <div className="h-5 bg-cream-200/60 rounded w-3/4" />
+                      <div className="h-4 bg-cream-200/40 rounded w-1/4" />
                     </div>
                   </div>
-                </motion.div>
-              </AnimatedSection>
-            ))}
+                ))
+              : vedette.map((bijou, i) => (
+                  <AnimatedSection key={bijou._id} delay={i * 0.1}>
+                    <Link href={`/boutique-bijou/${bijou._id}`}>
+                      <motion.div
+                        whileHover={{
+                          rotate: 0,
+                          y: -12,
+                          scale: 1.02,
+                          boxShadow:
+                            "0 25px 50px rgba(0,0,0,0.1), 0 10px 20px rgba(0,0,0,0.05)",
+                        }}
+                        transition={{ type: "spring", stiffness: 300, damping: 20 }}
+                        className="cursor-pointer"
+                        style={{ transform: `rotate(${CARD_ROTATIONS[i % 6]})` }}
+                      >
+                        {/* Polaroid card */}
+                        <div className="bg-white p-3 pb-6 shadow-[0_4px_24px_rgba(0,0,0,0.06)]">
+                          {/* Product image */}
+                          <div className="aspect-square relative overflow-hidden bg-cream-100">
+                            {bijou.highlightedImg ? (
+                              <Image
+                                src={urlFor(bijou.highlightedImg).width(400).url()}
+                                alt={bijou.name}
+                                fill
+                                className="object-cover"
+                              />
+                            ) : (
+                              <div className="absolute inset-0 flex items-center justify-center">
+                                <PressedFlower className="w-24 h-24 text-olive-500/15" />
+                              </div>
+                            )}
+                          </div>
+
+                          {/* Product name + price */}
+                          <div className="mt-4 px-1">
+                            <h3 className="font-hand text-xl md:text-2xl text-olive-700 leading-tight">
+                              {bijou.name}
+                            </h3>
+                            <p className="font-editorial text-sm text-bronze-500 mt-1">
+                              {bijou.promotionDiscount
+                                ? (bijou.price * (1 - bijou.promotionDiscount / 100)).toFixed(2)
+                                : bijou.price}{" "}
+                              &euro;
+                            </p>
+                          </div>
+                        </div>
+                      </motion.div>
+                    </Link>
+                  </AnimatedSection>
+                ))}
           </div>
 
           {/* View all CTA */}
           <AnimatedSection className="text-center mt-14" delay={0.3}>
-            <button className="px-10 py-3.5 border border-olive-400/50 bg-white text-olive-600 font-editorial text-sm tracking-[0.15em] uppercase cursor-pointer hover:bg-olive-700 hover:text-cream-50 hover:border-olive-700 transition-all duration-300">
-              Voir toute la collection
-            </button>
+            <Link href="/boutique-bijou">
+              <button className="px-10 py-3.5 border border-olive-400/50 bg-white text-olive-600 font-editorial text-sm tracking-[0.15em] uppercase cursor-pointer hover:bg-olive-700 hover:text-cream-50 hover:border-olive-700 transition-all duration-300">
+                Voir toute la collection
+              </button>
+            </Link>
           </AnimatedSection>
         </div>
       </section>
@@ -1499,22 +1485,44 @@ export default function LandingPage() {
                           Email
                         </p>
                         <p className="font-hand text-lg text-olive-700">
-                          contact@damepascale.fr
+                          damepascale72@gmail.com
                         </p>
                       </div>
                     </div>
 
-                    <div className="flex items-start gap-4">
-                      <PhoneIcon className="w-6 h-6 text-olive-700 flex-shrink-0 mt-0.5" />
+                    <Link
+                      href="https://www.instagram.com/dame_pascale"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex items-start gap-4 group no-underline"
+                    >
+                      <Instagram className="w-6 h-6 text-olive-700 flex-shrink-0 mt-0.5 group-hover:text-bronze-500 transition-colors" />
                       <div>
-                        <p className="font-editorial text-sm text-olive-700 uppercase tracking-wider mb-1 font-medium">
-                          Téléphone
+                        <p className="font-editorial text-sm text-olive-700 uppercase tracking-wider mb-1 font-medium group-hover:text-bronze-500 transition-colors">
+                          Instagram
                         </p>
-                        <p className="font-hand text-lg text-olive-700">
-                          06 12 34 56 78
+                        <p className="font-hand text-lg text-olive-700 group-hover:text-bronze-500 transition-colors">
+                          @dame_pascale
                         </p>
                       </div>
-                    </div>
+                    </Link>
+
+                    <Link
+                      href="https://www.facebook.com/p/Mes-petites-cr%C3%A9a-ch%C3%A9ries-100057342554163/"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex items-start gap-4 group no-underline"
+                    >
+                      <Facebook className="w-6 h-6 text-olive-700 flex-shrink-0 mt-0.5 group-hover:text-bronze-500 transition-colors" />
+                      <div>
+                        <p className="font-editorial text-sm text-olive-700 uppercase tracking-wider mb-1 font-medium group-hover:text-bronze-500 transition-colors">
+                          Facebook
+                        </p>
+                        <p className="font-hand text-lg text-olive-700 group-hover:text-bronze-500 transition-colors">
+                          Mes petites créa chéries
+                        </p>
+                      </div>
+                    </Link>
 
                     <div className="flex items-start gap-4">
                       <PenIcon className="w-6 h-6 text-olive-700 flex-shrink-0 mt-0.5" />
@@ -1523,7 +1531,7 @@ export default function LandingPage() {
                           Atelier
                         </p>
                         <p className="font-hand text-lg text-olive-700">
-                          Paris, France
+                          Le Mans, France
                         </p>
                       </div>
                     </div>

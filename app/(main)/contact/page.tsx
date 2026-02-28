@@ -2,6 +2,8 @@
 
 import React from "react";
 import Image from "next/image";
+import Link from "next/link";
+import { Instagram, Facebook } from "lucide-react";
 import { ContactForm } from "@/components/contact/contact-form";
 import Footer from "@/components/footer/footer";
 
@@ -61,16 +63,6 @@ function EnvelopeIcon({ className = "" }: { className?: string }) {
   );
 }
 
-function PhoneIcon({ className = "" }: { className?: string }) {
-  return (
-    <svg viewBox="0 0 32 32" fill="none" className={className} xmlns="http://www.w3.org/2000/svg">
-      <path
-        d="M6 4 C6 4, 10 4, 12 8 L10 12 C10 12, 14 18, 20 22 L24 20 C28 22, 28 26, 28 26 C28 28, 26 30, 22 28 C14 24, 8 18, 4 10 C2 6, 4 4, 6 4Z"
-        stroke="currentColor" strokeWidth="1.5" strokeLinejoin="round"
-      />
-    </svg>
-  );
-}
 
 function PenIcon({ className = "" }: { className?: string }) {
   return (
@@ -208,22 +200,44 @@ const ContactPage = () => {
                       Email
                     </p>
                     <p className="font-hand text-lg text-olive-700">
-                      contact@damepascale.fr
+                      damepascale72@gmail.com
                     </p>
                   </div>
                 </div>
 
-                <div className="flex items-start gap-4">
-                  <PhoneIcon className="w-6 h-6 text-olive-700 flex-shrink-0 mt-0.5" />
+                <Link
+                  href="https://www.instagram.com/dame_pascale"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-start gap-4 group no-underline"
+                >
+                  <Instagram className="w-6 h-6 text-olive-700 flex-shrink-0 mt-0.5 group-hover:text-bronze-500 transition-colors" />
                   <div>
-                    <p className="font-editorial text-sm text-olive-700 uppercase tracking-wider mb-1 font-medium">
-                      Téléphone
+                    <p className="font-editorial text-sm text-olive-700 uppercase tracking-wider mb-1 font-medium group-hover:text-bronze-500 transition-colors">
+                      Instagram
                     </p>
-                    <p className="font-hand text-lg text-olive-700">
-                      06 12 34 56 78
+                    <p className="font-hand text-lg text-olive-700 group-hover:text-bronze-500 transition-colors">
+                      @dame_pascale
                     </p>
                   </div>
-                </div>
+                </Link>
+
+                <Link
+                  href="https://www.facebook.com/p/Mes-petites-cr%C3%A9a-ch%C3%A9ries-100057342554163/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-start gap-4 group no-underline"
+                >
+                  <Facebook className="w-6 h-6 text-olive-700 flex-shrink-0 mt-0.5 group-hover:text-bronze-500 transition-colors" />
+                  <div>
+                    <p className="font-editorial text-sm text-olive-700 uppercase tracking-wider mb-1 font-medium group-hover:text-bronze-500 transition-colors">
+                      Facebook
+                    </p>
+                    <p className="font-hand text-lg text-olive-700 group-hover:text-bronze-500 transition-colors">
+                      Mes petites créa chéries
+                    </p>
+                  </div>
+                </Link>
 
                 <div className="flex items-start gap-4">
                   <PenIcon className="w-6 h-6 text-olive-700 flex-shrink-0 mt-0.5" />
@@ -232,7 +246,7 @@ const ContactPage = () => {
                       Atelier
                     </p>
                     <p className="font-hand text-lg text-olive-700">
-                      Paris, France
+                      Le Mans, France
                     </p>
                   </div>
                 </div>

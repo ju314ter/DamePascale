@@ -137,6 +137,26 @@ export const getLastNBijoux = async (n: number) => {
   return bijoux;
 };
 
+export const getCollectionVedette = async (): Promise<Bijou[]> => {
+  const query = groq`*[_type == "collectionVedette"][0]{
+    "bijoux": bijoux[]-> {
+      _id,
+      name,
+      price,
+      highlightedImg,
+      stock,
+      promotionDiscount
+    }
+  }.bijoux`;
+
+  const bijoux: Bijou[] | null = await client.fetch(query);
+
+  if (!bijoux || bijoux.length === 0) {
+    return getLastNBijoux(6);
+  }
+  return bijoux;
+};
+
 export const getBijouNavlinks = async () => {
   const query = `*[_type == "bijouLienMenu"]{
     _id,

@@ -9,7 +9,7 @@ import {
 } from "./bijoux/schema";
 import { blogCategorySchema, blogPostSchema, spotSchema } from "./blog/schema";
 import { marcheSchema } from "./marches/schema";
-import { codePromoSchema, configBoutiqueSchema } from "./global/schema";
+import { codePromoSchema, configBoutiqueSchema, collectionVedetteSchema } from "./global/schema";
 
 const schema: { types: SchemaTypeDefinition[] } = {
   types: [],
@@ -36,5 +36,6 @@ schema.types.push(marcheSchema);
 
 schema.types.push(codePromoSchema);
 schema.types.push(configBoutiqueSchema);
+schema.types.push(collectionVedetteSchema);
 
 export default schema;

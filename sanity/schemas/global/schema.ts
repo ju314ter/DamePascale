@@ -35,6 +35,23 @@ export const configBoutiqueSchema: SchemaTypeDefinition = {
   // },
 };
 
+export const collectionVedetteSchema: SchemaTypeDefinition = {
+  name: "collectionVedette",
+  title: "Collection vedette (landing)",
+  type: "document",
+  fields: [
+    {
+      name: "bijoux",
+      title: "Bijoux mis en avant",
+      type: "array",
+      description:
+        "Choisissez jusqu'à 6 bijoux à afficher sur la page d'accueil.",
+      of: [{ type: "reference", to: [{ type: "bijoux" }] }],
+      validation: (Rule) => Rule.max(6),
+    },
+  ],
+};
+
 export const codePromoSchema: SchemaTypeDefinition = {
   name: "codePromo",
   title: "Codes Promotionnels",

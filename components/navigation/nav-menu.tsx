@@ -139,6 +139,24 @@ export function NavMenu({ rightSlot }: { rightSlot?: React.ReactNode }) {
               </NavigationMenuItem>
 
               <NavigationMenuItem>
+                <span className="relative flex items-center gap-1.5 font-editorial text-[0.8rem] tracking-[0.15em] uppercase text-olive-400/60 px-4 py-2 cursor-default select-none">
+                  Marchés
+                  <span className="text-[0.55rem] tracking-normal normal-case font-editorial text-[#c4897a]/70 border border-[#c4897a]/30 px-1 py-0.5 rounded-sm leading-none">
+                    à venir
+                  </span>
+                </span>
+              </NavigationMenuItem>
+
+              <NavigationMenuItem>
+                <span className="relative flex items-center gap-1.5 font-editorial text-[0.8rem] tracking-[0.15em] uppercase text-olive-400/60 px-4 py-2 cursor-default select-none">
+                  Ateliers
+                  <span className="text-[0.55rem] tracking-normal normal-case font-editorial text-[#c4897a]/70 border border-[#c4897a]/30 px-1 py-0.5 rounded-sm leading-none">
+                    à venir
+                  </span>
+                </span>
+              </NavigationMenuItem>
+
+              <NavigationMenuItem>
                 <Link href="/contact" legacyBehavior passHref>
                   <NavigationMenuLink className="font-editorial text-[0.8rem] tracking-[0.15em] uppercase text-olive-600 hover:text-bronze-500 transition-colors px-4 py-2 cursor-pointer no-underline">
                     Contact
@@ -247,6 +265,20 @@ export function NavMenu({ rightSlot }: { rightSlot?: React.ReactNode }) {
                         </AccordionContent>
                       </AccordionItem>
                     </Accordion>
+
+                    <div className="flex items-center gap-2 py-3 px-4 font-editorial text-sm tracking-[0.12em] uppercase text-olive-400/60 cursor-default select-none rounded-sm">
+                      Marchés
+                      <span className="text-[0.6rem] tracking-normal normal-case font-editorial text-[#c4897a]/70 border border-[#c4897a]/30 px-1 py-0.5 rounded-sm leading-none">
+                        à venir
+                      </span>
+                    </div>
+
+                    <div className="flex items-center gap-2 py-3 px-4 font-editorial text-sm tracking-[0.12em] uppercase text-olive-400/60 cursor-default select-none rounded-sm">
+                      Ateliers
+                      <span className="text-[0.6rem] tracking-normal normal-case font-editorial text-[#c4897a]/70 border border-[#c4897a]/30 px-1 py-0.5 rounded-sm leading-none">
+                        à venir
+                      </span>
+                    </div>
 
                     <SheetClose asChild>
                       <Link
