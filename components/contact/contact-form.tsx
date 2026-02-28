@@ -1,16 +1,25 @@
 "use client";
 
-import { useForm } from "react-hook-form";
+import { useForm, Controller } from "react-hook-form";
 import { sendEmailContact } from "@/app/(main)/contact/action";
 import { useState } from "react";
 import { useGoogleReCaptcha } from "react-google-recaptcha-v3";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
 export type ContactFormData = {
   name: string;
   email: string;
+  subject: "Informations" | "Formations" | "Demande customisée" | "Autres";
   message: string;
   recaptchaToken: string;
 };
+
+const SUBJECT_OPTIONS: ContactFormData["subject"][] = [
+  "Informations",
+  "Formations",
+  "Demande customisée",
+  "Autres",
+];
 
 function EnvelopeIcon({ className = "" }: { className?: string }) {
   return (
@@ -24,6 +33,7 @@ function EnvelopeIcon({ className = "" }: { className?: string }) {
 export function ContactForm() {
   const {
     register,
+    control,
     handleSubmit,
     formState: { errors, isSubmitting },
     reset,
@@ -84,6 +94,35 @@ export function ContactForm() {
         {errors.email && (
           <p className="font-editorial text-[0.65rem] tracking-[0.1em] text-red-500/80 mt-1.5">
             {errors.email.message}
+          </p>
+        )}
+      </div>
+
+      {/* Objet */}
+      <div>
+        <label className="font-editorial text-sm text-olive-700 uppercase tracking-wider block mb-2 font-medium">
+          Objet
+        </label>
+        <Controller
+          name="subject"
+          control={control}
+          rules={{ required: "Objet requis" }}
+          render={({ field }) => (
+            <Select onValueChange={field.onChange} value={field.value ?? ""}>
+              <SelectTrigger className="border-b border-olive-300/40 font-editorial tracking-wide text-olive-900 focus:border-olive-500 transition-colors data-[placeholder]:text-olive-400">
+                <SelectValue placeholder="Choisir un objet…" />
+              </SelectTrigger>
+              <SelectContent>
+                {SUBJECT_OPTIONS.map((opt) => (
+                  <SelectItem key={opt} value={opt}>{opt}</SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          )}
+        />
+        {errors.subject && (
+          <p className="font-editorial text-[0.65rem] tracking-[0.1em] text-red-500/80 mt-1.5">
+            {errors.subject.message}
           </p>
         )}
       </div>

@@ -1,8 +1,10 @@
 "use client";
 
-import { useRef, type FormEvent } from "react";
+import { useRef, useState, useEffect, type FormEvent } from "react";
 import { motion, useInView } from "motion/react";
+import Link from "next/link";
 import Footer from "@/components/footer/footer";
+import { getMarches, formatMarcheDate, type Marche } from "@/sanity/lib/marches/calls";
 
 /* ──────────────────────────── SVG Decorations ──────────────────────────── */
 
@@ -338,6 +340,50 @@ function PhoneIcon({ className = "" }: { className?: string }) {
   );
 }
 
+function CraftHandIcon({ className = "" }: { className?: string }) {
+  return (
+    <svg viewBox="0 0 48 48" fill="none" className={className} xmlns="http://www.w3.org/2000/svg">
+      <path d="M24 36 C20 40, 12 42, 8 38 C4 34, 6 26, 10 22 L18 14" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" />
+      <path d="M18 14 C18 10, 22 8, 24 11 L24 24" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" />
+      <path d="M24 18 C24 14, 28 13, 29 16 L30 24" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" />
+      <path d="M30 20 C30 17, 33 16, 34 19 L34 26" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" />
+      <path d="M34 22 C35 20, 38 20, 38 24 L36 32" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" />
+      <path d="M14 10 C14 6, 16 4, 18 6 L20 12" stroke="currentColor" strokeWidth="1" strokeLinecap="round" />
+      <path d="M16 7 C17 4, 20 4, 20 8" stroke="currentColor" strokeWidth="0.8" strokeLinecap="round" />
+      <path d="M20 6 C20 4, 23 4, 23 8" stroke="currentColor" strokeWidth="0.8" strokeLinecap="round" />
+    </svg>
+  );
+}
+
+function SeedlingIcon({ className = "" }: { className?: string }) {
+  return (
+    <svg viewBox="0 0 48 48" fill="none" className={className} xmlns="http://www.w3.org/2000/svg">
+      <path d="M24 42 L24 20" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" />
+      <path d="M24 28 C20 24, 12 24, 10 18 C10 12, 18 10, 24 16" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" />
+      <path d="M24 22 C28 16, 36 15, 38 20 C40 26, 32 30, 24 26" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" />
+      <path d="M24 16 C24 14, 26 8, 30 6 C34 4, 36 8, 34 12 C32 16, 28 16, 24 16Z" stroke="currentColor" strokeWidth="1" strokeLinecap="round" />
+    </svg>
+  );
+}
+
+function RibbonStarIcon({ className = "" }: { className?: string }) {
+  return (
+    <svg viewBox="0 0 48 48" fill="none" className={className} xmlns="http://www.w3.org/2000/svg">
+      <circle cx="24" cy="22" r="9" stroke="currentColor" strokeWidth="1.2" />
+      <path d="M24 6 L24 13" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" />
+      <path d="M24 31 L24 38" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" />
+      <path d="M8 22 L15 22" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" />
+      <path d="M33 22 L40 22" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" />
+      <path d="M13 11 L18 16" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" />
+      <path d="M30 28 L35 33" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" />
+      <path d="M35 11 L30 16" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" />
+      <path d="M18 28 L13 33" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" />
+      <circle cx="24" cy="22" r="3.5" stroke="currentColor" strokeWidth="0.8" />
+      <path d="M20 38 C20 36, 24 34, 28 38 L26 44 C25 46, 23 46, 22 44Z" stroke="currentColor" strokeWidth="0.9" strokeLinejoin="round" />
+    </svg>
+  );
+}
+
 /* Tape decoration — a small rotated rectangle simulating washi tape */
 function Tape({
   color = "bg-sage-300/60",
@@ -405,6 +451,45 @@ const ruledPaper: React.CSSProperties = {
   backgroundSize: "100% 32px",
 };
 
+const sageWash: React.CSSProperties = {
+  backgroundImage: `
+    radial-gradient(ellipse at 10% 65%, rgba(157,186,154,0.14) 0%, transparent 55%),
+    radial-gradient(ellipse at 88% 15%, rgba(139,119,75,0.07) 0%, transparent 50%),
+    repeating-conic-gradient(rgba(139,119,75,0.018) 0% 25%, transparent 0% 50%) 0 0 / 3px 3px,
+    linear-gradient(158deg, #f5f9f2 0%, #eef3e8 30%, #ede8d5 65%, #f4f8f1 100%)
+  `,
+};
+
+const formationBenefits = [
+  {
+    icon: <CraftHandIcon className="w-10 h-10 text-sage-600/70" />,
+    eyebrow: "Savoir-faire transmis",
+    title: "Apprenez en créant",
+    desc: "Récolte, pressage, encapsulation en résine… chaque geste vous est enseigné pas à pas, avec patience. Vous repartez avec vos propres créations et toutes les clés pour continuer chez vous.",
+    rotation: "-1.2deg",
+    tapeColor: "bg-sage-300/50",
+    accentColor: "#6b8f63",
+  },
+  {
+    icon: <SeedlingIcon className="w-10 h-10 text-bronze-500/70" />,
+    eyebrow: "Cadre bienveillant",
+    title: "Un moment pour soi",
+    desc: "Séances en petits groupes de 1 à 4 personnes pour un accompagnement attentif et personnalisé. Une atmosphère douce et inspirante, sans pression — l'atelier comme une vraie parenthèse.",
+    rotation: "0.6deg",
+    tapeColor: "bg-bronze-300/50",
+    accentColor: "#a07850",
+  },
+  {
+    icon: <RibbonStarIcon className="w-10 h-10 text-[#c4897a]/80" />,
+    eyebrow: "Accessible à tous",
+    title: "Zéro expérience requise",
+    desc: "Débutant·e ou curieux·se, vous êtes les bienvenu·es. Tout le matériel est fourni. Il ne vous faut qu'une seule chose : l'envie de mettre les mains dans la nature et de créer.",
+    rotation: "1.1deg",
+    tapeColor: "bg-[#c4897a]/35",
+    accentColor: "#c4897a",
+  },
+];
+
 /* ──────────────────────────── Animated Section Wrapper ──────────────────────────── */
 
 function AnimatedSection({
@@ -436,7 +521,7 @@ function AnimatedSection({
 const processSteps = [
   {
     num: "01",
-    title: "La Recolte",
+    title: "La Récolte",
     desc: "Cueillette minutieuse des plus belles fleurs sauvages et de jardin, au moment parfait de leur floraison.",
     rotation: "-2deg",
     tapeColor: "bg-sage-300/50",
@@ -444,27 +529,27 @@ const processSteps = [
   },
   {
     num: "02",
-    title: "Le Sechage",
-    desc: "Pressage delicat entre les pages d'un herbier, ou les petales reposent pendant plusieurs semaines.",
+    title: "Le Séchage",
+    desc: "Pressage délicat entre les pages d'un herbier, où les pétales reposent pendant plusieurs semaines.",
     rotation: "1deg",
     tapeColor: "bg-bronze-300/50",
     numColor: "text-bronze-500",
   },
   {
     num: "03",
-    title: "La Composition",
-    desc: "Arrangement artistique de chaque element — petales, feuilles et tiges — pour creer une harmonie naturelle.",
-    rotation: "-1deg",
-    tapeColor: "bg-[#c4897a]/40",
-    numColor: "text-olive-600",
-  },
-  {
-    num: "04",
-    title: "La Mise en Resine",
-    desc: "Encapsulation dans une resine cristalline qui fige la beaute ephemere pour l'eternite.",
+    title: "La Cristallisation",
+    desc: "Encapsulation dans une résine cristalline qui fige la beauté éphémère pour l'éternité.",
     rotation: "2deg",
     tapeColor: "bg-sage-300/50",
     numColor: "text-bronze-500",
+  },
+  {
+    num: "04",
+    title: "La Composition",
+    desc: "Arrangement artistique de chaque élément — pétales, feuilles et tiges — pour créer une harmonie naturelle.",
+    rotation: "-1deg",
+    tapeColor: "bg-[#c4897a]/40",
+    numColor: "text-olive-600",
   },
 ];
 
@@ -476,13 +561,13 @@ const products = [
     gradient: "from-[#c4897a]/30 via-cream-200 to-sage-200/40",
   },
   {
-    name: "Collier Fleurs Sechees",
+    name: "Collier Fleurs Séchées",
     price: "48",
     rotation: "1.5deg",
     gradient: "from-sage-200/50 via-cream-100 to-olive-200/30",
   },
   {
-    name: "Bracelet Dore Floral",
+    name: "Bracelet Doré Floral",
     price: "35",
     rotation: "-1deg",
     gradient: "from-bronze-200/40 via-cream-100 to-[#c4897a]/20",
@@ -494,45 +579,19 @@ const products = [
     gradient: "from-olive-200/30 via-cream-200 to-sage-200/40",
   },
   {
-    name: "Boucles Petales d'Or",
+    name: "Boucles Pétales d'Or",
     price: "38",
     rotation: "-1.5deg",
     gradient: "from-cream-300/50 via-bronze-100/40 to-cream-100",
   },
   {
-    name: "Bague Resine Florale",
+    name: "Bague Résine Florale",
     price: "32",
     rotation: "1deg",
     gradient: "from-[#c4897a]/25 via-cream-200 to-olive-200/20",
   },
 ];
 
-const markets = [
-  {
-    city: "Paris — Le Marais",
-    date: "15 Mars",
-    details: "Marche des Createurs, Rue de Bretagne",
-    time: "10h - 18h",
-  },
-  {
-    city: "Lyon",
-    date: "22 Mars",
-    details: "Salon de l'Artisanat, Halle Tony Garnier",
-    time: "9h - 17h",
-  },
-  {
-    city: "Bordeaux",
-    date: "5 Avril",
-    details: "Marche des Chartrons, Quai des Chartrons",
-    time: "10h - 19h",
-  },
-  {
-    city: "Aix-en-Provence",
-    date: "12 Avril",
-    details: "Place Richelme, Marche Provencal",
-    time: "9h - 18h",
-  },
-];
 
 /* ──────────────────────────── MAIN COMPONENT ──────────────────────────── */
 
@@ -546,6 +605,16 @@ export default function LandingPage() {
   const scrollTo = (ref: React.RefObject<HTMLDivElement | null>) => {
     ref.current?.scrollIntoView({ behavior: "smooth" });
   };
+
+  const [marches, setMarches] = useState<Marche[]>([]);
+  const [marchesLoaded, setMarchesLoaded] = useState(false);
+
+  useEffect(() => {
+    getMarches().then((data) => {
+      setMarches(data);
+      setMarchesLoaded(true);
+    });
+  }, []);
 
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
@@ -643,7 +712,7 @@ export default function LandingPage() {
               className="absolute -top-2 left-1/2 -translate-x-1/2 rounded-sm"
             />
             <p className="font-hand text-[0.55rem] text-olive-500/70 text-center mt-1.5 leading-tight">
-              la mise en resine
+              la mise en résine
             </p>
           </motion.div>
         </motion.div>
@@ -707,7 +776,7 @@ export default function LandingPage() {
               className="absolute -top-2 left-1/2 -translate-x-1/2 rounded-sm"
             />
             <p className="font-hand text-[0.55rem] text-olive-500/70 text-center mt-1.5 leading-tight">
-              le sechage
+              le séchage
             </p>
           </motion.div>
         </motion.div>
@@ -805,7 +874,7 @@ export default function LandingPage() {
             transition={{ duration: 0.8, delay: 0.6 }}
             className="font-hand text-xl sm:text-2xl md:text-3xl text-olive-700 mb-10 leading-relaxed max-w-2xl mx-auto"
           >
-            {"Chaque creation raconte l'histoire d'une "}
+            {"Chaque création raconte l'histoire d'une "}
             <span className="relative inline-block text-[#c4897a]">
               fleur
               <svg
@@ -864,7 +933,7 @@ export default function LandingPage() {
             transition={{ duration: 2, repeat: Infinity }}
             className="flex flex-col items-center gap-2"
           >
-            <span className="font-hand text-sm text-olive-600">defiler</span>
+            <span className="font-hand text-sm text-olive-600">défiler</span>
             <svg
               width="16"
               height="24"
@@ -990,7 +1059,7 @@ export default function LandingPage() {
         <div className="max-w-6xl mx-auto">
           <AnimatedSection className="text-center mb-16 md:mb-20">
             <span className="font-hand text-lg md:text-xl text-[#c4897a] block mb-3">
-              Nos creations
+              Nos créations
             </span>
             <h2 className="font-serif-display text-3xl sm:text-4xl md:text-5xl text-olive-800 mb-4">
               Notre{" "}
@@ -1012,9 +1081,9 @@ export default function LandingPage() {
               </span>
             </h2>
             <p className="font-editorial text-olive-700/90 text-sm md:text-base max-w-xl mx-auto">
-              Chaque piece est{" "}
+              Chaque pièce est{" "}
               <span className="italic text-olive-800 font-medium">unique</span>,
-              faconnee a la main avec des{" "}
+              façonnée à la main avec des{" "}
               <span className="relative inline-block text-[#c4897a]">
                 fleurs
                 <svg
@@ -1031,7 +1100,7 @@ export default function LandingPage() {
                   />
                 </svg>
               </span>
-              {` soigneusement selectionnees et preservees.`}
+              {` soigneusement sélectionnées et préservées.`}
             </p>
           </AnimatedSection>
 
@@ -1140,49 +1209,208 @@ export default function LandingPage() {
               />
 
               <div className="space-y-0">
-                {markets.map((market, i) => (
-                  <AnimatedSection key={market.city} delay={i * 0.12}>
-                    <div
-                      className="flex flex-col md:flex-row md:items-start gap-3 md:gap-8 py-6"
-                      style={{
-                        borderBottom:
-                          i < markets.length - 1
-                            ? "1px dashed rgba(139,119,75,0.15)"
-                            : "none",
-                      }}
-                    >
-                      {/* Date with hand-drawn circle */}
-                      <div className="relative flex-shrink-0 w-24 md:w-28 flex items-center justify-center">
-                        <HandCircle className="absolute inset-0 w-full h-full text-bronze-400/50" />
-                        <span className="font-hand text-lg md:text-xl text-bronze-500 relative z-10 text-center leading-tight">
-                          {market.date}
-                        </span>
+                {!marchesLoaded ? (
+                  /* Skeleton */
+                  [1, 2, 3].map((i) => (
+                    <div key={i} className="flex gap-8 py-6 animate-pulse" style={{ borderBottom: "1px dashed rgba(139,119,75,0.1)" }}>
+                      <div className="w-24 h-12 bg-olive-100/50 rounded-full flex-shrink-0" />
+                      <div className="flex-1 space-y-2 pt-1">
+                        <div className="h-4 bg-olive-100/50 rounded-full w-1/3" />
+                        <div className="h-3 bg-olive-100/40 rounded-full w-1/2" />
                       </div>
-
-                      {/* Market details */}
-                      <div className="flex-1 md:pl-4">
-                        <h3 className="font-hand text-xl md:text-2xl text-olive-700 mb-1">
-                          {market.city}
-                        </h3>
-                        <p className="font-editorial text-sm text-olive-700/85 mb-0.5">
-                          {market.details}
-                        </p>
-                        <p className="font-editorial text-xs text-olive-600/80 italic">
-                          {market.time}
-                        </p>
-                      </div>
-
-                      {/* Small decoration */}
-                      <SmallBlossom className="hidden md:block w-6 h-6 text-olive-200/30 flex-shrink-0 self-center" />
                     </div>
-                  </AnimatedSection>
-                ))}
+                  ))
+                ) : marches.length === 0 ? (
+                  <div className="text-center py-10">
+                    <SmallBlossom className="w-8 h-8 text-olive-200 mx-auto mb-3" />
+                    <p className="font-editorial text-[0.7rem] tracking-[0.2em] uppercase text-olive-500">
+                      Aucun événement à venir pour le moment
+                    </p>
+                  </div>
+                ) : (
+                  marches.map((marche, i) => (
+                    <AnimatedSection key={marche._id} delay={i * 0.12}>
+                      <div
+                        className="flex flex-col md:flex-row md:items-start gap-3 md:gap-8 py-6"
+                        style={{
+                          borderBottom:
+                            i < marches.length - 1
+                              ? "1px dashed rgba(139,119,75,0.15)"
+                              : "none",
+                        }}
+                      >
+                        {/* Date with hand-drawn circle */}
+                        <div className="relative flex-shrink-0 w-24 md:w-28 flex items-center justify-center">
+                          <HandCircle className="absolute inset-0 w-full h-full text-bronze-400/50" />
+                          <span className="font-hand text-lg md:text-xl text-bronze-500 relative z-10 text-center leading-tight">
+                            {formatMarcheDate(marche.date)}
+                          </span>
+                        </div>
+
+                        {/* Market details */}
+                        <div className="flex-1 md:pl-4">
+                          <h3 className="font-hand text-xl md:text-2xl text-olive-700 mb-1">
+                            {marche.city}
+                          </h3>
+                          <p className="font-editorial text-sm text-olive-700/85 mb-0.5">
+                            {marche.lieu}
+                          </p>
+                          <p className="font-editorial text-xs text-olive-600/80 italic">
+                            {marche.heures}
+                          </p>
+                        </div>
+
+                        {/* Small decoration */}
+                        <SmallBlossom className="hidden md:block w-6 h-6 text-olive-200/30 flex-shrink-0 self-center" />
+                      </div>
+                    </AnimatedSection>
+                  ))
+                )}
               </div>
 
               {/* Corner flower */}
               <WildRose className="absolute bottom-4 right-4 w-14 h-14 text-[#c4897a]/15" />
             </div>
           </AnimatedSection>
+        </div>
+      </section>
+
+      {/* ═══════════════════ FORMATIONS SECTION ═══════════════════ */}
+      <section
+        className="relative py-24 md:py-36 px-4 overflow-hidden"
+        style={sageWash}
+      >
+        {/* Botanical decorations */}
+        <BranchSprig
+          aria-hidden
+          className="pointer-events-none select-none absolute top-14 right-[6%] w-44 text-sage-500/[0.09] rotate-[14deg]"
+        />
+        <PressedLeaf
+          aria-hidden
+          className="pointer-events-none select-none absolute bottom-20 left-[4%] w-24 text-olive-500/[0.08] -rotate-[10deg]"
+        />
+        <SmallBlossom
+          aria-hidden
+          className="pointer-events-none select-none absolute top-[40%] left-[2%] w-12 text-sage-400/[0.10] rotate-[20deg]"
+        />
+
+        <div className="max-w-5xl mx-auto">
+
+          {/* ── Header ── */}
+          <AnimatedSection className="text-center mb-16 md:mb-20">
+            <span
+              className="font-hand block mb-4"
+              style={{ fontSize: "clamp(1rem, 2vw, 1.25rem)", color: "#7a9e72" }}
+            >
+              Apprenez, créez, vous épanouissez
+            </span>
+            <h2
+              className="font-serif-display text-olive-800 uppercase tracking-wide leading-[0.88]"
+              style={{ fontSize: "clamp(2.6rem, 6.5vw, 4.2rem)" }}
+            >
+              Ateliers
+            </h2>
+            <p
+              className="font-hand italic text-bronze-600 block"
+              style={{ fontSize: "clamp(1.6rem, 4vw, 2.6rem)" }}
+            >
+              &amp; Formations DIY
+            </p>
+            <p
+              className="font-editorial text-olive-700 max-w-lg mx-auto leading-relaxed mt-6"
+              style={{ fontSize: "clamp(0.82rem, 1.5vw, 0.95rem)" }}
+            >
+              Venez découvrir les secrets de la bijouterie botanique dans un cadre
+              intime et inspirant. Aucune expérience requise — juste l&apos;envie
+              de créer quelque chose de beau de vos propres mains.
+            </p>
+            <div className="flex items-center justify-center gap-3 mt-6">
+              <div className="w-10 h-px bg-olive-300/40" />
+              <WildRose className="w-5 h-5 text-olive-400/35" />
+              <div className="w-10 h-px bg-olive-300/40" />
+            </div>
+          </AnimatedSection>
+
+          {/* ── Benefit cards ── */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-7 md:gap-9 mb-14 md:mb-20">
+            {formationBenefits.map((benefit, i) => (
+              <AnimatedSection key={benefit.title} delay={i * 0.12}>
+                <div
+                  className="relative bg-white/82 shadow-[0_4px_24px_rgba(0,0,0,0.07)] px-7 pt-10 pb-7"
+                  style={{
+                    borderRadius: "2px",
+                    transform: `rotate(${benefit.rotation})`,
+                    ...ruledPaper,
+                  }}
+                >
+                  <Tape
+                    color={benefit.tapeColor}
+                    rotation="-3deg"
+                    width="w-11"
+                    className="absolute -top-2.5 left-1/2 -translate-x-1/2 rounded-sm"
+                  />
+                  <div className="mb-5">{benefit.icon}</div>
+                  <p
+                    className="font-editorial text-[0.62rem] tracking-[0.22em] uppercase font-medium mb-2"
+                    style={{ color: benefit.accentColor }}
+                  >
+                    {benefit.eyebrow}
+                  </p>
+                  <h3 className="font-serif-display text-olive-800 leading-tight mb-3" style={{ fontSize: "clamp(1.1rem, 2vw, 1.3rem)" }}>
+                    {benefit.title}
+                  </h3>
+                  <p className="font-editorial text-olive-700 leading-relaxed" style={{ fontSize: "0.84rem" }}>
+                    {benefit.desc}
+                  </p>
+                </div>
+              </AnimatedSection>
+            ))}
+          </div>
+
+          {/* ── Practical info strip ── */}
+          <AnimatedSection>
+            <div
+              className="flex flex-wrap justify-center gap-10 md:gap-16 py-8 mb-14"
+              style={{ borderTop: "1px solid rgba(139,119,75,0.15)", borderBottom: "1px solid rgba(139,119,75,0.15)" }}
+            >
+              {[
+                { label: "Durée", value: "2h30 – 3h" },
+                { label: "Groupe", value: "1 à 4 personnes" },
+                { label: "Niveau", value: "Tous niveaux" },
+                { label: "Matériel", value: "Entièrement fourni" },
+              ].map((item) => (
+                <div key={item.label} className="text-center">
+                  <p className="font-editorial text-[0.62rem] tracking-[0.2em] uppercase text-olive-500 mb-1.5">
+                    {item.label}
+                  </p>
+                  <p className="font-hand text-olive-800" style={{ fontSize: "clamp(1rem, 2.5vw, 1.3rem)" }}>
+                    {item.value}
+                  </p>
+                </div>
+              ))}
+            </div>
+          </AnimatedSection>
+
+          {/* ── CTA ── */}
+          <AnimatedSection className="text-center">
+            <p className="font-hand text-olive-700 mb-6" style={{ fontSize: "clamp(1rem, 2vw, 1.2rem)" }}>
+              Prête à créer votre premier bijou botanique ?
+            </p>
+            <Link href="/contact">
+              <motion.button
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
+                className="inline-flex items-center gap-3 px-10 py-4 bg-olive-700 text-cream-50 font-editorial text-sm tracking-[0.18em] uppercase hover:bg-olive-800 transition-colors"
+              >
+                Faire une demande
+                <span className="text-base leading-none">→</span>
+              </motion.button>
+            </Link>
+            <p className="font-editorial text-[0.7rem] tracking-[0.15em] text-olive-500/80 uppercase mt-5">
+              Réponse sous 48h · Séances sur Le Mans et alentours.
+            </p>
+          </AnimatedSection>
+
         </div>
       </section>
 
@@ -1201,7 +1429,7 @@ export default function LandingPage() {
               Une question, une envie ?
             </span>
             <h2 className="font-serif-display text-3xl sm:text-4xl md:text-5xl text-olive-800 mb-4">
-              Ecrivez-nous
+              Écrivez-nous
             </h2>
           </AnimatedSection>
 
@@ -1237,10 +1465,10 @@ export default function LandingPage() {
                       &ldquo;
                     </span>
                     La nature nous offre ses plus beaux{" "}
-                    <span className="italic text-bronze-600">tresors</span>, je
+                    <span className="italic text-bronze-600">trésors</span>, je
                     les transforme en souvenirs{" "}
                     <span className="relative inline-block italic text-olive-800">
-                      eternels
+                      éternels
                       <svg
                         className="absolute -bottom-0.5 left-0 w-full h-2 text-sage-400/30"
                         viewBox="0 0 100 8"
@@ -1280,7 +1508,7 @@ export default function LandingPage() {
                       <PhoneIcon className="w-6 h-6 text-olive-700 flex-shrink-0 mt-0.5" />
                       <div>
                         <p className="font-editorial text-sm text-olive-700 uppercase tracking-wider mb-1 font-medium">
-                          Telephone
+                          Téléphone
                         </p>
                         <p className="font-hand text-lg text-olive-700">
                           06 12 34 56 78
@@ -1341,7 +1569,7 @@ export default function LandingPage() {
                       <input
                         type="text"
                         className="w-full bg-transparent border-0 border-b border-olive-300/40 py-2 font-hand text-lg text-olive-700 focus:outline-none focus:border-olive-500 transition-colors placeholder:text-olive-300/50"
-                        placeholder="Commande personnalisee..."
+                        placeholder="Commande personnalisée..."
                       />
                     </div>
 

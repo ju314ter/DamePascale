@@ -41,7 +41,7 @@ async function verifyRecaptcha(token: string) {
 }
 
 export async function sendEmailContact(data: ContactFormData) {
-  const { email, name, message, recaptchaToken } = data;
+  const { email, name, subject, message, recaptchaToken } = data;
 
   const isHuman = await verifyRecaptcha(recaptchaToken);
   if (!isHuman) {
@@ -50,7 +50,7 @@ export async function sendEmailContact(data: ContactFormData) {
 
   const transport = nodemailer.createTransport({
     service: "gmail",
-    /* 
+    /*
         setting service as 'gmail' is same as providing these setings:
         host: "smtp.gmail.com",
         port: 465,
@@ -66,8 +66,37 @@ export async function sendEmailContact(data: ContactFormData) {
     from: process.env.MY_EMAIL,
     to: process.env.MY_EMAIL,
     // cc: email, (uncomment this line if you want to send a copy to the sender)
-    subject: `Message de ${name} (${email})`,
-    text: message,
+    subject: `[${subject}] Message de ${name} (${email})`,
+    html: `
+      <div style="font-family: Georgia, serif; max-width: 600px; margin: 0 auto; color: #3d3520;">
+        <div style="border-bottom: 1px solid #d4c9a8; padding-bottom: 16px; margin-bottom: 24px;">
+          <h2 style="margin: 0 0 4px; font-size: 1.1rem; font-weight: normal; color: #735f35;">
+            Nouveau message — Dame Pascale
+          </h2>
+          <p style="margin: 0; font-size: 0.85rem; color: #8f7a40;">Formulaire de contact</p>
+        </div>
+        <table style="width: 100%; border-collapse: collapse; margin-bottom: 24px;">
+          <tr>
+            <td style="padding: 8px 0; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.12em; color: #8f7a40; width: 100px;">Nom</td>
+            <td style="padding: 8px 0; font-size: 1rem;">${name}</td>
+          </tr>
+          <tr>
+            <td style="padding: 8px 0; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.12em; color: #8f7a40;">Email</td>
+            <td style="padding: 8px 0; font-size: 1rem;"><a href="mailto:${email}" style="color: #735f35;">${email}</a></td>
+          </tr>
+          <tr>
+            <td style="padding: 8px 0; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.12em; color: #8f7a40;">Objet</td>
+            <td style="padding: 8px 0; font-size: 1rem;">
+              <span style="display: inline-block; background: #f5ead8; color: #735f35; padding: 2px 10px; border-radius: 20px; font-size: 0.85rem;">${subject}</span>
+            </td>
+          </tr>
+        </table>
+        <div style="background: #fdf8ed; border-left: 2px solid #c4897a; padding: 16px 20px; border-radius: 0 2px 2px 0;">
+          <p style="margin: 0 0 8px; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.12em; color: #8f7a40;">Message</p>
+          <p style="margin: 0; font-size: 1rem; line-height: 1.6; white-space: pre-wrap;">${message}</p>
+        </div>
+      </div>
+    `,
   };
 
   const sendMailPromise = () =>
