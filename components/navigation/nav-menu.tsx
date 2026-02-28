@@ -139,12 +139,11 @@ export function NavMenu({ rightSlot }: { rightSlot?: React.ReactNode }) {
               </NavigationMenuItem>
 
               <NavigationMenuItem>
-                <span className="relative flex items-center gap-1.5 font-editorial text-[0.8rem] tracking-[0.15em] uppercase text-olive-400/60 px-4 py-2 cursor-default select-none">
-                  Marchés
-                  <span className="text-[0.55rem] tracking-normal normal-case font-editorial text-[#c4897a]/70 border border-[#c4897a]/30 px-1 py-0.5 rounded-sm leading-none">
-                    à venir
-                  </span>
-                </span>
+                <Link href="/marches" legacyBehavior passHref>
+                  <NavigationMenuLink className="font-editorial text-[0.8rem] tracking-[0.15em] uppercase text-olive-600 hover:text-bronze-500 transition-colors px-4 py-2 cursor-pointer no-underline">
+                    Marchés
+                  </NavigationMenuLink>
+                </Link>
               </NavigationMenuItem>
 
               <NavigationMenuItem>
@@ -266,12 +265,14 @@ export function NavMenu({ rightSlot }: { rightSlot?: React.ReactNode }) {
                       </AccordionItem>
                     </Accordion>
 
-                    <div className="flex items-center gap-2 py-3 px-4 font-editorial text-sm tracking-[0.12em] uppercase text-olive-400/60 cursor-default select-none rounded-sm">
-                      Marchés
-                      <span className="text-[0.6rem] tracking-normal normal-case font-editorial text-[#c4897a]/70 border border-[#c4897a]/30 px-1 py-0.5 rounded-sm leading-none">
-                        à venir
-                      </span>
-                    </div>
+                    <SheetClose asChild>
+                      <Link
+                        href="/marches"
+                        className="block py-3 px-4 font-editorial text-sm tracking-[0.12em] uppercase text-olive-600 hover:text-bronze-500 hover:bg-olive-100/30 transition-colors no-underline rounded-sm"
+                      >
+                        Marchés
+                      </Link>
+                    </SheetClose>
 
                     <div className="flex items-center gap-2 py-3 px-4 font-editorial text-sm tracking-[0.12em] uppercase text-olive-400/60 cursor-default select-none rounded-sm">
                       Ateliers

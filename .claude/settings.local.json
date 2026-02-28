@@ -4,7 +4,8 @@
       "mcp__ide__getDiagnostics",
       "Bash(find:*)",
       "Bash(wc:*)",
-      "Bash(npx tsc:*)"
+      "Bash(npx tsc:*)",
+      "Bash(ls:*)"
     ]
   }
 }
