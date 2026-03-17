@@ -8,7 +8,12 @@ import FiltresBijouWrapper from "@/components/filtres/filtres-bijou-wrapper";
 import CardBijou from "@/components/product-cards/card-bijou";
 import Footer from "@/components/footer/footer";
 import Image from "next/image";
-import { SlidersHorizontal, ArrowUpDown, ChevronLeft, ChevronRight } from "lucide-react";
+import {
+  SlidersHorizontal,
+  ArrowUpDown,
+  ChevronLeft,
+  ChevronRight,
+} from "lucide-react";
 import {
   Sheet,
   SheetContent,
@@ -21,8 +26,18 @@ import {
 
 function PressedLeaf({ className = "" }: { className?: string }) {
   return (
-    <svg viewBox="0 0 80 120" fill="none" className={className} xmlns="http://www.w3.org/2000/svg">
-      <path d="M40 10 C20 30, 10 60, 40 110 C70 60, 60 30, 40 10Z" stroke="currentColor" strokeWidth="1.2" fill="none" />
+    <svg
+      viewBox="0 0 80 120"
+      fill="none"
+      className={className}
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path
+        d="M40 10 C20 30, 10 60, 40 110 C70 60, 60 30, 40 10Z"
+        stroke="currentColor"
+        strokeWidth="1.2"
+        fill="none"
+      />
       <path d="M40 10 L40 110" stroke="currentColor" strokeWidth="0.8" />
       <path d="M40 35 L25 25" stroke="currentColor" strokeWidth="0.6" />
       <path d="M40 50 L22 42" stroke="currentColor" strokeWidth="0.6" />
@@ -36,37 +51,143 @@ function PressedLeaf({ className = "" }: { className?: string }) {
 
 function BranchSprig({ className = "" }: { className?: string }) {
   return (
-    <svg viewBox="0 0 120 60" fill="none" className={className} xmlns="http://www.w3.org/2000/svg">
-      <path d="M10 50 Q40 45, 60 30 Q80 15, 110 10" stroke="currentColor" strokeWidth="1" />
-      <path d="M30 47 C25 38, 28 30, 35 28" stroke="currentColor" strokeWidth="0.7" />
-      <path d="M50 36 C43 28, 46 20, 54 18" stroke="currentColor" strokeWidth="0.7" />
-      <path d="M70 24 C64 18, 68 10, 76 9" stroke="currentColor" strokeWidth="0.7" />
-      <path d="M90 15 C86 10, 90 4, 96 5" stroke="currentColor" strokeWidth="0.7" />
+    <svg
+      viewBox="0 0 120 60"
+      fill="none"
+      className={className}
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path
+        d="M10 50 Q40 45, 60 30 Q80 15, 110 10"
+        stroke="currentColor"
+        strokeWidth="1"
+      />
+      <path
+        d="M30 47 C25 38, 28 30, 35 28"
+        stroke="currentColor"
+        strokeWidth="0.7"
+      />
+      <path
+        d="M50 36 C43 28, 46 20, 54 18"
+        stroke="currentColor"
+        strokeWidth="0.7"
+      />
+      <path
+        d="M70 24 C64 18, 68 10, 76 9"
+        stroke="currentColor"
+        strokeWidth="0.7"
+      />
+      <path
+        d="M90 15 C86 10, 90 4, 96 5"
+        stroke="currentColor"
+        strokeWidth="0.7"
+      />
     </svg>
   );
 }
 
 function PressedFlower({ className = "" }: { className?: string }) {
   return (
-    <svg viewBox="0 0 100 100" fill="none" className={className} xmlns="http://www.w3.org/2000/svg">
+    <svg
+      viewBox="0 0 100 100"
+      fill="none"
+      className={className}
+      xmlns="http://www.w3.org/2000/svg"
+    >
       <circle cx="50" cy="50" r="6" stroke="currentColor" strokeWidth="1" />
-      <ellipse cx="50" cy="30" rx="8" ry="16" stroke="currentColor" strokeWidth="0.8" transform="rotate(0 50 50)" />
-      <ellipse cx="50" cy="30" rx="8" ry="16" stroke="currentColor" strokeWidth="0.8" transform="rotate(72 50 50)" />
-      <ellipse cx="50" cy="30" rx="8" ry="16" stroke="currentColor" strokeWidth="0.8" transform="rotate(144 50 50)" />
-      <ellipse cx="50" cy="30" rx="8" ry="16" stroke="currentColor" strokeWidth="0.8" transform="rotate(216 50 50)" />
-      <ellipse cx="50" cy="30" rx="8" ry="16" stroke="currentColor" strokeWidth="0.8" transform="rotate(288 50 50)" />
+      <ellipse
+        cx="50"
+        cy="30"
+        rx="8"
+        ry="16"
+        stroke="currentColor"
+        strokeWidth="0.8"
+        transform="rotate(0 50 50)"
+      />
+      <ellipse
+        cx="50"
+        cy="30"
+        rx="8"
+        ry="16"
+        stroke="currentColor"
+        strokeWidth="0.8"
+        transform="rotate(72 50 50)"
+      />
+      <ellipse
+        cx="50"
+        cy="30"
+        rx="8"
+        ry="16"
+        stroke="currentColor"
+        strokeWidth="0.8"
+        transform="rotate(144 50 50)"
+      />
+      <ellipse
+        cx="50"
+        cy="30"
+        rx="8"
+        ry="16"
+        stroke="currentColor"
+        strokeWidth="0.8"
+        transform="rotate(216 50 50)"
+      />
+      <ellipse
+        cx="50"
+        cy="30"
+        rx="8"
+        ry="16"
+        stroke="currentColor"
+        strokeWidth="0.8"
+        transform="rotate(288 50 50)"
+      />
     </svg>
   );
 }
 
 function SmallBlossom({ className = "" }: { className?: string }) {
   return (
-    <svg viewBox="0 0 60 60" fill="none" className={className} xmlns="http://www.w3.org/2000/svg">
+    <svg
+      viewBox="0 0 60 60"
+      fill="none"
+      className={className}
+      xmlns="http://www.w3.org/2000/svg"
+    >
       <circle cx="30" cy="30" r="4" stroke="currentColor" strokeWidth="1" />
-      <ellipse cx="30" cy="18" rx="5" ry="10" stroke="currentColor" strokeWidth="0.7" />
-      <ellipse cx="30" cy="18" rx="5" ry="10" stroke="currentColor" strokeWidth="0.7" transform="rotate(90 30 30)" />
-      <ellipse cx="30" cy="18" rx="5" ry="10" stroke="currentColor" strokeWidth="0.7" transform="rotate(180 30 30)" />
-      <ellipse cx="30" cy="18" rx="5" ry="10" stroke="currentColor" strokeWidth="0.7" transform="rotate(270 30 30)" />
+      <ellipse
+        cx="30"
+        cy="18"
+        rx="5"
+        ry="10"
+        stroke="currentColor"
+        strokeWidth="0.7"
+      />
+      <ellipse
+        cx="30"
+        cy="18"
+        rx="5"
+        ry="10"
+        stroke="currentColor"
+        strokeWidth="0.7"
+        transform="rotate(90 30 30)"
+      />
+      <ellipse
+        cx="30"
+        cy="18"
+        rx="5"
+        ry="10"
+        stroke="currentColor"
+        strokeWidth="0.7"
+        transform="rotate(180 30 30)"
+      />
+      <ellipse
+        cx="30"
+        cy="18"
+        rx="5"
+        ry="10"
+        stroke="currentColor"
+        strokeWidth="0.7"
+        transform="rotate(270 30 30)"
+      />
     </svg>
   );
 }
@@ -97,7 +218,9 @@ const cardVariants = {
 
 export default function BoutiqueBijouPage() {
   const [bijoux, setBijoux] = useState<Bijou[]>([]);
-  const [sortByStock, setSortByStock] = useState<"none" | "desc" | "asc">("none");
+  const [sortByStock, setSortByStock] = useState<"none" | "desc" | "asc">(
+    "none",
+  );
   const [itemsPerPage, setItemsPerPage] = useState(20);
   const [currentPage, setCurrentPage] = useState(1);
   const [mobileFilterOpen, setMobileFilterOpen] = useState(false);
@@ -105,7 +228,7 @@ export default function BoutiqueBijouPage() {
 
   const { scrollYProgress } = useScroll();
   const ySlow = useTransform(scrollYProgress, [0, 1], [0, -55]);
-  const yMed  = useTransform(scrollYProgress, [0, 1], [0, -100]);
+  const yMed = useTransform(scrollYProgress, [0, 1], [0, -100]);
   const yFast = useTransform(scrollYProgress, [0, 1], [0, -150]);
 
   async function fetchBijoux(filters?: BijouFilters) {
@@ -177,8 +300,7 @@ export default function BoutiqueBijouPage() {
       url.searchParams.set("matiere", filtres.matieres.join(","));
     if (filtres.fleurs && filtres.fleurs.length > 0)
       url.searchParams.set("fleur", filtres.fleurs.join(","));
-    if (filtres.price)
-      url.searchParams.set("price", filtres.price.join(","));
+    if (filtres.price) url.searchParams.set("price", filtres.price.join(","));
     window.history.pushState({}, "", url);
     fetchBijoux(filtres);
     setCurrentPage(1);
@@ -187,26 +309,51 @@ export default function BoutiqueBijouPage() {
   return (
     <div className="min-h-screen relative" style={pageBackground}>
       {/* ── Botanical parallax decorations (fixed layer, no overflow needed) ── */}
-      <div className="fixed inset-0 pointer-events-none" aria-hidden style={{ zIndex: 0 }}>
-        <motion.div style={{ y: ySlow }} className="absolute top-[8%] right-0 w-32 md:w-48">
+      <div
+        className="fixed inset-0 pointer-events-none"
+        aria-hidden
+        style={{ zIndex: 0 }}
+      >
+        <motion.div
+          style={{ y: ySlow }}
+          className="absolute top-[8%] right-0 w-32 md:w-48"
+        >
           <PressedLeaf className="w-full text-olive-400/[0.12] rotate-[18deg]" />
         </motion.div>
-        <motion.div style={{ y: yFast }} className="absolute top-[22%] left-0 w-36 md:w-52">
+        <motion.div
+          style={{ y: yFast }}
+          className="absolute top-[22%] left-0 w-36 md:w-52"
+        >
           <BranchSprig className="w-full text-sage-400/[0.10] -rotate-[6deg]" />
         </motion.div>
-        <motion.div style={{ y: yMed }} className="absolute top-[40%] right-[2%] w-16 md:w-22">
+        <motion.div
+          style={{ y: yMed }}
+          className="absolute top-[40%] right-[2%] w-16 md:w-22"
+        >
           <PressedFlower className="w-full text-bronze-400/[0.09] rotate-[12deg]" />
         </motion.div>
-        <motion.div style={{ y: ySlow }} className="absolute top-[52%] left-[1%] w-14 md:w-20">
+        <motion.div
+          style={{ y: ySlow }}
+          className="absolute top-[52%] left-[1%] w-14 md:w-20"
+        >
           <SmallBlossom className="w-full text-olive-300/[0.10] -rotate-[15deg]" />
         </motion.div>
-        <motion.div style={{ y: yFast }} className="absolute top-[64%] right-0 w-28 md:w-40">
+        <motion.div
+          style={{ y: yFast }}
+          className="absolute top-[64%] right-0 w-28 md:w-40"
+        >
           <PressedLeaf className="w-full text-sage-300/[0.09] -rotate-[25deg]" />
         </motion.div>
-        <motion.div style={{ y: yMed }} className="absolute top-[76%] left-0 w-40 md:w-56">
+        <motion.div
+          style={{ y: yMed }}
+          className="absolute top-[76%] left-0 w-40 md:w-56"
+        >
           <BranchSprig className="w-full text-olive-400/[0.10] rotate-[5deg]" />
         </motion.div>
-        <motion.div style={{ y: ySlow }} className="absolute top-[88%] right-[5%] w-12 md:w-16">
+        <motion.div
+          style={{ y: ySlow }}
+          className="absolute top-[88%] right-[5%] w-12 md:w-16"
+        >
           <SmallBlossom className="w-full text-bronze-300/[0.08] rotate-[30deg]" />
         </motion.div>
       </div>
@@ -221,7 +368,7 @@ export default function BoutiqueBijouPage() {
             "linear-gradient(135deg, #f0ede3 0%, #f7f3e8 45%, #f5e8d0 100%)",
         }}
       >
-          <div className="pointer-events-none absolute inset-0 overflow-hidden">
+        <div className="pointer-events-none absolute inset-0 overflow-hidden">
           {/* Top Left Arabesque */}
           <svg
             className="absolute -top-10 -left-10 w-72 opacity-[0.08] text-olive-900"
@@ -261,7 +408,8 @@ export default function BoutiqueBijouPage() {
                 <br />
                 Floraux
               </h1>
-              <p className="font-editorial italic text-olive-700 leading-relaxed"
+              <p
+                className="font-editorial italic text-olive-700 leading-relaxed"
                 style={{ fontSize: "clamp(0.78rem, 1.5vw, 0.875rem)" }}
               >
                 Chaque pièce est unique, façonnée à la main
@@ -280,7 +428,7 @@ export default function BoutiqueBijouPage() {
               aria-hidden
             >
               <Image
-                src="/collier-fleur-nobg.png"
+                src="/medaillon.png"
                 alt=""
                 fill
                 sizes="(max-width: 640px) 180px, (max-width: 1024px) 280px, 360px"
@@ -299,9 +447,11 @@ export default function BoutiqueBijouPage() {
       {/* ──────────────────────────────────────────────────────────────────── */}
       {/* Main Content                                                         */}
       {/* ──────────────────────────────────────────────────────────────────── */}
-      <div ref={mainContentRef} className="max-w-7xl mx-auto px-4 sm:px-6 py-12">
+      <div
+        ref={mainContentRef}
+        className="max-w-7xl mx-auto px-4 sm:px-6 py-12"
+      >
         <div className="flex gap-8 items-start">
-
           {/* ── Desktop Sidebar ──────────────────────────────────────────── */}
           <aside className="hidden lg:block w-[320px] flex-shrink-0 self-stretch">
             <div className="sticky top-[88px]">
@@ -316,7 +466,6 @@ export default function BoutiqueBijouPage() {
 
           {/* ── Main Section ─────────────────────────────────────────────── */}
           <section className="flex-1 min-w-0">
-
             {/* Controls bar */}
             <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-3 mb-7 pb-5 border-b border-olive-100/70">
               <div>
@@ -335,7 +484,10 @@ export default function BoutiqueBijouPage() {
 
               <div className="flex items-center gap-2 flex-wrap">
                 {/* Mobile filter trigger */}
-                <Sheet open={mobileFilterOpen} onOpenChange={setMobileFilterOpen}>
+                <Sheet
+                  open={mobileFilterOpen}
+                  onOpenChange={setMobileFilterOpen}
+                >
                   <SheetTrigger asChild>
                     <button className="lg:hidden flex items-center gap-1.5 px-3.5 py-2 border border-olive-200 bg-white text-olive-700 font-editorial text-[0.62rem] tracking-[0.12em] uppercase rounded-lg hover:bg-olive-50 transition-colors shadow-sm">
                       <SlidersHorizontal size={12} />

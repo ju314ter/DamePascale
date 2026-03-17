@@ -5,7 +5,11 @@ import { motion, useInView } from "motion/react";
 import Link from "next/link";
 import Footer from "@/components/footer/footer";
 import { Instagram, Facebook } from "lucide-react";
-import { getMarches, formatMarcheDate, type Marche } from "@/sanity/lib/marches/calls";
+import {
+  getMarches,
+  formatMarcheDate,
+  type Marche,
+} from "@/sanity/lib/marches/calls";
 import { getCollectionVedette, type Bijou } from "@/sanity/lib/bijoux/calls";
 import { urlFor } from "@/sanity/lib/client";
 import Image from "next/image";
@@ -326,47 +330,166 @@ function PenIcon({ className = "" }: { className?: string }) {
   );
 }
 
-
 function CraftHandIcon({ className = "" }: { className?: string }) {
   return (
-    <svg viewBox="0 0 48 48" fill="none" className={className} xmlns="http://www.w3.org/2000/svg">
-      <path d="M24 36 C20 40, 12 42, 8 38 C4 34, 6 26, 10 22 L18 14" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" />
-      <path d="M18 14 C18 10, 22 8, 24 11 L24 24" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" />
-      <path d="M24 18 C24 14, 28 13, 29 16 L30 24" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" />
-      <path d="M30 20 C30 17, 33 16, 34 19 L34 26" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" />
-      <path d="M34 22 C35 20, 38 20, 38 24 L36 32" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" />
-      <path d="M14 10 C14 6, 16 4, 18 6 L20 12" stroke="currentColor" strokeWidth="1" strokeLinecap="round" />
-      <path d="M16 7 C17 4, 20 4, 20 8" stroke="currentColor" strokeWidth="0.8" strokeLinecap="round" />
-      <path d="M20 6 C20 4, 23 4, 23 8" stroke="currentColor" strokeWidth="0.8" strokeLinecap="round" />
+    <svg
+      viewBox="0 0 48 48"
+      fill="none"
+      className={className}
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path
+        d="M24 36 C20 40, 12 42, 8 38 C4 34, 6 26, 10 22 L18 14"
+        stroke="currentColor"
+        strokeWidth="1.4"
+        strokeLinecap="round"
+      />
+      <path
+        d="M18 14 C18 10, 22 8, 24 11 L24 24"
+        stroke="currentColor"
+        strokeWidth="1.4"
+        strokeLinecap="round"
+      />
+      <path
+        d="M24 18 C24 14, 28 13, 29 16 L30 24"
+        stroke="currentColor"
+        strokeWidth="1.4"
+        strokeLinecap="round"
+      />
+      <path
+        d="M30 20 C30 17, 33 16, 34 19 L34 26"
+        stroke="currentColor"
+        strokeWidth="1.4"
+        strokeLinecap="round"
+      />
+      <path
+        d="M34 22 C35 20, 38 20, 38 24 L36 32"
+        stroke="currentColor"
+        strokeWidth="1.4"
+        strokeLinecap="round"
+      />
+      <path
+        d="M14 10 C14 6, 16 4, 18 6 L20 12"
+        stroke="currentColor"
+        strokeWidth="1"
+        strokeLinecap="round"
+      />
+      <path
+        d="M16 7 C17 4, 20 4, 20 8"
+        stroke="currentColor"
+        strokeWidth="0.8"
+        strokeLinecap="round"
+      />
+      <path
+        d="M20 6 C20 4, 23 4, 23 8"
+        stroke="currentColor"
+        strokeWidth="0.8"
+        strokeLinecap="round"
+      />
     </svg>
   );
 }
 
 function SeedlingIcon({ className = "" }: { className?: string }) {
   return (
-    <svg viewBox="0 0 48 48" fill="none" className={className} xmlns="http://www.w3.org/2000/svg">
-      <path d="M24 42 L24 20" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" />
-      <path d="M24 28 C20 24, 12 24, 10 18 C10 12, 18 10, 24 16" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" />
-      <path d="M24 22 C28 16, 36 15, 38 20 C40 26, 32 30, 24 26" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" />
-      <path d="M24 16 C24 14, 26 8, 30 6 C34 4, 36 8, 34 12 C32 16, 28 16, 24 16Z" stroke="currentColor" strokeWidth="1" strokeLinecap="round" />
+    <svg
+      viewBox="0 0 48 48"
+      fill="none"
+      className={className}
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path
+        d="M24 42 L24 20"
+        stroke="currentColor"
+        strokeWidth="1.4"
+        strokeLinecap="round"
+      />
+      <path
+        d="M24 28 C20 24, 12 24, 10 18 C10 12, 18 10, 24 16"
+        stroke="currentColor"
+        strokeWidth="1.2"
+        strokeLinecap="round"
+      />
+      <path
+        d="M24 22 C28 16, 36 15, 38 20 C40 26, 32 30, 24 26"
+        stroke="currentColor"
+        strokeWidth="1.2"
+        strokeLinecap="round"
+      />
+      <path
+        d="M24 16 C24 14, 26 8, 30 6 C34 4, 36 8, 34 12 C32 16, 28 16, 24 16Z"
+        stroke="currentColor"
+        strokeWidth="1"
+        strokeLinecap="round"
+      />
     </svg>
   );
 }
 
 function RibbonStarIcon({ className = "" }: { className?: string }) {
   return (
-    <svg viewBox="0 0 48 48" fill="none" className={className} xmlns="http://www.w3.org/2000/svg">
+    <svg
+      viewBox="0 0 48 48"
+      fill="none"
+      className={className}
+      xmlns="http://www.w3.org/2000/svg"
+    >
       <circle cx="24" cy="22" r="9" stroke="currentColor" strokeWidth="1.2" />
-      <path d="M24 6 L24 13" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" />
-      <path d="M24 31 L24 38" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" />
-      <path d="M8 22 L15 22" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" />
-      <path d="M33 22 L40 22" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" />
-      <path d="M13 11 L18 16" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" />
-      <path d="M30 28 L35 33" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" />
-      <path d="M35 11 L30 16" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" />
-      <path d="M18 28 L13 33" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" />
+      <path
+        d="M24 6 L24 13"
+        stroke="currentColor"
+        strokeWidth="1.2"
+        strokeLinecap="round"
+      />
+      <path
+        d="M24 31 L24 38"
+        stroke="currentColor"
+        strokeWidth="1.2"
+        strokeLinecap="round"
+      />
+      <path
+        d="M8 22 L15 22"
+        stroke="currentColor"
+        strokeWidth="1.2"
+        strokeLinecap="round"
+      />
+      <path
+        d="M33 22 L40 22"
+        stroke="currentColor"
+        strokeWidth="1.2"
+        strokeLinecap="round"
+      />
+      <path
+        d="M13 11 L18 16"
+        stroke="currentColor"
+        strokeWidth="1.2"
+        strokeLinecap="round"
+      />
+      <path
+        d="M30 28 L35 33"
+        stroke="currentColor"
+        strokeWidth="1.2"
+        strokeLinecap="round"
+      />
+      <path
+        d="M35 11 L30 16"
+        stroke="currentColor"
+        strokeWidth="1.2"
+        strokeLinecap="round"
+      />
+      <path
+        d="M18 28 L13 33"
+        stroke="currentColor"
+        strokeWidth="1.2"
+        strokeLinecap="round"
+      />
       <circle cx="24" cy="22" r="3.5" stroke="currentColor" strokeWidth="0.8" />
-      <path d="M20 38 C20 36, 24 34, 28 38 L26 44 C25 46, 23 46, 22 44Z" stroke="currentColor" strokeWidth="0.9" strokeLinejoin="round" />
+      <path
+        d="M20 38 C20 36, 24 34, 28 38 L26 44 C25 46, 23 46, 22 44Z"
+        stroke="currentColor"
+        strokeWidth="0.9"
+        strokeLinejoin="round"
+      />
     </svg>
   );
 }
@@ -452,7 +575,7 @@ const formationBenefits = [
     icon: <CraftHandIcon className="w-10 h-10 text-sage-600/70" />,
     eyebrow: "Savoir-faire transmis",
     title: "Apprenez en créant",
-    desc: "Récolte, pressage, encapsulation en résine… chaque geste vous est enseigné pas à pas, avec patience. Vous repartez avec vos propres créations et toutes les clés pour continuer chez vous.",
+    desc: "Récolte, pressage, encapsulation en résine… chaque geste vous est enseigné pas à pas, avec patience. Venez avec vos fleurs préférées quelques semaines avant l'atelier ou choisissez parmi nos nombreuses fleurs déjà traitées, vous repartez avec vos propres créations et toutes les clés pour continuer chez vous.",
     rotation: "-1.2deg",
     tapeColor: "bg-sage-300/50",
     accentColor: "#6b8f63",
@@ -461,7 +584,7 @@ const formationBenefits = [
     icon: <SeedlingIcon className="w-10 h-10 text-bronze-500/70" />,
     eyebrow: "Cadre bienveillant",
     title: "Un moment pour soi",
-    desc: "Séances en petits groupes de 1 à 4 personnes pour un accompagnement attentif et personnalisé. Une atmosphère douce et inspirante, sans pression — l'atelier comme une vraie parenthèse.",
+    desc: "Séances individuelles pour un accompagnement attentif et personnalisé. Une atmosphère douce et inspirante, sans pression — l'atelier comme une vraie parenthèse.",
     rotation: "0.6deg",
     tapeColor: "bg-bronze-300/50",
     accentColor: "#a07850",
@@ -509,7 +632,7 @@ const processSteps = [
   {
     num: "01",
     title: "La Récolte",
-    desc: "Cueillette minutieuse des plus belles fleurs sauvages et de jardin, au moment parfait de leur floraison.",
+    desc: "Cueillette minutieuse des plus belles fleurs sauvages et de jardin ou de culture, au moment parfait de leur floraison.",
     rotation: "-2deg",
     tapeColor: "bg-sage-300/50",
     numColor: "text-olive-600",
@@ -517,7 +640,7 @@ const processSteps = [
   {
     num: "02",
     title: "Le Séchage",
-    desc: "Pressage délicat entre les pages d'un herbier, où les pétales reposent pendant plusieurs semaines.",
+    desc: "Pressage délicat entre les pages d'un herbier ou recouverte de poudre fine spéciale, les pétales reposent pendant plusieurs semaines.",
     rotation: "1deg",
     tapeColor: "bg-bronze-300/50",
     numColor: "text-bronze-500",
@@ -533,7 +656,7 @@ const processSteps = [
   {
     num: "04",
     title: "La Composition",
-    desc: "Arrangement artistique de chaque élément — pétales, feuilles et tiges — pour créer une harmonie naturelle.",
+    desc: "Arrangement artistique de chaque élément de qualité - sans perçage de fleurs ce qui leur assure une protection optimale contre l&apos;humidité-pour créer une harmonie naturelle.",
     rotation: "-1deg",
     tapeColor: "bg-[#c4897a]/40",
     numColor: "text-olive-600",
@@ -541,7 +664,6 @@ const processSteps = [
 ];
 
 const CARD_ROTATIONS = ["-2deg", "1.5deg", "-1deg", "2deg", "-1.5deg", "1deg"];
-
 
 /* ──────────────────────────── MAIN COMPONENT ──────────────────────────── */
 
@@ -628,10 +750,16 @@ export default function LandingPage() {
           <motion.div
             animate={{ y: [0, -6, 0], rotate: [-7, -5.5, -7] }}
             transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
-            className="bg-white p-2 pb-7 shadow-[0_4px_20px_rgba(0,0,0,0.08)] w-20 md:w-28 lg:w-34 opacity-55 md:opacity-65"
+            className="bg-white p-2 pb-7 shadow-[0_4px_20px_rgba(0,0,0,0.08)] w-28 md:w-36 lg:w-44 opacity-75 md:opacity-85"
           >
-            <div className="aspect-[4/3] bg-gradient-to-br from-sage-200/60 via-cream-200 to-olive-200/40 relative overflow-hidden">
-              <PressedFlower className="absolute inset-0 m-auto w-12 h-12 text-olive-500/20" />
+            <div className="aspect-[4/3] relative overflow-hidden">
+              <Image
+                src="/marches/polaroids/cueillette.jpg"
+                alt="Stand au marché"
+                fill
+                className="object-cover"
+                sizes="150px"
+              />
             </div>
             <Tape
               color="bg-sage-300/50"
@@ -660,10 +788,16 @@ export default function LandingPage() {
               ease: "easeInOut",
               delay: 1,
             }}
-            className="bg-white p-2 pb-7 shadow-[0_4px_20px_rgba(0,0,0,0.08)] w-20 md:w-30 lg:w-36 opacity-50 md:opacity-60"
+            className="bg-white p-2 pb-7 shadow-[0_4px_20px_rgba(0,0,0,0.08)] w-28 md:w-38 lg:w-44 opacity-70 md:opacity-85"
           >
-            <div className="aspect-[4/3] bg-gradient-to-br from-bronze-200/50 via-cream-100 to-[#c4897a]/20 relative overflow-hidden">
-              <WildRose className="absolute inset-0 m-auto w-14 h-14 text-[#c4897a]/20" />
+            <div className="aspect-[4/3] relative overflow-hidden">
+              <Image
+                src="/marches/polaroids/resine.jpg"
+                alt="Marché de Noël"
+                fill
+                className="object-cover"
+                sizes="150px"
+              />
             </div>
             <Tape
               color="bg-[#c4897a]/40"
@@ -692,10 +826,16 @@ export default function LandingPage() {
               ease: "easeInOut",
               delay: 2,
             }}
-            className="bg-white p-2 pb-7 shadow-[0_4px_20px_rgba(0,0,0,0.08)] w-28 opacity-50"
+            className="bg-white p-2 pb-7 shadow-[0_4px_20px_rgba(0,0,0,0.08)] w-36 opacity-80"
           >
-            <div className="aspect-square bg-gradient-to-br from-olive-200/40 via-cream-200 to-sage-200/50 relative overflow-hidden">
-              <BranchSprig className="absolute inset-0 m-auto w-16 h-8 text-olive-500/15" />
+            <div className="aspect-square relative overflow-hidden">
+              <Image
+                src="/marches/polaroids/atelier.jpg"
+                alt="Stand Dame Pascale"
+                fill
+                className="object-cover"
+                sizes="150px"
+              />
             </div>
             <Tape
               color="bg-bronze-300/35"
@@ -724,10 +864,16 @@ export default function LandingPage() {
               ease: "easeInOut",
               delay: 0.5,
             }}
-            className="bg-white p-2 pb-7 shadow-[0_4px_20px_rgba(0,0,0,0.08)] w-26 opacity-50"
+            className="bg-white p-2 pb-7 shadow-[0_4px_20px_rgba(0,0,0,0.08)] w-34 opacity-80"
           >
-            <div className="aspect-[3/4] bg-gradient-to-br from-sage-200/50 via-cream-200 to-olive-200/30 relative overflow-hidden">
-              <SmallBlossom className="absolute inset-0 m-auto w-8 h-8 text-olive-400/15" />
+            <div className="aspect-[3/4] relative overflow-hidden">
+              <Image
+                src="/marches/polaroids/sechage.jpg"
+                alt="Stand au marché"
+                fill
+                className="object-cover"
+                sizes="150px"
+              />
             </div>
             <Tape
               color="bg-sage-300/40"
@@ -756,10 +902,16 @@ export default function LandingPage() {
               ease: "easeInOut",
               delay: 3,
             }}
-            className="bg-white p-1.5 pb-6 shadow-[0_4px_16px_rgba(0,0,0,0.06)] w-20 md:w-24 lg:w-28 opacity-45 md:opacity-50"
+            className="bg-white p-1.5 pb-6 shadow-[0_4px_16px_rgba(0,0,0,0.06)] w-28 md:w-32 lg:w-38 opacity-70 md:opacity-80"
           >
-            <div className="aspect-square bg-gradient-to-br from-[#c4897a]/20 via-cream-100 to-bronze-200/30 relative overflow-hidden">
-              <PressedLeaf className="absolute inset-0 m-auto w-8 h-12 text-olive-500/15" />
+            <div className="aspect-square relative overflow-hidden">
+              <Image
+                src="/marches/polaroids/bijou.jpg"
+                alt="Visiteurs au stand"
+                fill
+                className="object-cover"
+                sizes="150px"
+              />
             </div>
             <Tape
               color="bg-[#c4897a]/30"
@@ -1090,9 +1242,15 @@ export default function LandingPage() {
                           boxShadow:
                             "0 25px 50px rgba(0,0,0,0.1), 0 10px 20px rgba(0,0,0,0.05)",
                         }}
-                        transition={{ type: "spring", stiffness: 300, damping: 20 }}
+                        transition={{
+                          type: "spring",
+                          stiffness: 300,
+                          damping: 20,
+                        }}
                         className="cursor-pointer"
-                        style={{ transform: `rotate(${CARD_ROTATIONS[i % 6]})` }}
+                        style={{
+                          transform: `rotate(${CARD_ROTATIONS[i % 6]})`,
+                        }}
                       >
                         {/* Polaroid card */}
                         <div className="bg-white p-3 pb-6 shadow-[0_4px_24px_rgba(0,0,0,0.06)]">
@@ -1100,7 +1258,9 @@ export default function LandingPage() {
                           <div className="aspect-square relative overflow-hidden bg-cream-100">
                             {bijou.highlightedImg ? (
                               <Image
-                                src={urlFor(bijou.highlightedImg).width(400).url()}
+                                src={urlFor(bijou.highlightedImg)
+                                  .width(400)
+                                  .url()}
                                 alt={bijou.name}
                                 fill
                                 className="object-cover"
@@ -1119,7 +1279,10 @@ export default function LandingPage() {
                             </h3>
                             <p className="font-editorial text-sm text-bronze-500 mt-1">
                               {bijou.promotionDiscount
-                                ? (bijou.price * (1 - bijou.promotionDiscount / 100)).toFixed(2)
+                                ? (
+                                    bijou.price *
+                                    (1 - bijou.promotionDiscount / 100)
+                                  ).toFixed(2)
                                 : bijou.price}{" "}
                               &euro;
                             </p>
@@ -1198,7 +1361,13 @@ export default function LandingPage() {
                 {!marchesLoaded ? (
                   /* Skeleton */
                   [1, 2, 3].map((i) => (
-                    <div key={i} className="flex gap-8 py-6 animate-pulse" style={{ borderBottom: "1px dashed rgba(139,119,75,0.1)" }}>
+                    <div
+                      key={i}
+                      className="flex gap-8 py-6 animate-pulse"
+                      style={{
+                        borderBottom: "1px dashed rgba(139,119,75,0.1)",
+                      }}
+                    >
                       <div className="w-24 h-12 bg-olive-100/50 rounded-full flex-shrink-0" />
                       <div className="flex-1 space-y-2 pt-1">
                         <div className="h-4 bg-olive-100/50 rounded-full w-1/3" />
@@ -1281,12 +1450,14 @@ export default function LandingPage() {
         />
 
         <div className="max-w-5xl mx-auto">
-
           {/* ── Header ── */}
           <AnimatedSection className="text-center mb-16 md:mb-20">
             <span
               className="font-hand block mb-4"
-              style={{ fontSize: "clamp(1rem, 2vw, 1.25rem)", color: "#7a9e72" }}
+              style={{
+                fontSize: "clamp(1rem, 2vw, 1.25rem)",
+                color: "#7a9e72",
+              }}
             >
               Apprenez, créez, vous épanouissez
             </span>
@@ -1306,9 +1477,9 @@ export default function LandingPage() {
               className="font-editorial text-olive-700 max-w-lg mx-auto leading-relaxed mt-6"
               style={{ fontSize: "clamp(0.82rem, 1.5vw, 0.95rem)" }}
             >
-              Venez découvrir les secrets de la bijouterie botanique dans un cadre
-              intime et inspirant. Aucune expérience requise — juste l&apos;envie
-              de créer quelque chose de beau de vos propres mains.
+              Venez découvrir les secrets de la bijouterie botanique dans un
+              cadre intime et inspirant. Aucune expérience requise — juste
+              l&apos;envie de créer quelque chose de beau de vos propres mains.
             </p>
             <div className="flex items-center justify-center gap-3 mt-6">
               <div className="w-10 h-px bg-olive-300/40" />
@@ -1342,10 +1513,16 @@ export default function LandingPage() {
                   >
                     {benefit.eyebrow}
                   </p>
-                  <h3 className="font-serif-display text-olive-800 leading-tight mb-3" style={{ fontSize: "clamp(1.1rem, 2vw, 1.3rem)" }}>
+                  <h3
+                    className="font-serif-display text-olive-800 leading-tight mb-3"
+                    style={{ fontSize: "clamp(1.1rem, 2vw, 1.3rem)" }}
+                  >
                     {benefit.title}
                   </h3>
-                  <p className="font-editorial text-olive-700 leading-relaxed" style={{ fontSize: "0.84rem" }}>
+                  <p
+                    className="font-editorial text-olive-700 leading-relaxed"
+                    style={{ fontSize: "0.84rem" }}
+                  >
                     {benefit.desc}
                   </p>
                 </div>
@@ -1357,11 +1534,13 @@ export default function LandingPage() {
           <AnimatedSection>
             <div
               className="flex flex-wrap justify-center gap-10 md:gap-16 py-8 mb-14"
-              style={{ borderTop: "1px solid rgba(139,119,75,0.15)", borderBottom: "1px solid rgba(139,119,75,0.15)" }}
+              style={{
+                borderTop: "1px solid rgba(139,119,75,0.15)",
+                borderBottom: "1px solid rgba(139,119,75,0.15)",
+              }}
             >
               {[
                 { label: "Durée", value: "2h30 – 3h" },
-                { label: "Groupe", value: "1 à 4 personnes" },
                 { label: "Niveau", value: "Tous niveaux" },
                 { label: "Matériel", value: "Entièrement fourni" },
               ].map((item) => (
@@ -1369,7 +1548,10 @@ export default function LandingPage() {
                   <p className="font-editorial text-[0.62rem] tracking-[0.2em] uppercase text-olive-500 mb-1.5">
                     {item.label}
                   </p>
-                  <p className="font-hand text-olive-800" style={{ fontSize: "clamp(1rem, 2.5vw, 1.3rem)" }}>
+                  <p
+                    className="font-hand text-olive-800"
+                    style={{ fontSize: "clamp(1rem, 2.5vw, 1.3rem)" }}
+                  >
                     {item.value}
                   </p>
                 </div>
@@ -1379,7 +1561,10 @@ export default function LandingPage() {
 
           {/* ── CTA ── */}
           <AnimatedSection className="text-center">
-            <p className="font-hand text-olive-700 mb-6" style={{ fontSize: "clamp(1rem, 2vw, 1.2rem)" }}>
+            <p
+              className="font-hand text-olive-700 mb-6"
+              style={{ fontSize: "clamp(1rem, 2vw, 1.2rem)" }}
+            >
               Prête à créer votre premier bijou botanique ?
             </p>
             <Link href="/contact">
@@ -1396,7 +1581,6 @@ export default function LandingPage() {
               Réponse sous 48h · Séances sur Le Mans et alentours.
             </p>
           </AnimatedSection>
-
         </div>
       </section>
 
