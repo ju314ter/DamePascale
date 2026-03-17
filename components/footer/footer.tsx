@@ -12,7 +12,7 @@ const Footer: React.FC = () => {
       className="relative py-10 md:py-14 w-full border-t border-olive-200/30"
       style={{
         backgroundImage:
-          "radial-gradient(ellipse at 20% 50%, rgba(227,207,165,0.15) 0%, transparent 60%), radial-gradient(ellipse at 80% 20%, rgba(200,180,140,0.1) 0%, transparent 50%), linear-gradient(175deg, #fefcf7 0%, #fdf8ed 50%, #fefcf7 100%)",
+          "radial-gradient(ellipse at 20% 50%, rgba(227,207,165,0.15) 0%, transparent 60%), radial-gradient(ellipse at 80% 20%, rgba(200,180,140,0.1) 0%, transparent 50%), linear-gradient(175deg, #fefefe 0%, #fdfcfa 50%, #fefefe 100%)",
       }}
     >
       <div className="max-w-6xl mx-auto px-6 flex flex-col md:flex-row gap-10 md:gap-4 justify-between items-start">

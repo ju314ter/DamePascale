@@ -58,9 +58,9 @@ const pageBackground = {
     radial-gradient(ellipse at 20% 80%, rgba(226,146,59,0.07) 0%, transparent 50%),
     radial-gradient(ellipse at 80% 20%, rgba(157,186,154,0.08) 0%, transparent 50%),
     repeating-conic-gradient(rgba(139,119,75,0.015) 0% 25%, transparent 0% 50%) 0 0 / 3px 3px,
-    linear-gradient(160deg, #fefcf7 0%, #fdf8ed 40%, #f9eed5 75%, #fefcf7 100%)
+    linear-gradient(160deg, #fefefe 0%, #fdfcfa 40%, #f7f4ef 75%, #fefefe 100%)
   `,
-  backgroundColor: "#fefcf7",
+  backgroundColor: "#fefefe",
 };
 
 /* ─────────────────────────────────────────────────────────────────────────── */

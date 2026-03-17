@@ -76,7 +76,7 @@ const PanierWrapper = () => {
       <SheetContent
         side="right"
         className="flex flex-col overflow-hidden border-l border-l-olive-200/30 p-0"
-        style={{ backgroundColor: "#fefcf7" }}
+        style={{ backgroundColor: "#fefefe" }}
       >
         <SheetHeader className="px-6 pt-6 pb-4 border-b border-olive-200/20">
           <SheetTitle className="font-hand text-2xl text-olive-700">

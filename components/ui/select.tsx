@@ -48,7 +48,7 @@ const SelectContent = React.forwardRef<
         className
       )}
       position={position}
-      style={{ backgroundColor: "#fdf8ed", border: "1px solid rgba(139,119,75,0.15)" }}
+      style={{ backgroundColor: "#fdfcfa", border: "1px solid rgba(139,119,75,0.15)" }}
       {...props}
     >
       <SelectPrimitive.Viewport

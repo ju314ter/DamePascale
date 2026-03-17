@@ -517,34 +517,34 @@ function Tape({
 /* ──────────────────────────── Paper Background Styles ──────────────────────────── */
 
 const paperBg: React.CSSProperties = {
-  backgroundColor: "#fefcf7",
+  backgroundColor: "#fefefe",
   backgroundImage: `
     repeating-linear-gradient(
       0deg,
       transparent,
       transparent 30px,
-      rgba(139,119,75,0.03) 30px,
-      rgba(139,119,75,0.03) 31px
+      rgba(139,119,75,0.02) 30px,
+      rgba(139,119,75,0.02) 31px
     ),
-    linear-gradient(135deg, #fefcf7 0%, #fdf8ed 40%, #f9eed5 100%)
+    linear-gradient(135deg, #fefefe 0%, #fdfcfa 40%, #f7f4ef 100%)
   `,
 };
 
 const paperTexture: React.CSSProperties = {
   backgroundImage: `
-    radial-gradient(ellipse at 20% 50%, rgba(227,207,165,0.15) 0%, transparent 60%),
-    radial-gradient(ellipse at 80% 20%, rgba(200,180,140,0.1) 0%, transparent 50%),
-    repeating-conic-gradient(rgba(139,119,75,0.02) 0% 25%, transparent 0% 50%) 0 0 / 4px 4px,
-    linear-gradient(175deg, #fefcf7 0%, #fdf8ed 50%, #fefcf7 100%)
+    radial-gradient(ellipse at 20% 50%, rgba(227,207,165,0.08) 0%, transparent 60%),
+    radial-gradient(ellipse at 80% 20%, rgba(200,180,140,0.05) 0%, transparent 50%),
+    repeating-conic-gradient(rgba(139,119,75,0.015) 0% 25%, transparent 0% 50%) 0 0 / 4px 4px,
+    linear-gradient(175deg, #fefefe 0%, #fdfcfa 50%, #fefefe 100%)
   `,
 };
 
 const warmVintage: React.CSSProperties = {
   backgroundImage: `
-    radial-gradient(ellipse at 30% 70%, rgba(226,146,59,0.06) 0%, transparent 50%),
-    radial-gradient(ellipse at 70% 30%, rgba(157,186,154,0.08) 0%, transparent 50%),
-    repeating-conic-gradient(rgba(139,119,75,0.015) 0% 25%, transparent 0% 50%) 0 0 / 3px 3px,
-    linear-gradient(170deg, #fefcf7 0%, #fdf8ed 30%, #f9eed5 70%, #fefcf7 100%)
+    radial-gradient(ellipse at 30% 70%, rgba(226,146,59,0.03) 0%, transparent 50%),
+    radial-gradient(ellipse at 70% 30%, rgba(157,186,154,0.05) 0%, transparent 50%),
+    repeating-conic-gradient(rgba(139,119,75,0.01) 0% 25%, transparent 0% 50%) 0 0 / 3px 3px,
+    linear-gradient(170deg, #fefefe 0%, #fdfcfa 30%, #f7f4ef 70%, #fefefe 100%)
   `,
 };
 
@@ -566,7 +566,7 @@ const sageWash: React.CSSProperties = {
     radial-gradient(ellipse at 10% 65%, rgba(157,186,154,0.14) 0%, transparent 55%),
     radial-gradient(ellipse at 88% 15%, rgba(139,119,75,0.07) 0%, transparent 50%),
     repeating-conic-gradient(rgba(139,119,75,0.018) 0% 25%, transparent 0% 50%) 0 0 / 3px 3px,
-    linear-gradient(158deg, #f5f9f2 0%, #eef3e8 30%, #ede8d5 65%, #f4f8f1 100%)
+    linear-gradient(158deg, #f5f9f2 0%, #eef3e8 30%, #f0ebe0 65%, #f4f8f1 100%)
   `,
 };
 

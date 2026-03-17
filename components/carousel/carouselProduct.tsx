@@ -83,7 +83,7 @@ export function CarouselProduct({ slides, options }: CarouselProductProps) {
               <div className="ep__slide" key={slide._key || `slide-${i}`}>
                 <div
                   className="relative w-full flex items-center justify-center"
-                  style={{ aspectRatio: "1 / 1", backgroundColor: "#fdf8ed" }}
+                  style={{ aspectRatio: "1 / 1", backgroundColor: "#fdfcfa" }}
                 >
                   {slide.asset && (
                     <div className="absolute inset-0 flex items-center justify-center p-8">
@@ -187,7 +187,7 @@ export function CarouselProduct({ slides, options }: CarouselProductProps) {
                       className="relative mt-1 overflow-hidden transition-all duration-300"
                       style={{
                         aspectRatio: "1 / 1",
-                        backgroundColor: "#fdf8ed",
+                        backgroundColor: "#fdfcfa",
                         opacity: isSelected ? 1 : 0.38,
                         filter: isSelected ? "none" : "grayscale(25%)",
                       }}

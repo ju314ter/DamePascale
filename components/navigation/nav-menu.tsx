@@ -55,7 +55,7 @@ export function NavMenu({ rightSlot }: { rightSlot?: React.ReactNode }) {
     <nav
       className="fixed top-0 left-0 right-0 z-50 backdrop-blur-sm"
       style={{
-        backgroundColor: "rgba(254,252,247,0.92)",
+        backgroundColor: "rgba(254,254,254,0.92)",
         borderBottom: "1px solid rgba(139,119,75,0.1)",
       }}
     >
@@ -187,7 +187,7 @@ export function NavMenu({ rightSlot }: { rightSlot?: React.ReactNode }) {
                 <SheetContent
                   side="left"
                   className="overflow-y-auto border-r-olive-200/30"
-                  style={{ backgroundColor: "#fefcf7" }}
+                  style={{ backgroundColor: "#fefefe" }}
                 >
                   <SheetHeader>
                     <SheetTitle className="font-hand text-2xl text-olive-700 text-center">

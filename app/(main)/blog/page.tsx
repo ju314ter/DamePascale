@@ -54,9 +54,9 @@ const pageBackground = {
     radial-gradient(ellipse at 25% 75%, rgba(226,146,59,0.06) 0%, transparent 55%),
     radial-gradient(ellipse at 78% 18%, rgba(157,186,154,0.08) 0%, transparent 50%),
     repeating-conic-gradient(rgba(139,119,75,0.015) 0% 25%, transparent 0% 50%) 0 0 / 3px 3px,
-    linear-gradient(168deg, #fefcf7 0%, #fdf8ed 35%, #f9eed5 70%, #fefcf7 100%)
+    linear-gradient(168deg, #fefefe 0%, #fdfcfa 35%, #f7f4ef 70%, #fefefe 100%)
   `,
-  backgroundColor: "#fefcf7",
+  backgroundColor: "#fefefe",
 };
 
 const cardVariants = {
@@ -177,7 +177,7 @@ const BlogPage = () => {
                 <Link href={`/blog/${post._id}`} className="group block">
 
                   {/* Image */}
-                  <div className="relative overflow-hidden aspect-[4/3]" style={{ backgroundColor: "#fdf8ed" }}>
+                  <div className="relative overflow-hidden aspect-[4/3]" style={{ backgroundColor: "#fdfcfa" }}>
                     <Image
                       src={urlFor(post.mainImage).url()}
                       alt={post.title}

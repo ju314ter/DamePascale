@@ -58,9 +58,9 @@ const pageBackground = {
     radial-gradient(ellipse at 15% 70%, rgba(226,146,59,0.07) 0%, transparent 55%),
     radial-gradient(ellipse at 85% 15%, rgba(157,186,154,0.08) 0%, transparent 50%),
     repeating-conic-gradient(rgba(139,119,75,0.015) 0% 25%, transparent 0% 50%) 0 0 / 3px 3px,
-    linear-gradient(162deg, #fefcf7 0%, #fdf8ed 38%, #f9eed5 72%, #fefcf7 100%)
+    linear-gradient(162deg, #fefefe 0%, #fdfcfa 38%, #f7f4ef 72%, #fefefe 100%)
   `,
-  backgroundColor: "#fefcf7",
+  backgroundColor: "#fefefe",
 };
 
 /* ──────────────────────────── PortableText components ──────────────────────────── */
@@ -287,7 +287,7 @@ const BlogDetailCollectionPage = () => {
                 </HoverCardTrigger>
                 <HoverCardContent
                   className="w-52 p-3 rounded-xl border border-olive-200/60 shadow-lg"
-                  style={{ backgroundColor: "#fefcf7" }}
+                  style={{ backgroundColor: "#fefefe" }}
                 >
                   <p className="font-editorial text-[0.78rem] text-olive-700 leading-relaxed mb-2">
                     {spot.details}

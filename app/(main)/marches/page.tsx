@@ -141,7 +141,7 @@ const warmVintage: React.CSSProperties = {
     radial-gradient(ellipse at 30% 70%, rgba(226,146,59,0.06) 0%, transparent 50%),
     radial-gradient(ellipse at 70% 30%, rgba(157,186,154,0.08) 0%, transparent 50%),
     repeating-conic-gradient(rgba(139,119,75,0.015) 0% 25%, transparent 0% 50%) 0 0 / 3px 3px,
-    linear-gradient(170deg, #fefcf7 0%, #fdf8ed 30%, #f9eed5 70%, #fefcf7 100%)
+    linear-gradient(170deg, #fefefe 0%, #fdfcfa 30%, #f7f4ef 70%, #fefefe 100%)
   `,
 };
 
