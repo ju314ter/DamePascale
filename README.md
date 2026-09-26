@@ -14,16 +14,15 @@ bun dev   # http://localhost:3000
 | Variable | Rôle |
 | --- | --- |
 | `NEXT_PUBLIC_SANITY_PROJECT_ID`, `NEXT_PUBLIC_SANITY_DATASET` | Projet Sanity |
-| `SANITY_READ_TOKEN` | Jeton **lecture**, serveur uniquement (remplace `NEXT_PUBLIC_SANITY_VIEW_TOKEN`) |
+| `NEXT_PUBLIC_SANITY_VIEW_TOKEN` (ou `SANITY_READ_TOKEN`) | Jeton public de lecture, utilisé côté serveur |
 | `SANITY_TOKEN` | Jeton **écriture** : stock, commandes, inscriptions aux actus |
 | `STRIPE_SECRET_KEY`, `STRIPE_WEBHOOK_SECRET` | Paiement |
 | `NEXT_PUBLIC_URL` | URL publique du site (ex. `www.damepascale.fr`), utilisée pour les retours Stripe, le SEO et le sitemap |
 | `MY_EMAIL`, `MY_GMAIL_APP_PASSWORD` | Envoi des e-mails (Gmail) |
 | `RECAPTCHA_SECRET_KEY`, `NEXT_PUBLIC_RECAPTCHA_SITE_KEY` (optionnel) | Anti-spam des formulaires |
 
-> ⚠️ L'ancien `NEXT_PUBLIC_SANITY_VIEW_TOKEN` était exposé dans le JavaScript public.
-> Il reste lu côté serveur par compatibilité, mais il faut **le révoquer dans Sanity**,
-> créer un nouveau jeton lecture et le déclarer sous le nom `SANITY_READ_TOKEN`.
+Le médiateur de la consommation indiqué dans les CGV est CM2C : l'adhésion doit
+être active (inscription sur cm2c.net) pour que la mention soit valable.
 
 ### Stripe
 

@@ -200,12 +200,34 @@ export default function CgvPage() {
           id: "litiges",
           title: "Droit applicable et litiges",
           content: (
-            <p>
-              Les présentes conditions sont soumises au droit français. En cas
-              de difficulté, contactez-moi d&apos;abord : nous trouverons
-              ensemble une solution amiable. À défaut, le litige relèvera des
-              tribunaux compétents.
-            </p>
+            <>
+              <p>
+                Les présentes conditions sont soumises au droit français. En cas
+                de difficulté, contactez-moi d&apos;abord à {mail} : nous
+                trouverons ensemble une solution amiable.
+              </p>
+              <p>
+                Si aucune solution n&apos;est trouvée, vous pouvez recourir
+                gratuitement au médiateur de la consommation (articles L611-1 et
+                suivants du Code de la consommation) : CM2C — Centre de la
+                Médiation de la Consommation de Conciliateurs de Justice, 49 rue
+                de Ponthieu, 75008 Paris,{" "}
+                <a
+                  href="https://www.cm2c.net"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  www.cm2c.net
+                </a>
+                . Le médiateur doit être saisi par écrit, après une réclamation
+                écrite restée sans réponse satisfaisante auprès de Dame Pascale,
+                et dans un délai d&apos;un an à compter de cette réclamation.
+              </p>
+              <p>
+                À défaut de résolution amiable, le litige relèvera des tribunaux
+                compétents.
+              </p>
+            </>
           ),
         },
       ]}

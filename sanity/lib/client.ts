@@ -15,7 +15,7 @@ const hostOverride = process.env.SANITY_API_HOST
 const readToken =
   process.env.SANITY_READ_TOKEN ||
   process.env.SANITY_TOKEN ||
-  // Ancien nom de variable, conservé pour compatibilité : à renommer côté Vercel.
+  // Jeton public de lecture.
   process.env.NEXT_PUBLIC_SANITY_VIEW_TOKEN;
 
 export const client = createClient({
