@@ -21,9 +21,6 @@ bun dev   # http://localhost:3000
 | `MY_EMAIL`, `MY_GMAIL_APP_PASSWORD` | Envoi des e-mails (Gmail) |
 | `RECAPTCHA_SECRET_KEY`, `NEXT_PUBLIC_RECAPTCHA_SITE_KEY` (optionnel) | Anti-spam des formulaires |
 
-Le médiateur de la consommation indiqué dans les CGV est CM2C : l'adhésion doit
-être active (inscription sur cm2c.net) pour que la mention soit valable.
-
 ### Stripe
 
 Le webhook `/api/stripe-webhook` doit recevoir l'événement `checkout.session.completed`.
