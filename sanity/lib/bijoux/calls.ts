@@ -41,17 +41,29 @@ export const getRelatedBijoux = (id: string, categoryIds: string[]) =>
     [],
   );
 
+/**
+ * Pièces mises en avant sur l'accueil : uniquement celles en stock. Si la
+ * sélection du Studio est vide ou épuisée, on complète avec les dernières
+ * pièces disponibles (jusqu'à 6).
+ */
 export const getCollectionVedette = async (): Promise<Bijou[]> => {
-  const vedette = await sanityFetch<Bijou[] | null>(
-    groq`*[_type == "collectionVedette"][0].bijoux[]->{ ${BIJOU_FIELDS} }`,
-    {},
-    null,
-  );
-  if (vedette && vedette.length > 0) return vedette.filter(Boolean);
-  return sanityFetch<Bijou[]>(
-    groq`*[_type == "bijoux"] | order(stock > 0 desc, _createdAt desc)[0...6]{ ${BIJOU_FIELDS} }`,
-    {},
-    [],
+  const [vedette, latest] = await Promise.all([
+    sanityFetch<Bijou[] | null>(
+      groq`*[_type == "collectionVedette"][0].bijoux[]->{ ${BIJOU_FIELDS} }`,
+      {},
+      null,
+    ),
+    sanityFetch<Bijou[]>(
+      groq`*[_type == "bijoux" && stock > 0] | order(_createdAt desc)[0...6]{ ${BIJOU_FIELDS} }`,
+      {},
+      [],
+    ),
+  ]);
+  const selected = (vedette ?? []).filter((b) => b && b.stock > 0);
+  const ids = new Set(selected.map((b) => b._id));
+  return [...selected, ...latest.filter((b) => !ids.has(b._id))].slice(
+    0,
+    Math.max(6, selected.length),
   );
 };
 

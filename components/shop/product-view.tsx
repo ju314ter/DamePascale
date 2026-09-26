@@ -179,7 +179,7 @@ export default function ProductView({
                     Demander une création similaire
                   </Link>
                   <Link
-                    href="/boutique-bijou?dispo=1"
+                    href="/boutique-bijou"
                     className={`${btnSecondary} w-full`}
                   >
                     Voir les pièces disponibles

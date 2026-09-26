@@ -5,6 +5,7 @@ import { Suspense } from "react";
 import { getBijoux, getTaxonomies } from "@/sanity/lib/bijoux/calls";
 import ShopBrowser from "@/components/shop/shop-browser";
 import { TrustStrip } from "@/components/shop/trust-list";
+import { SoldOutSection } from "@/components/shop/sold-out-section";
 import { BranchSprig, PressedLeaf } from "@/components/botanical/decorations";
 import { warmVintage } from "@/components/botanical/backgrounds";
 import { btnPrimary } from "@/components/ui/cta";
@@ -23,6 +24,10 @@ export default async function BoutiquePage() {
     getBijoux(),
     getTaxonomies(),
   ]);
+  // Seules les pièces en stock sont en boutique ; les autres passent dans « Trop tard ! ».
+  // Une pièce réapprovisionnée y retourne automatiquement.
+  const available = bijoux.filter((b) => b.stock > 0);
+  const soldOut = bijoux.filter((b) => b.stock <= 0);
 
   return (
     <div style={warmVintage} className="relative overflow-x-clip">
@@ -53,8 +58,16 @@ export default async function BoutiquePage() {
       </header>
 
       <Suspense fallback={<div className="min-h-[60vh]" />}>
-        <ShopBrowser bijoux={bijoux} taxonomies={taxonomies} />
+        <ShopBrowser
+          bijoux={available}
+          taxonomies={taxonomies}
+          soldOutCount={soldOut.length}
+        />
       </Suspense>
+
+      <div className="mt-16 md:mt-24">
+        <SoldOutSection bijoux={soldOut} />
+      </div>
 
       {/* Réassurance + sur mesure */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 md:py-24">

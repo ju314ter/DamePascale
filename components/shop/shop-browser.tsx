@@ -20,7 +20,6 @@ import { PressedFlower } from "@/components/botanical/decorations";
 const PAGE_SIZE = 12;
 
 const SORTS = [
-  { value: "selection", label: "Notre sélection" },
   { value: "nouveautes", label: "Nouveautés" },
   { value: "prix-asc", label: "Prix croissant" },
   { value: "prix-desc", label: "Prix décroissant" },
@@ -32,7 +31,6 @@ type Filters = {
   matieres: string[];
   fleurs: string[];
   price: [number, number] | null;
-  dispo: boolean;
   sort: Sort;
 };
 
@@ -49,8 +47,7 @@ function readFilters(params: URLSearchParams): Filters {
       rawPrice.length === 2 && rawPrice.every((n) => !isNaN(n))
         ? [rawPrice[0], rawPrice[1]]
         : null,
-    dispo: params.get("dispo") === "1",
-    sort: SORTS.some((s) => s.value === sort) ? (sort as Sort) : "selection",
+    sort: SORTS.some((s) => s.value === sort) ? (sort as Sort) : "nouveautes",
   };
 }
 
@@ -60,8 +57,7 @@ function writeFilters(f: Filters, visible?: number): string {
   if (f.matieres.length) p.set("matiere", f.matieres.join(","));
   if (f.fleurs.length) p.set("fleur", f.fleurs.join(","));
   if (f.price) p.set("prix", `${f.price[0]},${f.price[1]}`);
-  if (f.dispo) p.set("dispo", "1");
-  if (f.sort !== "selection") p.set("tri", f.sort);
+  if (f.sort !== "nouveautes") p.set("tri", f.sort);
   if (visible && visible > PAGE_SIZE) p.set("n", String(visible));
   const qs = p.toString();
   return qs ? `?${qs}` : "";
@@ -77,17 +73,13 @@ function applyFilters(items: Bijou[], f: Filters): Bijou[] {
       hasAny(f.matieres, b.matieres) &&
       hasAny(f.fleurs, b.fleurs) &&
       (!f.price ||
-        (finalPrice(b) >= f.price[0] && finalPrice(b) <= f.price[1])) &&
-      (!f.dispo || b.stock > 0),
+        (finalPrice(b) >= f.price[0] && finalPrice(b) <= f.price[1])),
   );
   const created = (b: Bijou) => (b._createdAt ? Date.parse(b._createdAt) : 0);
-  const byStock = (a: Bijou, b: Bijou) =>
-    Number(b.stock > 0) - Number(a.stock > 0);
   const sorters: Record<Sort, (a: Bijou, b: Bijou) => number> = {
-    selection: (a, b) => byStock(a, b) || created(b) - created(a),
     nouveautes: (a, b) => created(b) - created(a),
-    "prix-asc": (a, b) => byStock(a, b) || finalPrice(a) - finalPrice(b),
-    "prix-desc": (a, b) => byStock(a, b) || finalPrice(b) - finalPrice(a),
+    "prix-asc": (a, b) => finalPrice(a) - finalPrice(b),
+    "prix-desc": (a, b) => finalPrice(b) - finalPrice(a),
   };
   return [...filtered].sort(sorters[f.sort]);
 }
@@ -184,17 +176,6 @@ function FilterPanel({
 
   return (
     <div>
-      <label className="flex items-center justify-between gap-3 py-4 border-b border-olive-100 cursor-pointer">
-        <span className="font-editorial text-[0.85rem] text-olive-800">
-          Disponibles uniquement
-        </span>
-        <input
-          type="checkbox"
-          checked={filters.dispo}
-          onChange={(e) => update({ dispo: e.target.checked })}
-          className="w-5 h-5 accent-olive-700"
-        />
-      </label>
       <FilterGroup
         title="Type de bijou"
         taxa={taxonomies.categories}
@@ -247,9 +228,11 @@ function FilterPanel({
 export default function ShopBrowser({
   bijoux,
   taxonomies,
+  soldOutCount = 0,
 }: {
   bijoux: Bijou[];
   taxonomies: Taxonomies;
+  soldOutCount?: number;
 }) {
   const router = useRouter();
   const pathname = usePathname();
@@ -279,8 +262,7 @@ export default function ShopBrowser({
     filters.categories.length +
     filters.matieres.length +
     filters.fleurs.length +
-    (filters.price ? 1 : 0) +
-    (filters.dispo ? 1 : 0);
+    (filters.price ? 1 : 0);
 
   const update = useCallback(
     (patch: Partial<Filters>) => {
@@ -306,7 +288,6 @@ export default function ShopBrowser({
       matieres: [],
       fleurs: [],
       price: null,
-      dispo: false,
     });
 
   // Mémorise le nombre d'articles affichés dans l'URL : au retour depuis une
@@ -369,9 +350,6 @@ export default function ShopBrowser({
             remove: () => update({ price: null }),
           },
         ]
-      : []),
-    ...(filters.dispo
-      ? [{ label: "Disponibles", remove: () => update({ dispo: false }) }]
       : []),
   ].filter((p) => p.label);
 
@@ -511,7 +489,26 @@ export default function ShopBrowser({
 
         {/* ── Grille ──────────────────────────────────────────────────── */}
         <section className="flex-1 min-w-0" aria-label="Bijoux">
-          {results.length === 0 ? (
+          {bijoux.length === 0 ? (
+            <div className="text-center py-16 px-4">
+              <PressedFlower className="w-16 h-16 text-olive-300 mx-auto mb-4" />
+              <p className="font-hand text-2xl text-olive-700">
+                Toutes les pièces ont trouvé preneur !
+              </p>
+              <p className="font-editorial text-sm text-olive-600 mt-2 mb-6">
+                De nouvelles créations arrivent bientôt. En attendant, je peux
+                imaginer un bijou rien que pour vous.
+              </p>
+              <div className="flex flex-col sm:flex-row gap-3 justify-center">
+                <Link href="/sur-mesure" className={btnPrimary}>
+                  Créer ma pièce sur mesure
+                </Link>
+                <Link href="/marches" className={btnSecondary}>
+                  Me retrouver sur un marché
+                </Link>
+              </div>
+            </div>
+          ) : results.length === 0 ? (
             <div className="text-center py-16 px-4">
               <PressedFlower className="w-16 h-16 text-olive-300 mx-auto mb-4" />
               <p className="font-hand text-2xl text-olive-700">
@@ -575,6 +572,14 @@ export default function ShopBrowser({
                   >
                     Voir plus de bijoux
                   </button>
+                )}
+                {soldOutCount > 0 && shown.length >= results.length && (
+                  <a
+                    href="#trop-tard"
+                    className="mt-2 font-editorial text-[0.8rem] text-olive-600 underline underline-offset-4 decoration-olive-300 hover:text-bronze-600"
+                  >
+                    Voir les {soldOutCount} pièces déjà parties ↓
+                  </a>
                 )}
               </div>
             </>
