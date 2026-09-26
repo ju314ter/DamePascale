@@ -17,6 +17,7 @@ import { addProductToCart } from "@/components/shop/add-to-cart";
 import { btnPrimary, btnSecondary } from "@/components/ui/cta";
 import { PressedLeaf, BranchSprig } from "@/components/botanical/decorations";
 import { warmVintage } from "@/components/botanical/backgrounds";
+import { isInStock } from "@/lib/stock";
 
 function Details({
   title,
@@ -47,7 +48,7 @@ export default function ProductView({
   bijou: Bijou;
   related: Bijou[];
 }) {
-  const soldOut = bijou.stock <= 0;
+  const soldOut = !isInStock(bijou);
   const [state, setState] = useState<"idle" | "pending" | "added">("idle");
   const [showBar, setShowBar] = useState(false);
   const ctaRef = useRef<HTMLDivElement>(null);

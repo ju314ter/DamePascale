@@ -1,6 +1,7 @@
 import { groq } from "next-sanity";
 import { sanityFetch } from "../client";
 import type { Bijou, NavLink, Taxonomies } from "../types";
+import { isInStock } from "@/lib/stock";
 
 export type { Bijou, Taxonomies } from "../types";
 
@@ -59,7 +60,7 @@ export const getCollectionVedette = async (): Promise<Bijou[]> => {
       [],
     ),
   ]);
-  const selected = (vedette ?? []).filter((b) => b && b.stock > 0);
+  const selected = (vedette ?? []).filter((b) => b && isInStock(b));
   const ids = new Set(selected.map((b) => b._id));
   return [...selected, ...latest.filter((b) => !ids.has(b._id))].slice(
     0,
