@@ -1,31 +1,33 @@
 import { groq } from "next-sanity";
-import { client } from "../client";
+import { sanityFetch } from "../client";
 
-export const getCodePromo = async () => {
-  const query = `*[_type == "codePromo"]{
-      _id,
-      title,
-      reductionPercent,
-      code,
-      type
-    }`;
-  const codePromos: {
-    title: string;
-    code: string;
-    reductionPercent: number;
-    type: "absolute" | "percent";
-  }[] = await client.fetch(groq`${query}`);
-
-  return codePromos;
+export type CodePromo = {
+  title: string;
+  code: string;
+  reductionPercent: number;
+  type: "absolute" | "percent";
 };
 
+/** SERVEUR UNIQUEMENT — les codes ne doivent jamais être envoyés au navigateur. */
+export const getCodePromo = () =>
+  sanityFetch<CodePromo[]>(
+    groq`*[_type == "codePromo"]{ title, code, reductionPercent, type }`,
+    {},
+    [],
+    false,
+  );
+
 export const getBoutiqueStatus = async () => {
-  const query = `*[_type == "uniqueConfigBoutique"][0]{
-      _id,
-      boutiqueStatus
-    }`;
-  const config: {
-    boutiqueStatus: string;
-  } = await client.fetch(groq`${query}`);
-  return config.boutiqueStatus;
+  const config = await sanityFetch<{ boutiqueStatus?: string } | null>(
+    groq`*[_type == "uniqueConfigBoutique"][0]{ boutiqueStatus }`,
+    {},
+    null,
+    30,
+  );
+  return config?.boutiqueStatus ?? "open";
+};
+
+export const isBoutiqueOpen = async () => {
+  const status = await getBoutiqueStatus();
+  return status !== "closed" && status !== "maintenance";
 };

@@ -9,7 +9,13 @@ import {
 } from "./bijoux/schema";
 import { blogCategorySchema, blogPostSchema, spotSchema } from "./blog/schema";
 import { marcheSchema } from "./marches/schema";
-import { codePromoSchema, configBoutiqueSchema, collectionVedetteSchema } from "./global/schema";
+import { atelierSchema } from "./ateliers/schema";
+import { commandeSchema, inscriptionSchema } from "./commandes/schema";
+import {
+  codePromoSchema,
+  configBoutiqueSchema,
+  collectionVedetteSchema,
+} from "./global/schema";
 
 const schema: { types: SchemaTypeDefinition[] } = {
   types: [],
@@ -33,6 +39,9 @@ schema.types.push(blogPostSchema);
 schema.types.push(spotSchema);
 
 schema.types.push(marcheSchema);
+schema.types.push(atelierSchema);
+schema.types.push(commandeSchema);
+schema.types.push(inscriptionSchema);
 
 schema.types.push(codePromoSchema);
 schema.types.push(configBoutiqueSchema);

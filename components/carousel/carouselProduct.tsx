@@ -4,7 +4,7 @@ import * as React from "react";
 import { useCallback, useEffect, useState } from "react";
 import useEmblaCarousel from "embla-carousel-react";
 import { EmblaOptionsType } from "embla-carousel";
-import ImageWithPlaceholder from "../ui/imageWithPlaceholder";
+import Image from "next/image";
 import { urlForImage } from "@/sanity/lib/image";
 import "./embla.css";
 
@@ -17,13 +17,19 @@ type Slide = {
 type CarouselProductProps = {
   slides: Slide[];
   options?: EmblaOptionsType;
+  alt?: string;
 };
 
 function ChevronLeft() {
   return (
     <svg width="13" height="13" viewBox="0 0 13 13" fill="none" aria-hidden>
-      <path d="M8.5 2L4 6.5L8.5 11" stroke="currentColor" strokeWidth="1.4"
-        strokeLinecap="round" strokeLinejoin="round" />
+      <path
+        d="M8.5 2L4 6.5L8.5 11"
+        stroke="currentColor"
+        strokeWidth="1.4"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
     </svg>
   );
 }
@@ -31,15 +37,27 @@ function ChevronLeft() {
 function ChevronRight() {
   return (
     <svg width="13" height="13" viewBox="0 0 13 13" fill="none" aria-hidden>
-      <path d="M4.5 2L9 6.5L4.5 11" stroke="currentColor" strokeWidth="1.4"
-        strokeLinecap="round" strokeLinejoin="round" />
+      <path
+        d="M4.5 2L9 6.5L4.5 11"
+        stroke="currentColor"
+        strokeWidth="1.4"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
     </svg>
   );
 }
 
-export function CarouselProduct({ slides, options }: CarouselProductProps) {
+export function CarouselProduct({
+  slides,
+  options,
+  alt = "Bijou",
+}: CarouselProductProps) {
   const [selectedIndex, setSelectedIndex] = useState(0);
-  const [emblaMainRef, emblaMainApi] = useEmblaCarousel({ ...options, loop: true });
+  const [emblaMainRef, emblaMainApi] = useEmblaCarousel({
+    ...options,
+    loop: true,
+  });
   const [emblaThumbsRef, emblaThumbsApi] = useEmblaCarousel({
     containScroll: "keepSnaps",
     dragFree: true,
@@ -50,7 +68,7 @@ export function CarouselProduct({ slides, options }: CarouselProductProps) {
       if (!emblaMainApi || !emblaThumbsApi) return;
       emblaMainApi.scrollTo(index);
     },
-    [emblaMainApi, emblaThumbsApi]
+    [emblaMainApi, emblaThumbsApi],
   );
 
   const onSelect = useCallback(() => {
@@ -65,16 +83,22 @@ export function CarouselProduct({ slides, options }: CarouselProductProps) {
     emblaMainApi.on("select", onSelect).on("reInit", onSelect);
   }, [emblaMainApi, onSelect]);
 
-  const scrollPrev = useCallback(() => emblaMainApi?.scrollPrev(), [emblaMainApi]);
-  const scrollNext = useCallback(() => emblaMainApi?.scrollNext(), [emblaMainApi]);
+  const scrollPrev = useCallback(
+    () => emblaMainApi?.scrollPrev(),
+    [emblaMainApi],
+  );
+  const scrollNext = useCallback(
+    () => emblaMainApi?.scrollNext(),
+    [emblaMainApi],
+  );
 
-  const counter = slides.length > 1
-    ? `${String(selectedIndex + 1).padStart(2, "0")} — ${String(slides.length).padStart(2, "0")}`
-    : null;
+  const counter =
+    slides.length > 1
+      ? `${String(selectedIndex + 1).padStart(2, "0")} — ${String(slides.length).padStart(2, "0")}`
+      : null;
 
   return (
     <div className="w-full select-none">
-
       {/* ── Main image ─────────────────────────────────────────────────── */}
       <div className="relative group/carousel cursor-pointer">
         <div className="ep__viewport" ref={emblaMainRef}>
@@ -86,15 +110,14 @@ export function CarouselProduct({ slides, options }: CarouselProductProps) {
                   style={{ aspectRatio: "1 / 1", backgroundColor: "#fdfcfa" }}
                 >
                   {slide.asset && (
-                    <div className="absolute inset-0 flex items-center justify-center p-8">
-                      <ImageWithPlaceholder
-                        src={urlForImage(slide.asset)}
-                        alt={`Vue ${i + 1}`}
-                        width={700}
-                        height={700}
-                        className="max-w-full max-h-full object-contain"
-                      />
-                    </div>
+                    <Image
+                      src={urlForImage(slide.asset, 1200)}
+                      alt={`${alt} — vue ${i + 1}`}
+                      fill
+                      priority={i === 0}
+                      sizes="(max-width: 1024px) 100vw, 50vw"
+                      className="object-contain p-2 sm:p-6"
+                    />
                   )}
                 </div>
               </div>
@@ -113,7 +136,7 @@ export function CarouselProduct({ slides, options }: CarouselProductProps) {
                 w-9 h-9 flex items-center justify-center
                 rounded-full bg-white/75 backdrop-blur-sm
                 border border-olive-200/60 text-olive-600
-                opacity-0 group-hover/carousel:opacity-100
+                opacity-100 md:opacity-0 md:group-hover/carousel:opacity-100
                 transition-all duration-300
                 hover:bg-white hover:border-olive-400/60 hover:text-olive-800
                 active:scale-95
@@ -129,7 +152,7 @@ export function CarouselProduct({ slides, options }: CarouselProductProps) {
                 w-9 h-9 flex items-center justify-center
                 rounded-full bg-white/75 backdrop-blur-sm
                 border border-olive-200/60 text-olive-600
-                opacity-0 group-hover/carousel:opacity-100
+                opacity-100 md:opacity-0 md:group-hover/carousel:opacity-100
                 transition-all duration-300
                 hover:bg-white hover:border-olive-400/60 hover:text-olive-800
                 active:scale-95
@@ -168,7 +191,7 @@ export function CarouselProduct({ slides, options }: CarouselProductProps) {
                     key={slide._key || `thumb-${i}`}
                     type="button"
                     onClick={() => onThumbClick(i)}
-                    aria-label={`Vue ${i + 1}`}
+                    aria-label={`Afficher la vue ${i + 1}`}
                     aria-current={isSelected}
                     className="ep-thumbs__slide relative cursor-pointer flex-shrink-0 focus-visible:outline-none group/thumb"
                   >
@@ -193,15 +216,13 @@ export function CarouselProduct({ slides, options }: CarouselProductProps) {
                       }}
                     >
                       {slide.asset && (
-                        <div className="absolute inset-0 flex items-center justify-center p-1.5">
-                          <ImageWithPlaceholder
-                            src={urlForImage(slide.asset)}
-                            alt={`Miniature ${i + 1}`}
-                            width={150}
-                            height={150}
-                            className="max-w-full max-h-full object-contain"
-                          />
-                        </div>
+                        <Image
+                          src={urlForImage(slide.asset, 200)}
+                          alt=""
+                          fill
+                          sizes="80px"
+                          className="object-contain p-1"
+                        />
                       )}
                     </div>
                   </button>

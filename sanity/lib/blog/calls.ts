@@ -1,70 +1,34 @@
 import { groq } from "next-sanity";
-import { client } from "../client";
-import { ContentBlock } from "../amigurumis/calls";
+import { sanityFetch } from "../client";
+import type { BlogPost } from "../types";
 
-export interface BlogPostsFilters {
-  category?: string[];
-}
+export type { BlogPost } from "../types";
 
-export interface BlogPost {
-  _id: string;
-  title: string;
-  content: ContentBlock[];
-  introduction: string;
-  publishedDate: string;
-  author: string;
-  category: {
-    _id: string;
-    title: string;
-  };
-  mainImage: any;
-  hotspots: { x: number; y: number; details: string; url?: string }[];
-  tags: any[];
-}
+export const getBlogPosts = () =>
+  sanityFetch<BlogPost[]>(
+    groq`*[_type == "blogPost"] | order(publishedDate desc){
+      _id, title, introduction, publishedDate,
+      category->{ _id, title },
+      mainImage, tags
+    }`,
+    {},
+    [],
+  );
 
-export const getBlogPosts = async (filtres?: BlogPostsFilters) => {
-  const categoryPartialQuery = filtres?.category
-    ? ` && category._ref in [${filtres.category.map((category) => `"${category}"`)}]`
-    : "";
-  const query = `*[_type == "blogPost"${categoryPartialQuery}]{
-    _id,
-    title,
-    content,
-    category->{
-      _id,
-      title
-    },
-    mainImage,
-    tags
-  }`;
-  const blogPosts: BlogPost[] = await client.fetch(groq`${query}`);
-  return blogPosts;
-};
+export const getBlogPostById = (id: string) =>
+  sanityFetch<BlogPost | null>(
+    groq`*[_type == "blogPost" && _id == $id][0]{
+      _id, title, introduction, content, publishedDate, author,
+      category->{ _id, title },
+      mainImage, hotspots, tags
+    }`,
+    { id },
+    null,
+  );
 
-export const getBlogPostById = async (id: string) => {
-  const query = `*[_type == "blogPost" && _id == $id]{
-    _id,
-    title,
-    introduction,
-    content,
-    category->{
-      _id,
-      title
-    },
-    mainImage,
-    hotspots,
-    tags
-  }[0]`;
-  const blogPost: BlogPost = await client.fetch(groq`${query}`, { id });
-  return blogPost;
-};
-
-export const getBlogPostsCategories = async (): Promise<
-  {
-    _id: string;
-    title: string;
-  }[]
-> => {
-  const blogCategory = await client.fetch(groq`*[_type == "blogCategory"]`);
-  return blogCategory;
-};
+export const getBlogSitemap = () =>
+  sanityFetch<{ _id: string; _updatedAt: string }[]>(
+    groq`*[_type == "blogPost"]{ _id, _updatedAt }`,
+    {},
+    [],
+  );

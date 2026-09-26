@@ -1,74 +1,50 @@
-"use client";
-
-import React, { useEffect, useState } from "react";
-import { useParams } from "next/navigation";
+import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
+import { notFound } from "next/navigation";
 import { ChevronLeft } from "lucide-react";
-import { BlogPost, getBlogPostById } from "@/sanity/lib/blog/calls";
-import { urlFor } from "@/sanity/lib/client";
-import { HoverCard, HoverCardContent } from "@/components/ui/hover-card";
-import { HoverCardTrigger } from "@radix-ui/react-hover-card";
 import { PortableText, PortableTextReactComponents } from "@portabletext/react";
-import Footer from "@/components/footer/footer";
+import { getBlogPostById } from "@/sanity/lib/blog/calls";
+import { urlForImage } from "@/sanity/lib/image";
+import { HotspotImage } from "@/components/blog/hotspot-image";
+import {
+  BranchSprig,
+  PressedLeaf,
+  SmallBlossom,
+} from "@/components/botanical/decorations";
+import { warmVintage } from "@/components/botanical/backgrounds";
+import { btnPrimary, btnSecondary } from "@/components/ui/cta";
 
-/* ──────────────────────────── SVG Decorations ──────────────────────────── */
+export const revalidate = 60;
 
-function PressedLeaf({ className = "" }: { className?: string }) {
-  return (
-    <svg viewBox="0 0 80 120" fill="none" className={className} xmlns="http://www.w3.org/2000/svg">
-      <path d="M40 10 C20 30, 10 60, 40 110 C70 60, 60 30, 40 10Z" stroke="currentColor" strokeWidth="1.2" fill="none" />
-      <path d="M40 10 L40 110" stroke="currentColor" strokeWidth="0.8" />
-      <path d="M40 35 L25 25" stroke="currentColor" strokeWidth="0.6" />
-      <path d="M40 50 L22 42" stroke="currentColor" strokeWidth="0.6" />
-      <path d="M40 65 L24 60" stroke="currentColor" strokeWidth="0.6" />
-      <path d="M40 35 L55 25" stroke="currentColor" strokeWidth="0.6" />
-      <path d="M40 50 L58 42" stroke="currentColor" strokeWidth="0.6" />
-      <path d="M40 65 L56 60" stroke="currentColor" strokeWidth="0.6" />
-    </svg>
-  );
+type Props = { params: { detail: string } };
+
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const post = await getBlogPostById(params.detail);
+  if (!post) return { title: "Article introuvable" };
+  const image = post.mainImage ? urlForImage(post.mainImage, 1200) : undefined;
+  return {
+    title: post.title,
+    description: post.introduction?.slice(0, 160),
+    alternates: { canonical: `/blog/${post._id}` },
+    openGraph: {
+      type: "article",
+      title: post.title,
+      description: post.introduction?.slice(0, 200),
+      publishedTime: post.publishedDate,
+      images: image ? [{ url: image, alt: post.title }] : undefined,
+    },
+  };
 }
-
-function BranchSprig({ className = "" }: { className?: string }) {
-  return (
-    <svg viewBox="0 0 120 60" fill="none" className={className} xmlns="http://www.w3.org/2000/svg">
-      <path d="M10 50 Q40 45, 60 30 Q80 15, 110 10" stroke="currentColor" strokeWidth="1" />
-      <path d="M30 47 C25 38, 28 30, 35 28" stroke="currentColor" strokeWidth="0.7" />
-      <path d="M50 36 C43 28, 46 20, 54 18" stroke="currentColor" strokeWidth="0.7" />
-      <path d="M70 24 C64 18, 68 10, 76 9" stroke="currentColor" strokeWidth="0.7" />
-      <path d="M90 15 C86 10, 90 4, 96 5" stroke="currentColor" strokeWidth="0.7" />
-    </svg>
-  );
-}
-
-function SmallBlossom({ className = "" }: { className?: string }) {
-  return (
-    <svg viewBox="0 0 60 60" fill="none" className={className} xmlns="http://www.w3.org/2000/svg">
-      <circle cx="30" cy="30" r="4" stroke="currentColor" strokeWidth="1" />
-      <ellipse cx="30" cy="18" rx="5" ry="10" stroke="currentColor" strokeWidth="0.7" />
-      <ellipse cx="30" cy="18" rx="5" ry="10" stroke="currentColor" strokeWidth="0.7" transform="rotate(90 30 30)" />
-      <ellipse cx="30" cy="18" rx="5" ry="10" stroke="currentColor" strokeWidth="0.7" transform="rotate(180 30 30)" />
-      <ellipse cx="30" cy="18" rx="5" ry="10" stroke="currentColor" strokeWidth="0.7" transform="rotate(270 30 30)" />
-    </svg>
-  );
-}
-
-const pageBackground = {
-  backgroundImage: `
-    radial-gradient(ellipse at 15% 70%, rgba(226,146,59,0.07) 0%, transparent 55%),
-    radial-gradient(ellipse at 85% 15%, rgba(157,186,154,0.08) 0%, transparent 50%),
-    repeating-conic-gradient(rgba(139,119,75,0.015) 0% 25%, transparent 0% 50%) 0 0 / 3px 3px,
-    linear-gradient(162deg, #fefefe 0%, #fdfcfa 38%, #f7f4ef 72%, #fefefe 100%)
-  `,
-  backgroundColor: "#fefefe",
-};
 
 /* ──────────────────────────── PortableText components ──────────────────────────── */
 
 const portableTextComponents: Partial<PortableTextReactComponents> = {
   block: {
     normal: ({ children }) => (
-      <p className="font-editorial text-olive-800 leading-[1.85] text-[0.95rem] mb-5">{children}</p>
+      <p className="font-editorial text-olive-800 leading-[1.85] text-[0.95rem] mb-5">
+        {children}
+      </p>
     ),
     h2: ({ children }) => (
       <h2
@@ -96,13 +72,12 @@ const portableTextComponents: Partial<PortableTextReactComponents> = {
     image: ({ value }: { value: any }) => (
       <div className="my-10 rounded-xl overflow-hidden border border-olive-100/60 shadow-sm">
         <Image
-          src={urlFor(value).url()}
+          src={urlForImage(value, 1200)}
           alt=""
           width={900}
           height={600}
           className="w-full h-auto object-cover"
-          placeholder="blur"
-          blurDataURL="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAACklEQVR4nGMAAQAABQABDQottAAAAABJRU5ErkJggg=="
+          sizes="(max-width: 900px) 100vw, 900px"
         />
       </div>
     ),
@@ -140,7 +115,9 @@ const portableTextComponents: Partial<PortableTextReactComponents> = {
       value?: { href: string };
     }) => {
       const rel =
-        value?.href && !value.href.startsWith("/") ? "noreferrer noopener" : undefined;
+        value?.href && !value.href.startsWith("/")
+          ? "noreferrer noopener"
+          : undefined;
       return (
         <a
           href={value?.href}
@@ -157,7 +134,9 @@ const portableTextComponents: Partial<PortableTextReactComponents> = {
     em: ({ children }) => <em className="italic text-olive-700">{children}</em>,
   },
   list: {
-    bullet: ({ children }) => <ul className="my-4 space-y-1.5 pl-1">{children}</ul>,
+    bullet: ({ children }) => (
+      <ul className="my-4 space-y-1.5 pl-1">{children}</ul>
+    ),
     number: ({ children }) => (
       <ol className="my-4 space-y-1.5 pl-4 list-decimal">{children}</ol>
     ),
@@ -170,172 +149,95 @@ const portableTextComponents: Partial<PortableTextReactComponents> = {
       </li>
     ),
     number: ({ children }) => (
-      <li className="font-editorial text-olive-800 text-[0.95rem]">{children}</li>
+      <li className="font-editorial text-olive-800 text-[0.95rem]">
+        {children}
+      </li>
     ),
   },
 };
 
-/* ─────────────────────────────────────────────────────────────────────────── */
-
-const BlogDetailCollectionPage = () => {
-  const params = useParams();
-  const [blogPost, setBlogPost] = useState<BlogPost | null>(null);
-
-  useEffect(() => {
-    async function fetchBlogpost() {
-      if (typeof params.detail === "string") {
-        const data = await getBlogPostById(params.detail);
-        setBlogPost(data);
-      }
-    }
-    fetchBlogpost();
-  }, [params]);
-
-  if (!blogPost) {
-    return (
-      <div className="min-h-screen flex items-center justify-center" style={pageBackground}>
-        <div className="text-center">
-          <SmallBlossom className="w-10 h-10 text-olive-300 mx-auto mb-4 animate-pulse" />
-          <p className="font-editorial text-[0.65rem] tracking-[0.22em] uppercase text-olive-600">
-            Chargement…
-          </p>
-        </div>
-      </div>
-    );
-  }
+export default async function BlogPostPage({ params }: Props) {
+  const blogPost = await getBlogPostById(params.detail);
+  if (!blogPost) notFound();
 
   return (
-    <div className="min-h-screen relative" style={pageBackground}>
+    <div className="relative overflow-x-clip" style={warmVintage}>
+      <PressedLeaf className="pointer-events-none absolute top-[10%] right-0 w-28 md:w-40 text-olive-400/10 rotate-[14deg]" />
+      <BranchSprig className="pointer-events-none absolute top-[48%] left-0 w-36 md:w-52 text-sage-400/10 -rotate-[4deg]" />
 
-      {/* ── Botanical decorations ──────────────────────────────────────────── */}
-      <PressedLeaf aria-hidden className="pointer-events-none select-none absolute top-[10%] right-0 w-28 md:w-40 text-olive-400/[0.09] rotate-[14deg]" />
-      <BranchSprig aria-hidden className="pointer-events-none select-none absolute top-[48%] left-0 w-36 md:w-52 text-sage-400/[0.08] -rotate-[4deg]" />
-      <SmallBlossom aria-hidden className="pointer-events-none select-none absolute bottom-[15%] right-[6%] w-14 text-bronze-400/[0.07] rotate-[25deg]" />
-
-      {/* ── Article content ───────────────────────────────────────────────── */}
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 pt-24 md:pt-28 pb-20 relative z-10">
-
-        {/* Back link */}
+      <div className="max-w-3xl mx-auto px-4 sm:px-6 pt-8 md:pt-12 pb-20 relative z-10">
         <Link
           href="/blog"
-          className="inline-flex items-center gap-1.5 font-editorial text-[0.62rem] tracking-[0.15em] uppercase text-olive-600 hover:text-olive-800 transition-colors mb-12"
+          className="inline-flex items-center gap-1.5 font-editorial text-[0.68rem] tracking-[0.15em] uppercase text-olive-600 hover:text-olive-800 transition-colors mb-8 py-2"
         >
           <ChevronLeft size={12} strokeWidth={2.5} />
           Le Journal
         </Link>
 
-        {/* Category */}
         {blogPost.category?.title && (
-          <span
-            className="font-hand text-bronze-500 block mb-3"
-            style={{ fontSize: "clamp(1rem, 2vw, 1.25rem)" }}
-          >
+          <span className="font-hand text-xl text-bronze-500 block mb-2">
             {blogPost.category.title}
           </span>
         )}
-
-        {/* Title */}
-        <h1
-          className="font-serif-display text-olive-900 uppercase tracking-wide leading-[0.9] mb-6"
-          style={{ fontSize: "clamp(2.4rem, 6vw, 3.8rem)" }}
-        >
+        <h1 className="font-serif-display text-olive-900 leading-[1.05] text-4xl sm:text-5xl mb-5">
           {blogPost.title}
         </h1>
-
-        {/* Introduction */}
+        {blogPost.publishedDate && (
+          <p className="font-editorial text-xs text-olive-500 mb-6">
+            {new Date(blogPost.publishedDate).toLocaleDateString("fr-FR", {
+              day: "numeric",
+              month: "long",
+              year: "numeric",
+            })}
+            {blogPost.author ? ` · ${blogPost.author}` : ""}
+          </p>
+        )}
         {blogPost.introduction && (
-          <p
-            className="font-editorial italic text-olive-700 leading-relaxed mb-10"
-            style={{ fontSize: "clamp(0.9rem, 1.8vw, 1.05rem)" }}
-          >
+          <p className="font-editorial italic text-olive-700 leading-relaxed text-[1rem] md:text-lg mb-10">
             {blogPost.introduction}
           </p>
         )}
 
-        {/* Hairline divider */}
-        <div className="h-px bg-gradient-to-r from-transparent via-olive-200/70 to-transparent mb-10" />
-
-        {/* Hero image with hotspots */}
         {blogPost.mainImage && (
-          <div className="relative mb-12 rounded-2xl overflow-hidden border border-olive-100/60 shadow-[0_8px_40px_rgba(139,119,75,0.10)]">
-            <Image
-              src={urlFor(blogPost.mainImage).url()}
-              alt={blogPost.title}
-              width={900}
-              height={600}
-              className="w-full h-auto object-cover"
-              placeholder="blur"
-              blurDataURL="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAACklEQVR4nGMAAQAABQABDQottAAAAABJRU5ErkJggg=="
-            />
-
-            {/* Hotspot markers */}
-            {blogPost.hotspots?.map((spot) => (
-              <HoverCard key={`${spot.x}-${spot.y}`} openDelay={80} closeDelay={120}>
-                <HoverCardTrigger asChild>
-                  <button
-                    className="absolute -translate-x-1/2 -translate-y-1/2 group/spot focus-visible:outline-none"
-                    style={{ left: `${spot.x}%`, top: `${spot.y}%` }}
-                    aria-label={spot.details}
-                  >
-                    {/* Pulsing ring */}
-                    <span className="absolute inset-0 rounded-full bg-bronze-400/30 animate-ping" />
-                    {/* Core dot */}
-                    <span className="relative flex w-5 h-5 items-center justify-center rounded-full bg-white/85 backdrop-blur-sm border border-bronze-300/70 shadow-sm group-hover/spot:bg-bronze-50 transition-colors">
-                      <span className="w-1.5 h-1.5 rounded-full bg-bronze-500" />
-                    </span>
-                  </button>
-                </HoverCardTrigger>
-                <HoverCardContent
-                  className="w-52 p-3 rounded-xl border border-olive-200/60 shadow-lg"
-                  style={{ backgroundColor: "#fefefe" }}
-                >
-                  <p className="font-editorial text-[0.78rem] text-olive-700 leading-relaxed mb-2">
-                    {spot.details}
-                  </p>
-                  {spot.url && (
-                    <Link
-                      href={spot.url}
-                      className="inline-flex items-center gap-1 font-editorial text-[0.58rem] tracking-[0.18em] uppercase text-bronze-600 hover:text-bronze-800 transition-colors"
-                    >
-                      Découvrir →
-                    </Link>
-                  )}
-                </HoverCardContent>
-              </HoverCard>
-            ))}
-          </div>
+          <HotspotImage
+            src={urlForImage(blogPost.mainImage, 1400)}
+            alt={blogPost.title}
+            hotspots={blogPost.hotspots}
+          />
         )}
 
-        {/* Body content */}
         {blogPost.content && (
           <article>
-            <PortableText value={blogPost.content} components={portableTextComponents} />
+            <PortableText
+              value={blogPost.content}
+              components={portableTextComponents}
+            />
           </article>
         )}
 
-        {/* Bottom ornament */}
         <div className="mt-16 flex items-center justify-center gap-4">
           <div className="h-px flex-1 bg-gradient-to-r from-transparent to-olive-200/50" />
           <SmallBlossom className="w-6 h-6 text-olive-300" />
           <div className="h-px flex-1 bg-gradient-to-l from-transparent to-olive-200/50" />
         </div>
 
-        {/* Back to journal */}
-        <div className="mt-8 text-center">
-          <Link
-            href="/blog"
-            className="inline-flex items-center gap-1.5 font-editorial text-[0.62rem] tracking-[0.18em] uppercase text-olive-600 hover:text-olive-800 transition-colors"
-          >
-            <ChevronLeft size={11} strokeWidth={2.5} />
-            Retour au Journal
-          </Link>
+        <div className="mt-10 rounded-2xl bg-white/80 border border-olive-100 p-6 md:p-8 text-center">
+          <p className="font-hand text-2xl text-olive-700">
+            Envie de porter un peu de nature ?
+          </p>
+          <p className="font-editorial text-sm text-olive-600 mt-1 mb-6">
+            Toutes les pièces sont uniques et faites main.
+          </p>
+          <div className="flex flex-col sm:flex-row gap-3 justify-center">
+            <Link href="/boutique-bijou" className={btnPrimary}>
+              Voir la boutique
+            </Link>
+            <Link href="/blog" className={btnSecondary}>
+              Autres articles
+            </Link>
+          </div>
         </div>
-
       </div>
-
-      <Footer />
     </div>
   );
-};
-
-export default BlogDetailCollectionPage;
+}

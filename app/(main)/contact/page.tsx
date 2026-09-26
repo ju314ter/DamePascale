@@ -1,277 +1,151 @@
-"use client";
-
-import React from "react";
+import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
-import { Instagram, Facebook } from "lucide-react";
-import { ContactForm } from "@/components/contact/contact-form";
-import Footer from "@/components/footer/footer";
+import { Instagram, Facebook, Mail, MapPin, Clock } from "lucide-react";
+import { RequestForm } from "@/components/forms/request-form";
+import { CONTACT_FIELDS } from "@/components/forms/fields";
+import {
+  PressedFlower,
+  WildRose,
+  BranchSprig,
+} from "@/components/botanical/decorations";
+import { warmVintage } from "@/components/botanical/backgrounds";
+import { REPLY_DELAY, SITE } from "@/lib/site";
 
-/* ──────────────────────────── SVG Decorations ──────────────────────────── */
-
-function PressedFlower({ className = "" }: { className?: string }) {
-  return (
-    <svg viewBox="0 0 100 100" fill="none" className={className} xmlns="http://www.w3.org/2000/svg">
-      <circle cx="50" cy="50" r="6" stroke="currentColor" strokeWidth="1" />
-      <ellipse cx="50" cy="30" rx="8" ry="16" stroke="currentColor" strokeWidth="0.8" transform="rotate(0 50 50)" />
-      <ellipse cx="50" cy="30" rx="8" ry="16" stroke="currentColor" strokeWidth="0.8" transform="rotate(72 50 50)" />
-      <ellipse cx="50" cy="30" rx="8" ry="16" stroke="currentColor" strokeWidth="0.8" transform="rotate(144 50 50)" />
-      <ellipse cx="50" cy="30" rx="8" ry="16" stroke="currentColor" strokeWidth="0.8" transform="rotate(216 50 50)" />
-      <ellipse cx="50" cy="30" rx="8" ry="16" stroke="currentColor" strokeWidth="0.8" transform="rotate(288 50 50)" />
-    </svg>
-  );
-}
-
-function BranchSprig({ className = "" }: { className?: string }) {
-  return (
-    <svg viewBox="0 0 120 60" fill="none" className={className} xmlns="http://www.w3.org/2000/svg">
-      <path d="M10 50 Q40 45, 60 30 Q80 15, 110 10" stroke="currentColor" strokeWidth="1" />
-      <path d="M30 47 C25 38, 28 30, 35 28" stroke="currentColor" strokeWidth="0.7" />
-      <path d="M50 36 C43 28, 46 20, 54 18" stroke="currentColor" strokeWidth="0.7" />
-      <path d="M70 24 C64 18, 68 10, 76 9" stroke="currentColor" strokeWidth="0.7" />
-      <path d="M90 15 C86 10, 90 4, 96 5" stroke="currentColor" strokeWidth="0.7" />
-      <ellipse cx="35" cy="26" rx="4" ry="7" stroke="currentColor" strokeWidth="0.6" transform="rotate(-20 35 26)" />
-      <ellipse cx="54" cy="16" rx="4" ry="7" stroke="currentColor" strokeWidth="0.6" transform="rotate(-25 54 16)" />
-      <ellipse cx="76" cy="7" rx="3" ry="5" stroke="currentColor" strokeWidth="0.6" transform="rotate(-30 76 7)" />
-    </svg>
-  );
-}
-
-function WildRose({ className = "" }: { className?: string }) {
-  return (
-    <svg viewBox="0 0 80 80" fill="none" className={className} xmlns="http://www.w3.org/2000/svg">
-      <circle cx="40" cy="40" r="5" stroke="currentColor" strokeWidth="1" />
-      <circle cx="40" cy="40" r="2" fill="currentColor" fillOpacity="0.3" />
-      <path d="M40 35 C35 22, 30 18, 33 14 C38 12, 42 18, 40 35Z" stroke="currentColor" strokeWidth="0.7" />
-      <path d="M40 35 C35 22, 30 18, 33 14 C38 12, 42 18, 40 35Z" stroke="currentColor" strokeWidth="0.7" transform="rotate(72 40 40)" />
-      <path d="M40 35 C35 22, 30 18, 33 14 C38 12, 42 18, 40 35Z" stroke="currentColor" strokeWidth="0.7" transform="rotate(144 40 40)" />
-      <path d="M40 35 C35 22, 30 18, 33 14 C38 12, 42 18, 40 35Z" stroke="currentColor" strokeWidth="0.7" transform="rotate(216 40 40)" />
-      <path d="M40 35 C35 22, 30 18, 33 14 C38 12, 42 18, 40 35Z" stroke="currentColor" strokeWidth="0.7" transform="rotate(288 40 40)" />
-      <path d="M40 50 L40 75" stroke="currentColor" strokeWidth="0.8" />
-      <path d="M40 60 L34 54" stroke="currentColor" strokeWidth="0.6" />
-      <ellipse cx="32" cy="53" rx="3" ry="5" stroke="currentColor" strokeWidth="0.5" transform="rotate(30 32 53)" />
-    </svg>
-  );
-}
-
-function EnvelopeIcon({ className = "" }: { className?: string }) {
-  return (
-    <svg viewBox="0 0 32 32" fill="none" className={className} xmlns="http://www.w3.org/2000/svg">
-      <rect x="3" y="7" width="26" height="18" rx="2" stroke="currentColor" strokeWidth="1.5" />
-      <path d="M3 9 L16 18 L29 9" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
-    </svg>
-  );
-}
-
-
-function PenIcon({ className = "" }: { className?: string }) {
-  return (
-    <svg viewBox="0 0 32 32" fill="none" className={className} xmlns="http://www.w3.org/2000/svg">
-      <path d="M22 4 L28 10 L12 26 L4 28 L6 20 Z" stroke="currentColor" strokeWidth="1.5" strokeLinejoin="round" />
-      <path d="M20 6 L26 12" stroke="currentColor" strokeWidth="1.5" />
-    </svg>
-  );
-}
-
-/* ──────────────────────────── Background styles ──────────────────────────── */
-
-const warmVintage: React.CSSProperties = {
-  backgroundImage: `
-    radial-gradient(ellipse at 30% 70%, rgba(226,146,59,0.06) 0%, transparent 50%),
-    radial-gradient(ellipse at 70% 30%, rgba(157,186,154,0.08) 0%, transparent 50%),
-    repeating-conic-gradient(rgba(139,119,75,0.015) 0% 25%, transparent 0% 50%) 0 0 / 3px 3px,
-    linear-gradient(170deg, #fefefe 0%, #fdfcfa 30%, #f7f4ef 70%, #fefefe 100%)
-  `,
+export const metadata: Metadata = {
+  title: "Contact",
+  description:
+    "Une question sur un bijou, une commande, un atelier ou une création sur mesure ? Écrivez à Pascale, réponse sous 48 h.",
+  alternates: { canonical: "/contact" },
 };
 
-const ruledPaper: React.CSSProperties = {
-  backgroundImage: `
-    repeating-linear-gradient(
-      0deg,
-      transparent,
-      transparent 31px,
-      rgba(139,119,75,0.08) 31px,
-      rgba(139,119,75,0.08) 32px
-    )
-  `,
-  backgroundSize: "100% 32px",
-};
+const SUBJECTS =
+  CONTACT_FIELDS.find((f) => f.name === "subject")?.options ?? [];
 
-/* ─────────────────────────────────────────────────────────────────────────── */
+export default function ContactPage({
+  searchParams,
+}: {
+  searchParams: { objet?: string; bijou?: string };
+}) {
+  const objet = SUBJECTS.find(
+    (s) => s.toLowerCase() === searchParams.objet?.toLowerCase(),
+  );
+  const bijou = searchParams.bijou?.slice(0, 120);
 
-const ContactPage = () => {
   return (
-    <div className="min-h-screen relative" style={warmVintage}>
+    <div style={warmVintage} className="relative overflow-x-clip">
+      <PressedFlower className="pointer-events-none absolute top-[8%] right-[5%] w-20 md:w-28 text-olive-200/30 rotate-12" />
+      <BranchSprig className="pointer-events-none absolute bottom-[15%] left-[2%] w-28 md:w-40 text-sage-300/20 rotate-3" />
 
-      {/* ── Botanical decorations ──────────────────────────────────────────── */}
-      <PressedFlower aria-hidden className="pointer-events-none select-none absolute top-[12%] right-[6%] w-20 md:w-28 text-olive-200/25 rotate-12" />
-      <BranchSprig aria-hidden className="pointer-events-none select-none absolute bottom-[20%] left-[3%] w-28 md:w-40 text-sage-300/20 rotate-3" />
-      <WildRose aria-hidden className="pointer-events-none select-none absolute top-[58%] left-[5%] w-16 md:w-20 text-[#c4897a]/15 -rotate-12" />
-      <WildRose aria-hidden className="pointer-events-none select-none absolute bottom-[8%] right-[8%] w-14 text-[#c4897a]/12 rotate-[25deg]" />
-
-      {/* ── Content ────────────────────────────────────────────────────────── */}
-      <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 pt-24 md:pt-32 pb-20 relative z-10">
-
-        {/* Header */}
-        <div className="text-center mb-14">
-          <span className="font-hand text-lg md:text-xl text-[#c4897a] block mb-3">
+      <div className="relative max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 pt-10 md:pt-16 pb-20">
+        <div className="text-center mb-10 md:mb-14">
+          <span className="font-hand text-xl text-[#c4897a]">
             Une question, une envie ?
           </span>
-          <div className="inline-flex items-center gap-4 justify-center">
-            <Image
-              src="/medaillon.png"
-              alt="Dame Pascale"
-              width={72}
-              height={72}
-              className="rounded-full object-cover flex-shrink-0 shadow-sm"
-            />
-            <h1
-              className="font-serif-display text-olive-800 uppercase tracking-wide"
-              style={{ fontSize: "clamp(2.2rem, 6vw, 3.6rem)" }}
-            >
-              Écrivez-nous
-            </h1>
-          </div>
-          <div className="mt-4 mx-auto w-12 h-px bg-olive-200/80" />
+          <h1 className="font-serif-display text-4xl sm:text-5xl text-olive-800 mt-1">
+            Écrivez-moi
+          </h1>
+          <p className="font-editorial text-olive-700 mt-3">
+            Je vous réponds personnellement sous {REPLY_DELAY}.
+          </p>
         </div>
 
-        {/* Letter-style container */}
-        <div
-          className="relative bg-white/80 shadow-[0_4px_30px_rgba(0,0,0,0.06)]"
-          style={{ borderRadius: "2px" }}
-        >
-          {/* Torn paper top edge */}
-          <div className="absolute top-0 left-0 right-0 h-4 overflow-hidden" aria-hidden>
-            <svg
-              viewBox="0 0 1200 16"
-              preserveAspectRatio="none"
-              className="w-full h-full text-white/80"
-            >
-              <path
-                d="M0 16 L0 8 C20 4, 40 10, 60 6 C80 2, 100 9, 120 5 C140 1, 160 8, 180 4 C200 0, 220 7, 240 3 C260 -1, 280 6, 300 4 C320 2, 340 9, 360 5 C380 1, 400 7, 420 3 C440 0, 460 8, 480 4 C500 1, 520 6, 540 3 C560 0, 580 7, 600 5 C620 2, 640 8, 660 4 C680 1, 700 6, 720 3 C740 0, 760 7, 780 5 C800 2, 820 8, 840 4 C860 0, 880 6, 900 3 C920 1, 940 7, 960 5 C980 2, 1000 8, 1020 4 C1040 1, 1060 6, 1080 3 C1100 0, 1120 7, 1140 4 C1160 2, 1180 6, 1200 4 L1200 16 Z"
-                fill="currentColor"
+        <div className="grid gap-8 md:grid-cols-[1fr_1.5fr] items-start">
+          <aside className="space-y-6 md:sticky md:top-24">
+            <div className="flex items-center gap-4">
+              <Image
+                src="/medaillon.png"
+                alt=""
+                width={64}
+                height={64}
+                className="rounded-full"
               />
-            </svg>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-0">
-
-            {/* ── Left: contact info ─────────────────────────────────────── */}
-            <div className="p-8 md:p-12 md:border-r border-olive-200/30">
-
-              {/* Quote */}
-              <blockquote className="font-hand text-xl md:text-2xl text-olive-800/80 leading-relaxed mb-10 relative">
-                <span
-                  className="absolute -top-3 -left-2 text-4xl text-[#c4897a]/30 font-serif-display"
-                  aria-hidden
-                >
-                  &ldquo;
-                </span>
-                La nature nous offre ses plus beaux{" "}
-                <span className="italic text-bronze-600">trésors</span>, je les
-                transforme en souvenirs{" "}
-                <span className="relative inline-block italic text-olive-800">
-                  éternels
-                  <svg
-                    className="absolute -bottom-0.5 left-0 w-full h-2 text-sage-400/30"
-                    viewBox="0 0 100 8"
-                    preserveAspectRatio="none"
-                    fill="none"
-                  >
-                    <path
-                      d="M2 5 C30 1, 55 7, 80 3 C90 1, 96 4, 98 3"
-                      stroke="currentColor"
-                      strokeWidth="2"
-                      strokeLinecap="round"
-                    />
-                  </svg>
-                </span>
-                <span className="text-4xl text-[#c4897a]/30 font-serif-display ml-1" aria-hidden>
-                  &rdquo;
-                </span>
+              <blockquote className="font-hand text-xl text-olive-800/90 leading-snug">
+                « La nature nous offre ses plus beaux trésors, je les transforme
+                en souvenirs éternels. »
               </blockquote>
-
-              {/* Contact details */}
-              <div className="space-y-6">
-                <div className="flex items-start gap-4">
-                  <EnvelopeIcon className="w-6 h-6 text-olive-700 flex-shrink-0 mt-0.5" />
-                  <div>
-                    <p className="font-editorial text-sm text-olive-700 uppercase tracking-wider mb-1 font-medium">
-                      Email
-                    </p>
-                    <p className="font-hand text-lg text-olive-700">
-                      damepascale72@gmail.com
-                    </p>
-                  </div>
-                </div>
-
-                <Link
-                  href="https://www.instagram.com/dame_pascale"
+            </div>
+            <ul className="space-y-4 font-editorial text-[0.9rem] text-olive-800">
+              <li className="flex items-start gap-3">
+                <Mail className="w-5 h-5 text-olive-500 mt-0.5" />
+                <a
+                  href={`mailto:${SITE.email}`}
+                  className="hover:text-bronze-600 break-all"
+                >
+                  {SITE.email}
+                </a>
+              </li>
+              <li className="flex items-start gap-3">
+                <Instagram className="w-5 h-5 text-olive-500 mt-0.5" />
+                <a
+                  href={SITE.instagram.url}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex items-start gap-4 group no-underline"
+                  className="hover:text-bronze-600"
                 >
-                  <Instagram className="w-6 h-6 text-olive-700 flex-shrink-0 mt-0.5 group-hover:text-bronze-500 transition-colors" />
-                  <div>
-                    <p className="font-editorial text-sm text-olive-700 uppercase tracking-wider mb-1 font-medium group-hover:text-bronze-500 transition-colors">
-                      Instagram
-                    </p>
-                    <p className="font-hand text-lg text-olive-700 group-hover:text-bronze-500 transition-colors">
-                      @dame_pascale
-                    </p>
-                  </div>
-                </Link>
-
-                <Link
-                  href="https://www.facebook.com/p/Mes-petites-cr%C3%A9a-ch%C3%A9ries-100057342554163/"
+                  {SITE.instagram.handle}
+                </a>
+              </li>
+              <li className="flex items-start gap-3">
+                <Facebook className="w-5 h-5 text-olive-500 mt-0.5" />
+                <a
+                  href={SITE.facebook.url}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex items-start gap-4 group no-underline"
+                  className="hover:text-bronze-600"
                 >
-                  <Facebook className="w-6 h-6 text-olive-700 flex-shrink-0 mt-0.5 group-hover:text-bronze-500 transition-colors" />
-                  <div>
-                    <p className="font-editorial text-sm text-olive-700 uppercase tracking-wider mb-1 font-medium group-hover:text-bronze-500 transition-colors">
-                      Facebook
-                    </p>
-                    <p className="font-hand text-lg text-olive-700 group-hover:text-bronze-500 transition-colors">
-                      Mes petites créa chéries
-                    </p>
-                  </div>
-                </Link>
-
-                <div className="flex items-start gap-4">
-                  <PenIcon className="w-6 h-6 text-olive-700 flex-shrink-0 mt-0.5" />
-                  <div>
-                    <p className="font-editorial text-sm text-olive-700 uppercase tracking-wider mb-1 font-medium">
-                      Atelier
-                    </p>
-                    <p className="font-hand text-lg text-olive-700">
-                      Le Mans, France
-                    </p>
-                  </div>
-                </div>
-              </div>
-
-              {/* Ornament */}
-              <div className="mt-10 flex items-center gap-3">
-                <div className="w-8 h-px bg-olive-300/30" />
-                <WildRose className="w-8 h-8 text-[#c4897a]/25" />
-                <div className="w-8 h-px bg-olive-300/30" />
-              </div>
+                  {SITE.facebook.name}
+                </a>
+              </li>
+              <li className="flex items-start gap-3">
+                <MapPin className="w-5 h-5 text-olive-500 mt-0.5" />
+                <span>{SITE.location}</span>
+              </li>
+              <li className="flex items-start gap-3">
+                <Clock className="w-5 h-5 text-olive-500 mt-0.5" />
+                <span>Réponse sous {REPLY_DELAY}</span>
+              </li>
+            </ul>
+            <div className="rounded-2xl bg-white/80 border border-olive-100 p-5 space-y-2 font-editorial text-[0.85rem] text-olive-700">
+              <p className="font-hand text-xl text-olive-700">
+                Vous cherchez peut-être…
+              </p>
+              <Link
+                href="/sur-mesure"
+                className="block underline underline-offset-4 decoration-olive-300 hover:text-bronze-600"
+              >
+                Une création avec vos fleurs →
+              </Link>
+              <Link
+                href="/ateliers"
+                className="block underline underline-offset-4 decoration-olive-300 hover:text-bronze-600"
+              >
+                Réserver un atelier →
+              </Link>
+              <Link
+                href="/marches"
+                className="block underline underline-offset-4 decoration-olive-300 hover:text-bronze-600"
+              >
+                Les prochains marchés →
+              </Link>
             </div>
+          </aside>
 
-            {/* ── Right: form ────────────────────────────────────────────── */}
-            <div className="p-8 md:p-12" style={ruledPaper}>
-              <ContactForm />
-            </div>
-
+          <div className="relative bg-white rounded-2xl border border-olive-100 p-5 sm:p-8 shadow-[0_4px_30px_rgba(0,0,0,0.05)]">
+            <WildRose className="absolute -top-5 -right-4 w-12 h-12 text-[#c4897a]/30" />
+            <RequestForm
+              kind="contact"
+              fields={CONTACT_FIELDS}
+              defaults={{
+                subject: objet,
+                message: bijou
+                  ? `Bonjour Pascale, j'ai une question au sujet du bijou « ${bijou} » : `
+                  : undefined,
+              }}
+            />
           </div>
         </div>
       </div>
-
-      <Footer />
     </div>
   );
-};
-
-export default ContactPage;
+}

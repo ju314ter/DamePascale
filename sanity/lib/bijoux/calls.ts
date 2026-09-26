@@ -1,208 +1,81 @@
 import { groq } from "next-sanity";
-import { client } from "../client";
-import { ContentBlock } from "../amigurumis/calls";
+import { sanityFetch } from "../client";
+import type { Bijou, NavLink, Taxonomies } from "../types";
 
-export interface BijouFilters {
-  price?: [number, number];
-  matieres?: string[];
-  fleurs?: string[];
-  categories?: string[];
-}
+export type { Bijou, Taxonomies } from "../types";
 
-export interface Bijou {
-  _id: string;
-  name: string;
-  description: ContentBlock[];
-  price: number;
-  matieres: {
-    _id: string;
-    title: string;
-  }[];
-  categories: {
-    _id: string;
-    title: string;
-  }[];
-  fleurs: {
-    _id: string;
-    title: string;
-  }[];
-  stock: number;
-  highlightedImg: any;
-  imageGallery: any[];
-  promotionDiscount?: number;
-}
+const BIJOU_FIELDS = groq`
+  _id,
+  _createdAt,
+  name,
+  price,
+  "matieres": matieres[]->{ _id, title },
+  "categories": categories[]->{ _id, title },
+  "fleurs": fleurs[]->{ _id, title },
+  stock,
+  highlightedImg,
+  imageGallery,
+  promotionDiscount
+`;
 
-export interface BijouHerobanner {
-  _id: string;
-  title: string;
-  subtitle: string;
-  heroImg: any;
-  buttonText: string;
-  buttonLink: string;
-}
+/** Tout le catalogue : les filtres et tris sont appliqués instantanément côté client. */
+export const getBijoux = () =>
+  sanityFetch<Bijou[]>(
+    groq`*[_type == "bijoux"] | order(_createdAt desc){ ${BIJOU_FIELDS} }`,
+    {},
+    [],
+  );
 
-export const getBijoux = async (filtres?: BijouFilters) => {
-  const pricePartialQuery = filtres?.price
-    ? ` && price >= ${filtres.price[0]} && price <= ${filtres.price[1]}`
-    : "";
-  const matierePartialQuery =
-    filtres?.matieres && filtres.matieres.length > 0
-      ? ` && (${filtres.matieres.map((matiere) => `"${matiere}" in matieres[]->_id`).join(" || ")})`
-      : "";
-  const fleurPartialQuery =
-    filtres?.fleurs && filtres.fleurs.length > 0
-      ? ` && (${filtres.fleurs.map((fleur) => `"${fleur}" in fleurs[]->_id`).join(" || ")})`
-      : "";
+export const getBijouById = (id: string) =>
+  sanityFetch<Bijou | null>(
+    groq`*[_type == "bijoux" && _id == $id][0]{ ${BIJOU_FIELDS}, description }`,
+    { id },
+    null,
+  );
 
-  const categoryPartialQuery =
-    filtres?.categories && filtres.categories.length > 0
-      ? ` && (${filtres.categories.map((cat) => `"${cat}" in categories[]->_id`).join(" || ")})`
-      : "";
-
-  const query = `*[_type == "bijoux"${pricePartialQuery}${matierePartialQuery}${fleurPartialQuery}${categoryPartialQuery}]{
-    _id,
-    name,
-    price,
-    "matieres": matieres[]-> {
-      _id,
-      title,
-    },
-    "categories": categories[]-> {
-      _id,
-      title,
-    },
-    "fleurs": fleurs[]-> {
-      _id,
-      title,
-    },
-    stock,
-    highlightedImg,
-    imageGallery,
-    promotionDiscount
-  }`;
-  const bijoux: Bijou[] = await client.fetch(groq`${query}`);
-  return bijoux;
-};
-
-export const getBijouById = async (id: string) => {
-  const query = `*[_type == "bijoux" && _id == $id]{
-    _id,
-    name,
-    description,
-    price,
-    "matieres": matieres[]-> {
-      _id,
-      title,
-    },
-    "categories": categories[]-> {
-      _id,
-      title,
-    },
-    "fleurs": fleurs[]-> {
-      _id,
-      title,
-    },
-    stock,
-    highlightedImg,
-    imageGallery,
-    promotionDiscount
-  }[0]`;
-  const bijou: Bijou = await client.fetch(groq`${query}`, { id });
-  return bijou;
-};
-
-export const getLastNBijoux = async (n: number) => {
-  const query = `*[_type == "bijoux"] | order(_createdAt desc) [0...${n}]{
-    _id,
-    name,
-    price,
-    "matieres": matieres[]-> {
-      _id,
-      title,
-    },
-    "categories": categories[]-> {
-      _id,
-      title,
-    },
-    "fleurs": fleurs[]-> {
-      _id,
-      title,
-    },
-    stock,
-    highlightedImg,
-    imageGallery,
-    promotionDiscount
-  }`;
-  const bijoux: Bijou[] = await client.fetch(groq`${query}`);
-  return bijoux;
-};
+export const getRelatedBijoux = (id: string, categoryIds: string[]) =>
+  sanityFetch<Bijou[]>(
+    groq`*[_type == "bijoux" && _id != $id && stock > 0]
+      | order(count((categories[]._ref)[@ in $categoryIds]) desc, _createdAt desc)[0...4]{ ${BIJOU_FIELDS} }`,
+    { id, categoryIds },
+    [],
+  );
 
 export const getCollectionVedette = async (): Promise<Bijou[]> => {
-  const query = groq`*[_type == "collectionVedette"][0]{
-    "bijoux": bijoux[]-> {
-      _id,
-      name,
-      price,
-      highlightedImg,
-      stock,
-      promotionDiscount
-    }
-  }.bijoux`;
-
-  const bijoux: Bijou[] | null = await client.fetch(query);
-
-  if (!bijoux || bijoux.length === 0) {
-    return getLastNBijoux(6);
-  }
-  return bijoux;
+  const vedette = await sanityFetch<Bijou[] | null>(
+    groq`*[_type == "collectionVedette"][0].bijoux[]->{ ${BIJOU_FIELDS} }`,
+    {},
+    null,
+  );
+  if (vedette && vedette.length > 0) return vedette.filter(Boolean);
+  return sanityFetch<Bijou[]>(
+    groq`*[_type == "bijoux"] | order(stock > 0 desc, _createdAt desc)[0...6]{ ${BIJOU_FIELDS} }`,
+    {},
+    [],
+  );
 };
 
-export const getBijouNavlinks = async () => {
-  const query = `*[_type == "bijouLienMenu"]{
-    _id,
-    title,
-    href
-  }`;
-  const navlinks: { title: string; href: string }[] = await client.fetch(
-    groq`${query}`
+export const getBijouNavlinks = () =>
+  sanityFetch<NavLink[]>(
+    groq`*[_type == "bijouLienMenu"]{ title, href }`,
+    {},
+    [],
   );
 
-  return navlinks;
-};
-
-export const getBijouxCategories = async (): Promise<
-  {
-    _id: string;
-    title: string;
-  }[]
-> => {
-  const bijouxCat = await client.fetch(groq`*[_type == "bijouCategory"]`);
-  return bijouxCat;
-};
-
-export const getBijouxMatieres = async (): Promise<
-  {
-    _id: string;
-    title: string;
-  }[]
-> => {
-  const bijouxMatiere = await client.fetch(groq`*[_type == "bijouMatiere"]`);
-  return bijouxMatiere;
-};
-
-export const getBijouxFleurs = async (): Promise<
-  {
-    _id: string;
-    title: string;
-  }[]
-> => {
-  const bijouxFleurs = await client.fetch(groq`*[_type == "bijouFleur"]`);
-  return bijouxFleurs;
-};
-
-export const getBijouxHeroBanner = async () => {
-  const bijouxHeroItems: BijouHerobanner[] = await client.fetch(
-    groq`*[_type == "heroBannerBijou"]`
+export const getTaxonomies = () =>
+  sanityFetch<Taxonomies>(
+    groq`{
+      "categories": *[_type == "bijouCategory"] | order(title asc){ _id, title },
+      "matieres": *[_type == "bijouMatiere"] | order(title asc){ _id, title },
+      "fleurs": *[_type == "bijouFleur"] | order(title asc){ _id, title }
+    }`,
+    {},
+    { categories: [], matieres: [], fleurs: [] },
   );
-  return bijouxHeroItems;
-};
+
+export const getBijouxSitemap = () =>
+  sanityFetch<{ _id: string; _updatedAt: string }[]>(
+    groq`*[_type == "bijoux"]{ _id, _updatedAt }`,
+    {},
+    [],
+  );
