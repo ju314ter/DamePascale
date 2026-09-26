@@ -1,142 +1,219 @@
-import Footer from "@/components/footer/footer";
-import React from "react";
+import type { Metadata } from "next";
+import Link from "next/link";
+import { LegalLayout } from "@/components/legal/legal-layout";
+import { SHIPPING, SITE } from "@/lib/site";
 
-const Page = () => {
-  return (
-    <>
-      <div className="max-w-4xl mx-auto p-8 pt-[10vh] flex flex-col gap-4">
-        <h1 className="text-3xl font-bold mb-4">
-          Conditions générales de vente Conditions Générales de Vente du site
-          DAME PASCALE (www.damepascale.fr)
-        </h1>
-        <h2 className="text-2xl font-bold mb-2">1. Introduction </h2>
-        <div>
-          Les présentes conditions générales de vente s&apos;appliquent à
-          l&apos;ensemble des commandes passées sur le site DAME PASCALE. DAME
-          PASCALE se réserve le droit de modifier dans le temps ces conditions.
-          Les conditions applicables à toute commande sont celles en vigueur au
-          moment de la passation de la commande.
-        </div>
-        <h2 className="text-2xl font-bold mb-2">2. Commande</h2>
-        <div>
-          L&apos;acheteur, qui souhaite acheter un produit sur DAME PASCALE doit
-          obligatoirement : – remplir la fiche d&apos;identification sur
-          laquelle il indiquera toutes les coordonnées demandées. – valider sa
-          commande après l&apos;avoir vérifiée. – effectuer le paiement dans les
-          conditions prévues. La confirmation de la commande entraîne
-          acceptation des présentes conditions de vente, la reconnaissance
-          d&apos;en avoir parfaite connaissance et la renonciation à se
-          prévaloir de ses propres conditions d&apos;achat ou d&apos;autres
-          conditions. L&apos;ensemble des données fournies et la confirmation
-          enregistrée vaudront preuve de la transaction. DAME PASCALE
-          communiquera par courrier électronique confirmation de la commande
-          enregistrée. Les produits vendus par le site sont identifiés par une
-          ou plusieurs photos, un texte descriptif et un prix TTC en euros. Les
-          photographies réalisées pour ce site se veulent les plus fidèles
-          possibles aux produits vendus. Mais les couleurs restituées peuvent
-          varier d&apos;un ordinateur à l&apos;autre.
-        </div>
-        <h2 className="text-2xl font-bold mb-2">3. Prix</h2>
-        <div>
-          Les prix figurant sur le site sont indiqués en euros (toutes taxes
-          comprises), hors frais de livraison. Ils sont garantis pour la durée
-          de la mise en ligne et dans la limite des stocks disponibles. Les
-          frais de port varient et sont précisés avant la finalisation de
-          l&apos;achat.
-        </div>
-        <h2 className="text-2xl font-bold mb-2">4. Paiement</h2>
-        <div>
-          Dans un souci de respect des utilisateurs et des clients, DAME PASCALE
-          propose deux modes de paiement. Les paiements se font par chèque ou en
-          ligne par virement bancaire, qui dans ce cas sont entièrement
-          sécurisés grâce à la plateforme Paypal. La date de validation de la
-          commande correspond à la date de réception du chèque ou de paiement en
-          ligne. Les produits demeurent la propriété du site DAME PASCALE
-          jusqu&apos;au complet paiement du prix.
-        </div>
-        <h2 className="text-2xl font-bold mb-2">5. Livraison</h2>
-        <div>
-          Les livraisons sont faites à l&apos;adresse indiquée dans le bon de
-          commande qui ne peut être que dans la zone géographique convenue. Nous
-          livrons partout en France.et zone Euro Après leur validation, les
-          commandes sont généralement expédiées sous 15 jours. Le délai
-          d&apos;acheminement en France métropolitaine est habituellement de 2 à
-          3 jours. En cas de retard de livraison de plus de 7 jours, nous vous
-          conseillons de contacter votre bureau de poste pour vous assurer que
-          votre paquet n&apos;est pas en instance ; puis le cas échéant, de
-          contacter notre service client pour l&apos;enjoindre d&apos;exécuter
-          la livraison sous un délai supplémentaire raisonnable. En cas de
-          non-respect de ce nouveau délai, le client pourra demander à DAME
-          PASCALE par e-mail l&apos;annulation de sa commande. Le contrat et
-          donc la vente sera considérée comme rompue à la réception de
-          l&apos;e-mail ou d&apos;une lettre par laquelle le client
-          l&apos;informe de sa décision, à moins que la livraison ne soit
-          intervenue entre l&apos;envoi et la réception de l&apos;e-mail ou de
-          la lettre du client. Dans l&apos;hypothèse où la commande serait
-          définitivement annulée, le client obtiendra le remboursement du prix
-          payé pour sa commande dans les quatorze (14) jours calendaires suivant
-          l&apos;annulation confirmée par e-mail. Dans l&apos;hypothèse où le
-          client recevrait le colis après l&apos;annulation de sa commande, DAME
-          PASCALE procédera au remboursement des articles et des frais de
-          retour, à réception de l&apos;intégralité de ceux-ci dans leur parfait
-          état d&apos;origine. Chaque livraison est réputée effectuée dès mise à
-          disposition du colis auprès du client, notamment par le transporteur,
-          matérialisée par le système de contrôle utilisé par le transporteur.
-          Le client est tenu de vérifier le bon état des articles livrés. Si
-          l&apos;article est endommagé ou ne correspond pas à la commande du
-          client, celui-ci doit enclencher dans les trente (30) jours
-          calendaires après l&apos;expédition la procédure de retour décrite
-          ci-après. DAME PASCALE ne peut en aucun cas être responsable des
-          retards de livraison dû exclusivement à une indisponibilité du client.
-        </div>
-        <h2 className="text-2xl font-bold mb-2">6. Retractation et retours</h2>
-        <div>
-          Conformément aux dispositions légales en vigueur, vous disposez
-          d&apos;un délai de 14 jours à compter de la réception de votre
-          commande, pour exercer votre droit de rétractation auprès de DAME
-          PASCALE. Les articles retournés doivent être dans un état neuf et dans
-          leur emballage d&apos;origine, pour permettre leur commercialisation
-          ultérieure. Tout article ne respectant pas ces caractéristiques ne
-          sera ni remboursé ni échangé. En cas de perte ou détérioration du
-          colis retourné, nous ne pourrons procéder au remboursement de la
-          commande et l&apos;acheteur devra effectuer une réclamation
-          directement auprès de son transporteur. Dans le cas d&apos;un retour
-          de produits conformes, le renvoi se fera à la charge de
-          l&apos;acheteur. Celui-ci se verra proposer un avoir ou un
-          remboursement de la valeur des produits à leur date d&apos;achat. Dans
-          le cas d&apos;un retour de produits réceptionnés non-conformes, le
-          renvoi se fera à la charge de l&apos;acheteur. Le remboursement des
-          produits et des frais de renvoi ne se fera qu&apos;après réception des
-          produits et validation de leur non-conformité. Le remboursement des
-          produits réceptionnés se fera sous 15 jours ouvrables. Pour demander
-          un remboursement ou faire un retour, vous devez tout d&apos;abord
-          envoyer un e-mail à 
-          <a href="mailto:damepascale72@gmail.com">damepascale72@gmail.com</a>
-           afin de connaître la marche à suivre.
-        </div>
-        <h2 className="text-2xl font-bold mb-2">7. Droit applicable</h2>
-        <div>
-          Les présentes CGV sont régies par le droit français. Tout litige
-          relèvera de la compétence exclusive des tribunaux français du lieu de
-          domicile du Client, à défaut d&apos;accord amiable DAME PASCALE et le
-          client.
-        </div>
-        <h2 className="text-2xl font-bold mb-2">8. Service client</h2>
-        <div>
-          Pour toute information ou question, pour un suivi de commande, le
-          client peut contacter le service clientèle par e-mail sur la page «
-          Contact » du site.
-        </div>
-        <h2 className="text-2xl font-bold mb-2">9. Mentions légales</h2>
-        <div>
-          Raison sociale : DAME PASCALE Créatrice, propriétaire et responsable :
-          Pascale FEGER N° SIRET : 92922415200017 DAME PASCALE est basé à YVRE
-          L&apos;EVEQUE 6 rue de Villemusard 72530 FRANCE.
-        </div>
-      </div>
-      <Footer />
-    </>
-  );
+export const metadata: Metadata = {
+  title: "Conditions générales de vente",
+  description:
+    "Commande, paiement, livraison, rétractation et garanties sur la boutique Dame Pascale.",
+  alternates: { canonical: "/cgv" },
 };
 
-export default Page;
+const mail = <a href={`mailto:${SITE.email}`}>{SITE.email}</a>;
+
+export default function CgvPage() {
+  return (
+    <LegalLayout
+      title="Conditions générales de vente"
+      updated="septembre 2026"
+      sections={[
+        {
+          id: "vendeur",
+          title: "Le vendeur",
+          content: (
+            <p>
+              Les présentes conditions s&apos;appliquent aux ventes conclues sur
+              le site Dame Pascale, édité par Pascale Féger, entreprise
+              individuelle (SIRET 929 224 152 00017), 6 rue de Villemusard,
+              72530 Yvré-l&apos;Évêque, France. Contact : {mail}. Les conditions
+              applicables sont celles en vigueur au jour de la commande.
+            </p>
+          ),
+        },
+        {
+          id: "produits",
+          title: "Les produits",
+          content: (
+            <>
+              <p>
+                Les bijoux sont fabriqués à la main avec des fleurs naturelles :
+                chaque pièce est unique et peut légèrement différer des photos
+                (couleurs selon l&apos;écran, nuances naturelles des fleurs).
+                Les produits sont proposés dans la limite des stocks
+                disponibles.
+              </p>
+              <p>
+                Ces bijoux ne sont pas des jouets et ne conviennent pas aux
+                enfants de moins de 3 ans (petites pièces).
+              </p>
+            </>
+          ),
+        },
+        {
+          id: "commande",
+          title: "Commande et prix",
+          content: (
+            <>
+              <p>
+                Les prix sont indiqués en euros, toutes taxes comprises, hors
+                frais de livraison. Les frais de livraison sont affichés dans le
+                panier avant le paiement. La commande est ferme après validation
+                du paiement ; une confirmation est alors envoyée par e-mail.
+              </p>
+              <p>
+                Les codes promotionnels ne sont pas cumulables et
+                s&apos;appliquent au montant des articles, hors frais de
+                livraison.
+              </p>
+            </>
+          ),
+        },
+        {
+          id: "paiement",
+          title: "Paiement",
+          content: (
+            <p>
+              Le paiement s&apos;effectue en ligne, de façon sécurisée, via la
+              plateforme Stripe : carte bancaire (CB, Visa, Mastercard…), PayPal
+              ou Link. Dame Pascale n&apos;a jamais accès à vos coordonnées
+              bancaires. Le montant est débité à la validation de la commande.
+              Les produits restent la propriété de Dame Pascale jusqu&apos;au
+              paiement complet.
+            </p>
+          ),
+        },
+        {
+          id: "livraison",
+          title: "Livraison",
+          content: (
+            <>
+              <p>
+                Livraison en France et dans les pays de la zone euro, à
+                l&apos;adresse indiquée lors du paiement. Frais de livraison :{" "}
+                {SHIPPING.cost.toLocaleString("fr-FR")} €, offerts à partir de{" "}
+                {SHIPPING.freeThreshold} € d&apos;achat (montant des articles
+                après promotions).
+              </p>
+              <p>
+                Les commandes sont expédiées sous 15 jours maximum après
+                validation du paiement. Le délai d&apos;acheminement en France
+                métropolitaine est habituellement de 2 à 3 jours ouvrés.
+              </p>
+              <p>
+                En cas de retard important ou de colis endommagé, contactez-moi
+                à {mail} : je m&apos;occupe des démarches auprès du
+                transporteur. Si la livraison n&apos;intervient pas dans un
+                délai supplémentaire raisonnable, vous pouvez annuler la
+                commande et être remboursé·e sous 14 jours.
+              </p>
+            </>
+          ),
+        },
+        {
+          id: "retractation",
+          title: "Droit de rétractation et retours",
+          content: (
+            <>
+              <p>
+                Vous disposez de 14 jours à compter de la réception de votre
+                commande pour exercer votre droit de rétractation, sans avoir à
+                vous justifier. Il suffit de m&apos;en informer par e-mail à{" "}
+                {mail}.
+              </p>
+              <p>
+                Le bijou doit être renvoyé dans les 14 jours suivant votre
+                demande, dans un état permettant sa remise en vente (non porté,
+                bien protégé). Les frais de retour sont à votre charge. Vous
+                restez responsable d&apos;une éventuelle dépréciation résultant
+                d&apos;une manipulation autre que celle nécessaire pour
+                l&apos;examiner.
+              </p>
+              <p>
+                Je vous rembourse la totalité des sommes versées, y compris les
+                frais de livraison initiaux (sur la base du tarif standard),
+                dans les 14 jours suivant votre demande, par le même moyen de
+                paiement. Le remboursement peut être différé jusqu&apos;à
+                réception du bijou.
+              </p>
+              <p>
+                <strong>Exception :</strong> conformément à l&apos;article
+                L221-28 du Code de la consommation, le droit de rétractation ne
+                s&apos;applique pas aux créations sur mesure réalisées selon vos
+                spécifications ou avec vos propres fleurs.
+              </p>
+            </>
+          ),
+        },
+        {
+          id: "sur-mesure",
+          title: "Créations sur mesure",
+          content: (
+            <p>
+              Toute création sur mesure fait l&apos;objet d&apos;un échange
+              préalable et d&apos;un devis accepté par e-mail. Les délais sont
+              donnés à titre indicatif : le séchage des fleurs demande plusieurs
+              semaines. Les fleurs naturelles étant vivantes, leur teinte peut
+              évoluer lors du séchage. Voir la page{" "}
+              <Link href="/sur-mesure">Sur mesure</Link>.
+            </p>
+          ),
+        },
+        {
+          id: "ateliers",
+          title: "Ateliers",
+          content: (
+            <p>
+              Les ateliers sont réservés sur demande via la page{" "}
+              <Link href="/ateliers">Ateliers</Link>. La date, le lieu, le prix
+              ainsi que les conditions de paiement, de report et
+              d&apos;annulation sont confirmés par écrit (e-mail) au moment de
+              la réservation.
+            </p>
+          ),
+        },
+        {
+          id: "garanties",
+          title: "Garanties",
+          content: (
+            <p>
+              Les produits bénéficient de la garantie légale de conformité
+              (articles L217-3 et suivants du Code de la consommation) et de la
+              garantie contre les vices cachés (articles 1641 et suivants du
+              Code civil). Pour la mettre en œuvre, contactez-moi à {mail}.
+            </p>
+          ),
+        },
+        {
+          id: "donnees",
+          title: "Données personnelles",
+          content: (
+            <p>
+              Les données transmises lors d&apos;une commande servent uniquement
+              à la traiter et à vous livrer. Pour en savoir plus et exercer vos
+              droits, consultez les{" "}
+              <Link href="/legals#donnees">mentions légales</Link>.
+            </p>
+          ),
+        },
+        {
+          id: "litiges",
+          title: "Droit applicable et litiges",
+          content: (
+            <>
+              <p>
+                Les présentes conditions sont soumises au droit français. En cas
+                de difficulté, contactez-moi d&apos;abord à {mail} : nous
+                trouverons ensemble une solution amiable.
+              </p>
+              <p>
+                À défaut de résolution amiable, le litige relèvera des tribunaux
+                compétents.
+              </p>
+            </>
+          ),
+        },
+      ]}
+    />
+  );
+}

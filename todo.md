@@ -1,1 +1,0 @@
-# Illustration picture for process section landing

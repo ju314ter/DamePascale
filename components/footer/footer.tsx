@@ -1,158 +1,180 @@
-"use client";
-
-import { motion } from "framer-motion";
-import { Facebook, Instagram } from "lucide-react";
 import Link from "next/link";
-import React, { useState } from "react";
 import Image from "next/image";
+import { Facebook, Instagram, Mail, MapPin } from "lucide-react";
+import { SITE } from "@/lib/site";
+import { NewsSignup } from "@/components/forms/news-signup";
 
-const Footer: React.FC = () => {
+const linkClass =
+  "font-editorial text-[0.85rem] text-cream-200/85 hover:text-white transition-colors py-1 inline-block";
+
+export default function Footer() {
   return (
-    <footer
-      className="relative py-10 md:py-14 w-full border-t border-olive-200/30"
-      style={{
-        backgroundImage:
-          "radial-gradient(ellipse at 20% 50%, rgba(227,207,165,0.15) 0%, transparent 60%), radial-gradient(ellipse at 80% 20%, rgba(200,180,140,0.1) 0%, transparent 50%), linear-gradient(175deg, #fefefe 0%, #fdfcfa 50%, #fefefe 100%)",
-      }}
-    >
-      <div className="max-w-6xl mx-auto px-6 flex flex-col md:flex-row gap-10 md:gap-4 justify-between items-start">
-        <div className="flex flex-col gap-3">
-          <span className="font-hand text-2xl text-olive-700">
-            Dame Pascale
-          </span>
-          <CustomHoveredLink
-            label="Conditions de vente"
-            url="/cgv"
-            internalLink={true}
-          />
-          <CustomHoveredLink
-            label="Mentions légales"
-            url="/legals"
-            internalLink={true}
-          />
-        </div>
-        <div className="flex flex-col gap-3">
-          <span className="font-editorial text-sm font-medium uppercase tracking-[0.15em] text-olive-800">
-            Informations
-          </span>
-          <CustomHoveredLink
-            label="Contactez moi"
-            url="/contact"
-            internalLink={true}
-          />
-          <CustomHoveredLink
-            label="Collections"
-            url="/blog"
-            internalLink={true}
-          />
-          <CustomHoveredLink
-            label="Yvré l'évêque, Sarthe, France"
-            url="https://www.google.fr/maps/place/Yvr%C3%A9-l'%C3%89v%C3%AAque/@48.0121067,0.1865311,12.25z/data=!4m15!1m8!3m7!1s0x47e28b93650142cb:0xe07e236cd6b4a084!2zWXZyw6ktbCfDiXbDqnF1ZQ!3b1!8m2!3d48.0139762!4d0.271887!16s%2Fm%2F03qj283!3m5!1s0x47e28b93650142cb:0xe07e236cd6b4a084!8m2!3d48.0139762!4d0.271887!16s%2Fm%2F03qj283?entry=ttu&g_ep=EgoyMDI0MDkxOC4xIKXMDSoASAFQAw%3D%3D"
-            internalLink={false}
-          />
-          <CustomHoveredLink
-            label="damepascale72@gmail.com"
-            url="mailto:damepascale72@gmail.com"
-            internalLink={false}
-          />
-        </div>
-        <div className="flex flex-col gap-6">
+    <footer className="bg-olive-900 text-cream-100">
+      <div className="max-w-7xl mx-auto px-5 sm:px-6 lg:px-8 pt-14 pb-8">
+        <div className="grid gap-10 md:grid-cols-2 lg:grid-cols-[1.3fr_1fr_1fr_1.4fr]">
           <div>
-            <span className="font-editorial text-sm font-medium uppercase tracking-[0.15em] text-olive-800">
-              Paiement
-            </span>
-            <div className="flex gap-3 pt-3">
-              <Image src="/paypal.png" alt="paypal" width={50} height={30} />
-              <Image src="/visa.png" alt="visa" width={50} height={30} />
+            <Link
+              href="/"
+              className="inline-flex items-center gap-2 font-hand text-3xl text-cream-50"
+            >
               <Image
-                src="/mastercard.png"
-                alt="mastercard"
-                width={50}
-                height={30}
+                src="/medaillon.png"
+                alt=""
+                width={40}
+                height={40}
+                className="rounded-full"
               />
+              Dame Pascale
+            </Link>
+            <p className="font-editorial text-[0.85rem] text-cream-200/80 leading-relaxed mt-4 max-w-xs">
+              Des fleurs cueillies, séchées puis figées dans la résine : des
+              bijoux uniques, façonnés à la main près du Mans.
+            </p>
+            <div className="flex gap-3 mt-5">
+              <a
+                href={SITE.instagram.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="Instagram"
+                className="w-10 h-10 rounded-full border border-cream-200/25 flex items-center justify-center hover:bg-white/10"
+              >
+                <Instagram className="w-[18px] h-[18px]" />
+              </a>
+              <a
+                href={SITE.facebook.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="Facebook"
+                className="w-10 h-10 rounded-full border border-cream-200/25 flex items-center justify-center hover:bg-white/10"
+              >
+                <Facebook className="w-[18px] h-[18px]" />
+              </a>
             </div>
           </div>
+
+          <nav aria-label="Boutique et services">
+            <p className="font-editorial text-[0.68rem] tracking-[0.2em] uppercase text-cream-300/70 mb-3">
+              Découvrir
+            </p>
+            <ul>
+              <li>
+                <Link href="/boutique-bijou" className={linkClass}>
+                  La boutique
+                </Link>
+              </li>
+              <li>
+                <Link href="/ateliers" className={linkClass}>
+                  Ateliers DIY
+                </Link>
+              </li>
+              <li>
+                <Link href="/sur-mesure" className={linkClass}>
+                  Création sur mesure
+                </Link>
+              </li>
+              <li>
+                <Link href="/marches" className={linkClass}>
+                  Marchés &amp; événements
+                </Link>
+              </li>
+              <li>
+                <Link href="/blog" className={linkClass}>
+                  Le journal
+                </Link>
+              </li>
+            </ul>
+          </nav>
+
+          <nav aria-label="Informations">
+            <p className="font-editorial text-[0.68rem] tracking-[0.2em] uppercase text-cream-300/70 mb-3">
+              Infos pratiques
+            </p>
+            <ul>
+              <li>
+                <Link href="/contact" className={linkClass}>
+                  Contact
+                </Link>
+              </li>
+              <li>
+                <Link href="/cgv#livraison" className={linkClass}>
+                  Livraison &amp; retours
+                </Link>
+              </li>
+              <li>
+                <Link href="/cgv" className={linkClass}>
+                  Conditions de vente
+                </Link>
+              </li>
+              <li>
+                <Link href="/legals" className={linkClass}>
+                  Mentions légales
+                </Link>
+              </li>
+            </ul>
+            <ul className="mt-4 space-y-2">
+              <li className="flex items-center gap-2 font-editorial text-[0.8rem] text-cream-200/80">
+                <Mail className="w-4 h-4 flex-shrink-0" />
+                <a
+                  href={`mailto:${SITE.email}`}
+                  className="hover:text-white break-all"
+                >
+                  {SITE.email}
+                </a>
+              </li>
+              <li className="flex items-center gap-2 font-editorial text-[0.8rem] text-cream-200/80">
+                <MapPin className="w-4 h-4 flex-shrink-0" />
+                <a
+                  href={SITE.mapsUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="hover:text-white"
+                >
+                  {SITE.location}
+                </a>
+              </li>
+            </ul>
+          </nav>
+
           <div>
-            <span className="font-editorial text-sm font-medium uppercase tracking-[0.15em] text-olive-800">
-              Réseaux sociaux
-            </span>
-            <div className="flex gap-3 pt-3">
-              <Link
-                href="https://www.facebook.com/p/Mes-petites-cr%C3%A9a-ch%C3%A9ries-100057342554163/"
-                target="_blank"
-                rel="noreferrer"
-              >
-                <Facebook
-                  className="text-olive-600 hover:text-bronze-500 transition-colors"
-                  width={24}
-                  height={24}
-                />
-              </Link>
-              <Link
-                href="https://www.instagram.com/dame_pascale"
-                target="_blank"
-                rel="noreferrer"
-              >
-                <Instagram
-                  className="text-olive-600 hover:text-bronze-500 transition-colors"
-                  width={24}
-                  height={24}
-                />
-              </Link>
-            </div>
+            <p className="font-hand text-2xl text-cream-50">
+              Ne manquez aucun rendez-vous
+            </p>
+            <p className="font-editorial text-[0.82rem] text-cream-200/80 mt-1 mb-4">
+              Prochains marchés, nouveaux ateliers, nouvelles pièces.
+            </p>
+            <NewsSignup source="footer" tone="dark" />
           </div>
         </div>
-      </div>
-      <div className="max-w-6xl mx-auto px-6 mt-10 pt-6 border-t border-olive-200/20">
-        <p className="font-editorial text-xs text-olive-600/70 text-center">
-          &copy; 2026 Dame Pascale — Tous droits réservés
-        </p>
+
+        <div className="mt-12 pt-6 border-t border-cream-200/15 flex flex-col-reverse sm:flex-row items-center justify-between gap-4">
+          <p className="font-editorial text-xs text-cream-300/70 text-center">
+            © {new Date().getFullYear()} Dame Pascale — Tous droits réservés
+          </p>
+          <div
+            className="flex items-center gap-2"
+            aria-label="Moyens de paiement acceptés"
+          >
+            {[
+              ["/visa.png", "Visa"],
+              ["/mastercard.png", "Mastercard"],
+              ["/paypal.png", "PayPal"],
+            ].map(([src, alt]) => (
+              <span
+                key={alt}
+                className="bg-white rounded px-1.5 py-1 flex items-center"
+              >
+                <Image
+                  src={src}
+                  alt={alt}
+                  width={40}
+                  height={24}
+                  className="h-5 w-auto object-contain"
+                />
+              </span>
+            ))}
+          </div>
+        </div>
       </div>
     </footer>
   );
-};
-
-const CustomHoveredLink = ({
-  label,
-  url,
-  internalLink,
-}: {
-  label: string;
-  url: string;
-  internalLink: boolean;
-}) => {
-  const [hover, setHover] = useState(false);
-  return (
-    <span
-      className="relative cursor-pointer"
-      onMouseEnter={() => setHover(true)}
-      onMouseLeave={() => setHover(false)}
-    >
-      {internalLink ? (
-        <Link
-          href={url}
-          className="font-editorial text-sm text-olive-600 hover:text-bronze-500 transition-colors no-underline"
-        >
-          {label}
-        </Link>
-      ) : (
-        <a
-          href={url}
-          target="_blank"
-          rel="noreferrer"
-          className="font-editorial text-sm text-olive-600 hover:text-bronze-500 transition-colors no-underline"
-        >
-          {label}
-        </a>
-      )}
-      <motion.div
-        initial={{ scaleX: 0 }}
-        animate={{ scaleX: hover ? 1 : 0 }}
-        transition={{ duration: 0.3 }}
-        className="absolute bg-bronze-400 bottom-0 left-0 w-full h-[1px] z-10 pointer-events-none origin-left"
-      />
-    </span>
-  );
-};
-
-export default Footer;
+}

@@ -1,230 +1,94 @@
-"use client";
-
-import React, { useEffect, useState } from "react";
-import { BlogPost, getBlogPosts } from "@/sanity/lib/blog/calls";
-import { urlFor } from "@/sanity/lib/client";
+import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
-import Footer from "@/components/footer/footer";
-import { motion } from "framer-motion";
+import { getBlogPosts } from "@/sanity/lib/blog/calls";
+import { urlForImage } from "@/sanity/lib/image";
+import { SectionHeading } from "@/components/ui/section-heading";
+import { AnimatedSection } from "@/components/botanical/animated-section";
+import {
+  BranchSprig,
+  PressedLeaf,
+  SmallBlossom,
+} from "@/components/botanical/decorations";
+import { warmVintage } from "@/components/botanical/backgrounds";
+import { btnPrimary } from "@/components/ui/cta";
 
-/* ──────────────────────────── SVG Decorations ──────────────────────────── */
+export const revalidate = 60;
 
-function PressedLeaf({ className = "" }: { className?: string }) {
-  return (
-    <svg viewBox="0 0 80 120" fill="none" className={className} xmlns="http://www.w3.org/2000/svg">
-      <path d="M40 10 C20 30, 10 60, 40 110 C70 60, 60 30, 40 10Z" stroke="currentColor" strokeWidth="1.2" fill="none" />
-      <path d="M40 10 L40 110" stroke="currentColor" strokeWidth="0.8" />
-      <path d="M40 35 L25 25" stroke="currentColor" strokeWidth="0.6" />
-      <path d="M40 50 L22 42" stroke="currentColor" strokeWidth="0.6" />
-      <path d="M40 65 L24 60" stroke="currentColor" strokeWidth="0.6" />
-      <path d="M40 35 L55 25" stroke="currentColor" strokeWidth="0.6" />
-      <path d="M40 50 L58 42" stroke="currentColor" strokeWidth="0.6" />
-      <path d="M40 65 L56 60" stroke="currentColor" strokeWidth="0.6" />
-    </svg>
-  );
-}
-
-function BranchSprig({ className = "" }: { className?: string }) {
-  return (
-    <svg viewBox="0 0 120 60" fill="none" className={className} xmlns="http://www.w3.org/2000/svg">
-      <path d="M10 50 Q40 45, 60 30 Q80 15, 110 10" stroke="currentColor" strokeWidth="1" />
-      <path d="M30 47 C25 38, 28 30, 35 28" stroke="currentColor" strokeWidth="0.7" />
-      <path d="M50 36 C43 28, 46 20, 54 18" stroke="currentColor" strokeWidth="0.7" />
-      <path d="M70 24 C64 18, 68 10, 76 9" stroke="currentColor" strokeWidth="0.7" />
-      <path d="M90 15 C86 10, 90 4, 96 5" stroke="currentColor" strokeWidth="0.7" />
-    </svg>
-  );
-}
-
-function SmallBlossom({ className = "" }: { className?: string }) {
-  return (
-    <svg viewBox="0 0 60 60" fill="none" className={className} xmlns="http://www.w3.org/2000/svg">
-      <circle cx="30" cy="30" r="4" stroke="currentColor" strokeWidth="1" />
-      <ellipse cx="30" cy="18" rx="5" ry="10" stroke="currentColor" strokeWidth="0.7" />
-      <ellipse cx="30" cy="18" rx="5" ry="10" stroke="currentColor" strokeWidth="0.7" transform="rotate(90 30 30)" />
-      <ellipse cx="30" cy="18" rx="5" ry="10" stroke="currentColor" strokeWidth="0.7" transform="rotate(180 30 30)" />
-      <ellipse cx="30" cy="18" rx="5" ry="10" stroke="currentColor" strokeWidth="0.7" transform="rotate(270 30 30)" />
-    </svg>
-  );
-}
-
-const pageBackground = {
-  backgroundImage: `
-    radial-gradient(ellipse at 25% 75%, rgba(226,146,59,0.06) 0%, transparent 55%),
-    radial-gradient(ellipse at 78% 18%, rgba(157,186,154,0.08) 0%, transparent 50%),
-    repeating-conic-gradient(rgba(139,119,75,0.015) 0% 25%, transparent 0% 50%) 0 0 / 3px 3px,
-    linear-gradient(168deg, #fefefe 0%, #fdfcfa 35%, #f7f4ef 70%, #fefefe 100%)
-  `,
-  backgroundColor: "#fefefe",
+export const metadata: Metadata = {
+  title: "Le Journal — coulisses et inspirations botaniques",
+  description:
+    "Coulisses de l'atelier, inspirations botaniques et conseils de création par Dame Pascale.",
+  alternates: { canonical: "/blog" },
 };
 
-const cardVariants = {
-  hidden: { opacity: 0, y: 18 },
-  visible: (i: number) => ({
-    opacity: 1,
-    y: 0,
-    transition: { delay: i * 0.09, duration: 0.45, ease: [0.25, 0.46, 0.45, 0.94] },
-  }),
-};
-
-/* ─────────────────────────────────────────────────────────────────────────── */
-
-const BlogPage = () => {
-  const [blogPosts, setBlogPosts] = useState<BlogPost[]>([]);
-  const [loaded, setLoaded] = useState(false);
-
-  useEffect(() => {
-    async function fetchBlogPosts() {
-      const data = await getBlogPosts();
-      setBlogPosts(data);
-      setLoaded(true);
-    }
-    fetchBlogPosts();
-  }, []);
+export default async function BlogPage() {
+  const posts = await getBlogPosts();
 
   return (
-    <div className="min-h-screen relative" style={pageBackground}>
+    <div style={warmVintage} className="relative overflow-x-clip">
+      <PressedLeaf className="pointer-events-none absolute top-[12%] right-[3%] w-24 md:w-36 text-olive-400/10 rotate-[16deg]" />
+      <BranchSprig className="pointer-events-none absolute top-[50%] left-0 w-36 md:w-52 text-sage-400/10 -rotate-6" />
 
-      {/* ── Botanical decorations ──────────────────────────────────────────── */}
-      <PressedLeaf aria-hidden className="pointer-events-none select-none absolute top-[28%] right-0 w-28 md:w-40 text-olive-400/[0.10] rotate-[16deg]" />
-      <BranchSprig aria-hidden className="pointer-events-none select-none absolute top-[55%] left-0 w-36 md:w-52 text-sage-400/[0.09] -rotate-[5deg]" />
-      <SmallBlossom aria-hidden className="pointer-events-none select-none absolute bottom-[12%] right-[5%] w-14 text-bronze-400/[0.08] rotate-[22deg]" />
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 pt-10 md:pt-16 pb-20">
+        <SectionHeading
+          as="h1"
+          eyebrow="Inspirations & savoir-faire"
+          title="Le Journal"
+          intro="Coulisses de l'atelier, inspirations botaniques et conseils de création."
+        />
 
-      {/* ── Hero ────────────────────────────────────────────────────────────── */}
-      <div
-        className="relative overflow-hidden pt-16 md:pt-20"
-        style={{ background: "linear-gradient(135deg, #f0ede3 0%, #f7f3e8 45%, #f5e8d0 100%)" }}
-      >
-        <div className="pointer-events-none absolute inset-0 overflow-hidden">
-          {/* Top Left Arabesque */}
-          <svg
-            className="absolute -top-10 -left-10 w-72 opacity-[0.08] text-olive-900"
-            viewBox="0 0 500 500"
-            fill="currentColor"
-          >
-            <path d="M480,60 C420,20 360,20 300,60 C260,90 240,140 220,190 C200,240 170,290 120,320 C80,345 40,350 10,340 C60,370 120,380 180,350 C240,320 280,270 300,210 C320,150 350,100 400,80 C430,70 455,70 480,60 Z" />
-          </svg>
-
-          {/* Bottom Right Arabesque */}
-          <svg
-            className="absolute -bottom-16 -right-16 w-96 opacity-[0.06] text-bronze-600"
-            viewBox="0 0 500 500"
-            fill="currentColor"
-          >
-            <path d="M20,440 C80,480 140,480 200,440 C240,410 260,360 280,310 C300,260 330,210 380,180 C420,155 460,150 490,160 C440,130 380,120 320,150 C260,180 220,230 200,290 C180,350 150,400 100,420 C70,430 45,430 20,440 Z" />
-          </svg>
-        </div>
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="relative left-12 py-14 md:py-20 max-w-xl">
-            <span
-              className="font-hand text-bronze-500 block mb-2"
-              style={{ fontSize: "clamp(1rem, 2vw, 1.3rem)" }}
-            >
-              Inspirations & Savoir-faire
-            </span>
-            <h1
-              className="font-serif-display text-olive-900 uppercase tracking-wide leading-[0.88]"
-              style={{ fontSize: "clamp(2.8rem, 7vw, 5rem)" }}
-            >
-              Le Journal
-            </h1>
-            <p
-              className="font-editorial italic text-olive-700 mt-5 leading-relaxed"
-              style={{ fontSize: "clamp(0.8rem, 1.5vw, 0.9rem)" }}
-            >
-              Coulisses de l&apos;atelier, inspirations botaniques<br className="hidden sm:block" />
-              et conseils de création.
+        {posts.length === 0 ? (
+          <div className="text-center py-16">
+            <SmallBlossom className="w-10 h-10 text-olive-300 mx-auto mb-4" />
+            <p className="font-hand text-2xl text-olive-700">
+              Les premiers articles arrivent bientôt
             </p>
-          </div>
-        </div>
-        <div className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-olive-200/60 to-transparent" />
-      </div>
-
-      {/* ── Posts grid ──────────────────────────────────────────────────────── */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-14 md:py-20">
-        {!loaded ? (
-          /* Skeleton */
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-7 gap-y-14">
-            {[1, 2, 3].map((i) => (
-              <div key={i} className="animate-pulse">
-                <div className="bg-olive-100/40 aspect-[4/3]" />
-                <div className="pt-4 space-y-2.5">
-                  <div className="h-2.5 bg-olive-100/50 rounded-full w-1/4" />
-                  <div className="h-4 bg-olive-100/50 rounded-full w-3/4" />
-                  <div className="h-4 bg-olive-100/30 rounded-full w-1/2" />
-                </div>
-              </div>
-            ))}
-          </div>
-        ) : blogPosts.length === 0 ? (
-          <div className="text-center py-24">
-            <SmallBlossom className="w-10 h-10 text-olive-200 mx-auto mb-4" />
-            <p className="font-editorial text-[0.7rem] tracking-[0.2em] uppercase text-olive-600">
-              Aucun article pour le moment
-            </p>
+            <Link href="/boutique-bijou" className={`${btnPrimary} mt-6`}>
+              Voir la boutique
+            </Link>
           </div>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-7 gap-y-14">
-            {blogPosts.map((post, i) => (
-              <motion.article
-                key={post._id}
-                custom={i}
-                initial="hidden"
-                animate="visible"
-                variants={cardVariants}
-              >
+          <ul className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-7 gap-y-12">
+            {posts.map((post, i) => (
+              <AnimatedSection as="li" key={post._id} delay={(i % 3) * 0.08}>
                 <Link href={`/blog/${post._id}`} className="group block">
-
-                  {/* Image */}
-                  <div className="relative overflow-hidden aspect-[4/3]" style={{ backgroundColor: "#fdfcfa" }}>
-                    <Image
-                      src={urlFor(post.mainImage).url()}
-                      alt={post.title}
-                      fill
-                      className="object-cover transition-transform duration-700 ease-out group-hover:scale-[1.05]"
-                      placeholder="blur"
-                      blurDataURL="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAACklEQVR4nGMAAQAABQABDQottAAAAABJRU5ErkJggg=="
-                    />
-                    {/* Subtle vignette on hover */}
-                    <div className="absolute inset-0 bg-olive-900/0 group-hover:bg-olive-900/8 transition-colors duration-500" />
-                    {/* Category chip */}
+                  <div className="relative overflow-hidden aspect-[4/3] rounded-xl bg-cream-200">
+                    {post.mainImage && (
+                      <Image
+                        src={urlForImage(post.mainImage, 900)}
+                        alt=""
+                        fill
+                        sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                        className="object-cover transition-transform duration-700 group-hover:scale-[1.04]"
+                      />
+                    )}
                     {post.category?.title && (
-                      <div className="absolute top-3 left-3">
-                        <span className="font-editorial text-[0.56rem] tracking-[0.2em] uppercase px-2.5 py-1 rounded-full bg-white/88 backdrop-blur-sm text-olive-700 border border-olive-100/60">
-                          {post.category.title}
-                        </span>
-                      </div>
+                      <span className="absolute top-3 left-3 font-editorial text-[0.6rem] tracking-[0.18em] uppercase px-2.5 py-1 rounded-full bg-white/90 text-olive-700">
+                        {post.category.title}
+                      </span>
                     )}
                   </div>
-
-                  {/* Thin rule */}
-                  <div className="h-px bg-olive-100/80 w-full" />
-
-                  {/* Text */}
-                  <div className="pt-4 pb-1">
-                    <h2
-                      className="font-serif-display text-olive-900 leading-[1.15] transition-colors duration-300 group-hover:text-olive-700"
-                      style={{ fontSize: "clamp(1.05rem, 2.2vw, 1.3rem)" }}
-                    >
-                      {post.title}
-                    </h2>
-                    <span className="inline-flex items-center gap-1.5 mt-4 font-editorial text-[0.58rem] tracking-[0.22em] uppercase text-olive-600 group-hover:text-olive-800 transition-colors duration-300">
-                      Lire l&apos;article
-                      <span className="transition-transform duration-300 group-hover:translate-x-1">→</span>
+                  <h2 className="font-serif-display text-xl text-olive-900 leading-snug mt-4 group-hover:text-bronze-600 transition-colors">
+                    {post.title}
+                  </h2>
+                  {post.introduction && (
+                    <p className="font-editorial text-[0.88rem] text-olive-700 mt-2 line-clamp-3 leading-relaxed">
+                      {post.introduction}
+                    </p>
+                  )}
+                  <span className="inline-flex items-center gap-1.5 mt-3 font-editorial text-[0.65rem] tracking-[0.2em] uppercase text-olive-600 group-hover:text-olive-900">
+                    Lire l&apos;article{" "}
+                    <span className="transition-transform group-hover:translate-x-1">
+                      →
                     </span>
-                  </div>
-
+                  </span>
                 </Link>
-              </motion.article>
+              </AnimatedSection>
             ))}
-          </div>
+          </ul>
         )}
       </div>
-
-      <Footer />
     </div>
   );
-};
-
-export default BlogPage;
+}

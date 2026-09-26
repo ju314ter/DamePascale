@@ -1,56 +1,63 @@
+/**
+ * Client Sanity — SERVEUR UNIQUEMENT.
+ * Ne jamais importer ce fichier depuis un composant "use client" : il contient
+ * un jeton d'accès qui partirait sinon dans le JavaScript envoyé au navigateur.
+ * Côté navigateur, utiliser `@/sanity/lib/image` (URLs d'images, sans jeton).
+ */
 import { createClient } from "next-sanity";
-import imageUrlBuilder from "@sanity/image-url";
+import { apiVersion, dataset, projectId } from "../env";
 
-import { apiVersion, dataset, projectId, useCdn, viewtoken } from "../env";
-import { getBoutiqueStatus } from "./general/calls";
+// Permet de pointer vers un faux serveur Sanity en local (tests visuels).
+const hostOverride = process.env.SANITY_API_HOST
+  ? { apiHost: process.env.SANITY_API_HOST, useProjectHostname: false }
+  : {};
+
+const readToken =
+  process.env.SANITY_READ_TOKEN ||
+  process.env.SANITY_TOKEN ||
+  // Jeton public de lecture.
+  process.env.NEXT_PUBLIC_SANITY_VIEW_TOKEN;
 
 export const client = createClient({
   projectId,
   dataset,
   apiVersion,
-  useCdn,
+  useCdn: false,
   perspective: "published",
-  token: viewtoken,
-  //we can ignore warning as the token used is read-only
-  ignoreBrowserTokenWarning: true,
+  token: readToken,
+  ...hostOverride,
 });
 
-const builder = imageUrlBuilder(client);
+/** Client avec droits d'écriture (stock, commandes, inscriptions). */
+export const writeClient = createClient({
+  projectId,
+  dataset,
+  apiVersion,
+  useCdn: false,
+  perspective: "published",
+  token: process.env.SANITY_TOKEN,
+  ...hostOverride,
+});
 
-export const urlFor = (source: any) => {
-  return builder.image(source).auto("format").fit("max");
-};
+export const REVALIDATE_SECONDS = 60;
 
-export async function verifyStock(items: { id: string; quantity: number }[]) {
-  const ids = items.map((item) => item.id);
-  const query = `*[_id in $ids]{
-    _id,
-    name,
-    stock
-  }`;
-  const products = await client.fetch(query, { ids });
-
-  const stockStatus = products.map((product: any) => {
-    const orderedItem = items.find((item) => item.id === product._id);
-    const isAvailable = product.stock >= (orderedItem?.quantity || 0);
-    return {
-      id: product._id,
-      name: product.name,
-      isAvailable,
-      requestedQuantity: orderedItem?.quantity || 0,
-      availableStock: product.stock,
-    };
-  });
-
-  const allAvailable = stockStatus.every((item: any) => item.isAvailable);
-
-  return { allAvailable, stockStatus };
-}
-
-export async function checkBoutiqueStatus() {
-  const boutiqueStatus = await getBoutiqueStatus();
-  if (boutiqueStatus === "closed" || boutiqueStatus === "maintenance") {
-    return false;
+/**
+ * Lecture tolérante aux pannes : une indisponibilité de Sanity ne doit jamais
+ * faire tomber une page entière, on affiche alors l'état « vide ».
+ */
+export async function sanityFetch<T>(
+  query: string,
+  params: Record<string, unknown> = {},
+  fallback: T,
+  revalidate: number | false = REVALIDATE_SECONDS,
+): Promise<T> {
+  try {
+    const result = await client.fetch<T>(query, params, {
+      next: { revalidate },
+    });
+    return result ?? fallback;
+  } catch (error) {
+    console.error("[sanity] requête en échec :", error);
+    return fallback;
   }
-  return true;
 }

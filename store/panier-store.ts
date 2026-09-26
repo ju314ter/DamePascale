@@ -1,88 +1,94 @@
-import { checkBoutiqueStatus, verifyStock } from "@/sanity/lib/client";
 import { create } from "zustand";
 import { createJSONStorage, persist } from "zustand/middleware";
+import { checkCartItem } from "@/app/actions/shop";
+import type { AppliedPromo, CartLine, CartProduct } from "@/lib/cart";
 
-type ItemType = {
-  _id: string;
-  name: string;
-  highlightedImg: any;
-  promotionDiscount?: number;
-  price: number;
-};
-
-export type Item = {
-  type: ItemType & object;
-  qty: number;
-};
+type Result = { ok: true } | { ok: false; error: string };
 
 type PanierState = {
-  panier: Item[];
-  addToPanier: (item: ItemType) => Promise<string>;
-  removeFromPanier: (item: ItemType) => void;
+  panier: CartLine[];
+  promo: AppliedPromo | null;
+  isOpen: boolean;
+  openCart: () => void;
+  closeCart: () => void;
+  setOpen: (open: boolean) => void;
+  addToPanier: (
+    product: CartProduct,
+    opts?: { openCart?: boolean },
+  ) => Promise<Result>;
+  setQty: (id: string, qty: number) => Promise<Result>;
+  removeFromPanier: (id: string) => void;
+  clearPanier: () => void;
+  setPromo: (promo: AppliedPromo | null) => void;
 };
 
-const sessionStorageStore =
-  typeof window !== "undefined"
-    ? createJSONStorage(() => sessionStorage)
-    : undefined;
+const toCartProduct = (p: CartProduct): CartProduct => ({
+  _id: p._id,
+  name: p.name,
+  highlightedImg: p.highlightedImg,
+  price: p.price,
+  promotionDiscount: p.promotionDiscount,
+});
 
 export const usePanier = create<PanierState>()(
   persist(
     (set, get) => ({
       panier: [],
-      addToPanier: async (itemType: ItemType) => {
-        const canAdd = await checkBoutiqueStatus();
-        if (!canAdd) {
-          throw new Error("Boutique désactivée, revenez plus tard :) !");
-        }
+      promo: null,
+      isOpen: false,
+      openCart: () => set({ isOpen: true }),
+      closeCart: () => set({ isOpen: false }),
+      setOpen: (open) => set({ isOpen: open }),
 
-        const state = get();
-        const alreadyHasItem = state.panier.some(
-          (item: Item) => item.type._id === itemType._id
-        );
-
-        const currentQuantity = alreadyHasItem
-          ? state.panier.find((item: Item) => item.type._id === itemType._id)
-              ?.qty || 0
-          : 0;
-
-        const hasStock = await verifyStock([
-          { id: itemType._id, quantity: currentQuantity + 1 },
-        ]);
-
-        if (!hasStock.allAvailable) {
-          throw new Error("Pas de stock pour " + itemType.name);
-        }
-
-        set((s: PanierState) => {
-          const newState = {
-            ...s,
-            panier: !alreadyHasItem
-              ? [...s.panier, { type: itemType, qty: 1 }]
-              : [
-                  ...s.panier.map((item: Item) => {
-                    if (item.type._id === itemType._id) item.qty += 1;
-                    return item;
-                  }),
-                ],
-          };
-          return newState;
-        });
-
-        return `${itemType.name} ajouté au panier avec succès.`;
+      addToPanier: async (product, opts = { openCart: true }) => {
+        const current =
+          get().panier.find((l) => l.product._id === product._id)?.qty ?? 0;
+        const check = await checkCartItem(product._id, current + 1);
+        if (!check.ok) return { ok: false, error: check.error };
+        set((s) => ({
+          panier: current
+            ? s.panier.map((l) =>
+                l.product._id === product._id ? { ...l, qty: l.qty + 1 } : l,
+              )
+            : [...s.panier, { product: toCartProduct(product), qty: 1 }],
+          isOpen: opts.openCart ?? true,
+        }));
+        return { ok: true };
       },
-      removeFromPanier: (item: ItemType) =>
-        set((s: PanierState) => ({
-          ...s,
-          panier: s.panier.filter(
-            (itemCart: Item) => itemCart.type._id !== item._id
+
+      setQty: async (id, qty) => {
+        if (qty <= 0) {
+          get().removeFromPanier(id);
+          return { ok: true };
+        }
+        const current =
+          get().panier.find((l) => l.product._id === id)?.qty ?? 0;
+        if (qty > current) {
+          const check = await checkCartItem(id, qty);
+          if (!check.ok) return { ok: false, error: check.error };
+        }
+        set((s) => ({
+          panier: s.panier.map((l) =>
+            l.product._id === id ? { ...l, qty } : l,
           ),
-        })),
+        }));
+        return { ok: true };
+      },
+
+      removeFromPanier: (id) =>
+        set((s) => ({ panier: s.panier.filter((l) => l.product._id !== id) })),
+
+      clearPanier: () => set({ panier: [], promo: null }),
+
+      setPromo: (promo) => set({ promo }),
     }),
     {
-      name: "panier-store",
-      storage: sessionStorageStore,
-      partialize: (state) => ({ panier: state.panier }),
-    }
-  )
+      name: "dp-panier",
+      version: 2,
+      storage: createJSONStorage(() => localStorage),
+      partialize: (state) => ({ panier: state.panier, promo: state.promo }),
+      // Réhydraté après le premier rendu (voir CartHydrator) pour éviter les écarts SSR.
+      skipHydration: true,
+    },
+  ),
 );

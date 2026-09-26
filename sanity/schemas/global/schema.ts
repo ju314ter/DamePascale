@@ -71,9 +71,11 @@ export const codePromoSchema: SchemaTypeDefinition = {
     },
     {
       name: "reductionPercent",
-      title: "Pourcentage de réduction",
+      title: "Valeur de la réduction",
+      description:
+        "En % si le type est « Percentage », en euros si le type est « Absolute ».",
       type: "number",
-      validation: (Rule) => Rule.required(),
+      validation: (Rule) => Rule.required().min(0),
     },
     {
       name: "type",
