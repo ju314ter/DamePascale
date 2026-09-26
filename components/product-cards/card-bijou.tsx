@@ -9,6 +9,7 @@ import { urlForImage } from "@/sanity/lib/image";
 import { hasPromo } from "@/lib/pricing";
 import { Price } from "@/components/ui/price";
 import { addProductToCart } from "@/components/shop/add-to-cart";
+import { isInStock } from "@/lib/stock";
 
 export default function CardBijou({
   item,
@@ -19,7 +20,7 @@ export default function CardBijou({
   priority?: boolean;
   sizes?: string;
 }) {
-  const soldOut = item.stock <= 0;
+  const soldOut = !isInStock(item);
   const [state, setState] = useState<"idle" | "pending" | "added">("idle");
   const secondImage = item.imageGallery?.find(
     (img) =>

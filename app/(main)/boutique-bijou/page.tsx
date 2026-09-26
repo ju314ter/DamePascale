@@ -9,6 +9,7 @@ import { SoldOutSection } from "@/components/shop/sold-out-section";
 import { BranchSprig, PressedLeaf } from "@/components/botanical/decorations";
 import { warmVintage } from "@/components/botanical/backgrounds";
 import { btnPrimary } from "@/components/ui/cta";
+import { isInStock } from "@/lib/stock";
 
 export const revalidate = 60;
 
@@ -26,8 +27,8 @@ export default async function BoutiquePage() {
   ]);
   // Seules les pièces en stock sont en boutique ; les autres passent dans « Trop tard ! ».
   // Une pièce réapprovisionnée y retourne automatiquement.
-  const available = bijoux.filter((b) => b.stock > 0);
-  const soldOut = bijoux.filter((b) => b.stock <= 0);
+  const available = bijoux.filter(isInStock);
+  const soldOut = bijoux.filter((b) => !isInStock(b));
 
   return (
     <div style={warmVintage} className="relative overflow-x-clip">

@@ -362,7 +362,7 @@ export default function ShopBrowser({
         aria-hidden
       />
       <div className="sticky top-14 md:top-16 z-30 -mx-4 sm:-mx-6 lg:mx-0 px-4 sm:px-6 lg:px-0 pt-3 pb-3 bg-cream-50/95 backdrop-blur border-b border-olive-100/80">
-        {taxonomies.categories.length > 0 && (
+        {(taxonomies.categories.length > 0 || soldOutCount > 0) && (
           <div
             className="flex gap-2 overflow-x-auto no-scrollbar -mx-4 px-4 sm:mx-0 sm:px-0 pb-3"
             role="group"
@@ -374,6 +374,17 @@ export default function ShopBrowser({
             >
               Tout voir
             </Chip>
+            {soldOutCount > 0 && (
+              <a
+                href="#trop-tard"
+                className="flex-shrink-0 inline-flex items-center gap-1.5 px-3.5 py-2 rounded-full border border-[#c4897a]/50 bg-[#c4897a]/10 font-editorial text-[0.78rem] text-[#9a5f52] whitespace-nowrap hover:bg-[#c4897a]/20 transition-colors"
+              >
+                Trop tard !
+                <span className="min-w-5 h-5 px-1 rounded-full bg-[#c4897a] text-white text-[0.65rem] flex items-center justify-center">
+                  {soldOutCount}
+                </span>
+              </a>
+            )}
             {taxonomies.categories.map((cat) => (
               <Chip
                 key={cat._id}
